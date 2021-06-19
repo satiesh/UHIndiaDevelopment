@@ -1,0 +1,18 @@
+<div [@fadeInOut] class="page-content">
+  <mat-table [dataSource]="dataSource" matSort>
+    <ng-container matColumnDef="Name">
+      <mat-header-cell fxFlex="40%" *matHeaderCellDef mat-sort-header> {{'permission.management.Name' | translate}} </mat-header-cell>
+      <mat-cell fxFlex="40%" *matCellDef="let row"> {{row.Name}} </mat-cell>
+    </ng-container>
+    <ng-container matColumnDef="Assigned">
+      <mat-header-cell *matHeaderCellDef>Assign</mat-header-cell>
+      <mat-cell *matCellDef="let row">
+        <mat-checkbox [checked]="row.Assigned" [(ngModel)]="row.Assigned" ></mat-checkbox>
+      </mat-cell>
+    </ng-container>
+    <mat-header-row *matHeaderRowDef="displayedColumns"></mat-header-row>
+    <mat-row *matRowDef="let row; columns: displayedColumns;">
+    </mat-row>
+  </mat-table>
+  <mat-paginator [pageSizeOptions]="[10, 25, 100]"></mat-paginator>
+</div>

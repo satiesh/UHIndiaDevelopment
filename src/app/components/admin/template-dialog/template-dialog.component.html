@@ -1,0 +1,10 @@
+<button mat-icon-button class="close" aria-label="Close" title="Close" style="float: right;" (click)="cancel()">
+  <mat-icon>close</mat-icon>
+</button>
+<h1 mat-dialog-title>{{templateName ? ('messaging.management.TemplateEdit' | translate:templateName) : ('messaging.management.NewTemplate' | translate)}}</h1>
+<!--<app-template-editor [template]="data.template" isEditMode="isEditMode"></app-template-editor>-->
+<div class="spacer"></div>
+<div>
+  <button mat-raised-button (click)="templateControl.save()" color="primary">Save</button>&nbsp;
+  <button mat-raised-button (click)="cancel()" color="warn">Cancel</button>
+</div>

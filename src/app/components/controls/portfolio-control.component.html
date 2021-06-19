@@ -1,0 +1,25 @@
+<form #form="ngForm" [formGroup]="userProtfolioForm" novalidate (ngSubmit)="save()" fxLayout="column" autocomplete="off">
+    <div fxLayout="row" fxLayout.lt-md="column" fxLayoutGap="1em">
+        <mat-form-field class="app-validate" fxFlex appearance="fill">
+            <mat-label>{{'users.editor.Portfoliosize' | translate}}</mat-label>
+            <mat-select>
+              <mat-option *ngFor="let pfsize of portfoliosize" [value]="pfsize">{{pfsize}}</mat-option>
+            </mat-select>
+        </mat-form-field>
+        <mat-form-field  class="app-validate" fxFlex appearance="fill">
+          <mat-label>{{'users.editor.Portfoliotype' | translate}}</mat-label>
+          <mat-select>
+            <mat-option *ngFor="let pftype of portfoliotype" [value]="pftype">{{pftype}}</mat-option>
+          </mat-select>
+        </mat-form-field>
+    </div>
+
+    <div fxLayout="row" fxLayout.lt-md="column" fxLayoutGap="1em">
+        <mat-form-field class="app-validate" fxFlex appearance="fill">
+            <mat-label>{{'users.editor.TradeTypes' | translate}}</mat-label>
+            <mat-select>
+              <mat-option *ngFor="let tradeType of currentTradeTypes" [value]="tradeType">{{tradeType}}</mat-option>
+            </mat-select>
+        </mat-form-field>
+    </div>
+</form>

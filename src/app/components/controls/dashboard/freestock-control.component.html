@@ -1,0 +1,68 @@
+<mat-card class="mat-elevation-z8" fxLayout.lt-lg="column">
+  <div>
+
+    <div>
+      <mat-progress-bar *ngIf="loadingIndicator$|async" mode="query"></mat-progress-bar>
+      <div *ngIf="(isDailyTickerLoaded$|async) && recordFound">
+        <div class="spacer"></div>
+        <div style="display: flex; justify-content: flex-end">
+          <mat-icon class="mat-button-icon green-check-icon">lock_open</mat-icon>Active Trade&nbsp;|&nbsp;
+          <mat-icon class="mat-button-icon green-check-icon">lock</mat-icon>Closed Trade
+        </div>
+        <div style="display: flex; justify-content: flex-end">
+          <button mat-button color="primary" matTooltip="{{'options.management.Refresh' | translate}}" (click)="reloadDailyTrade()">
+            <mat-icon class="mat-button-icon">refresh</mat-icon>Reload
+          </button>
+        </div>
+        <mat-table [dataSource]="dataSource" matSort matSortActive="createdon" matSortDirection="desc">
+
+          <ng-container matColumnDef="symbol">
+            <mat-header-cell fxFlex="20%" *matHeaderCellDef mat-sort-header> {{'stockoftheday.management.Symbol' | translate}} </mat-header-cell>
+            <mat-cell fxFlex="20%" *matCellDef="let row"> {{row.symbol}} </mat-cell>
+          </ng-container>
+
+          <ng-container matColumnDef="support">
+            <mat-header-cell fxFlex="20%" *matHeaderCellDef mat-sort-header> {{'stockoftheday.management.Support' | translate}} </mat-header-cell>
+            <mat-cell fxFlex="20%" *matCellDef="let row"> {{row.support}} </mat-cell>
+          </ng-container>
+
+          <ng-container matColumnDef="resistancetarget">
+            <mat-header-cell fxFlex="15%" *matHeaderCellDef mat-sort-header> {{'stockoftheday.management.ResistanceTarget' | translate}} </mat-header-cell>
+            <mat-cell fxFlex="15%" *matCellDef="let row"> {{row.resistancetarget}} </mat-cell>
+          </ng-container>
+          <ng-container matColumnDef="stoploss">
+            <mat-header-cell fxFlex="15%" *matHeaderCellDef mat-sort-header> {{'stockoftheday.management.StopLoss' | translate}} </mat-header-cell>
+            <mat-cell fxFlex="15%" *matCellDef="let row"> {{row.stoploss}} </mat-cell>
+          </ng-container>
+          <ng-container matColumnDef="createdon">
+            <mat-header-cell fxFlex="15%" *matHeaderCellDef mat-sort-header> {{'stockoftheday.management.CreatedOn' | translate}} </mat-header-cell>
+            <mat-cell fxFlex="15%" *matCellDef="let row"> {{checkDate(row.createdon)| date: 'EEEE, MMMM d, y' }} </mat-cell>
+          </ng-container>
+          <ng-container matColumnDef="actions">
+            <mat-header-cell *matHeaderCellDef fxFlex="15%">
+              {{'stockoftheday.management.ViewDetails' | translate}}
+            </mat-header-cell>
+            <mat-cell *matCellDef="let ticker" fxFlex="140px" fxFlexOffset="30px">
+              <button mat-icon-button matTooltip="{{'stockoftheday.management.Delete' | translate}}">
+                <mat-cell fxFlex="5%">
+                  <mat-icon class="mat-button-icon green-check-icon" *ngIf="ticker.isactive">lock_open</mat-icon>
+                  <mat-icon class="mat-button-icon green-check-icon" *ngIf="!ticker.isactive">lock</mat-icon>
+                </mat-cell>
+                <!--<mat-icon color="warn">delete</mat-icon>-->
+              </button>
+            </mat-cell>
+          </ng-container>
+
+          <mat-header-row *matHeaderRowDef="displayedColumns"></mat-header-row>
+          <mat-row *matRowDef="let row; columns: displayedColumns;">
+          </mat-row>
+        </mat-table>
+        <mat-paginator [pageSizeOptions]="[10, 25, 100]"></mat-paginator>
+      </div>
+      <div style="display: flex; justify-content: center" *ngIf="!recordFound">
+        <h2>No Data Found!</h2>
+      </div>
+    </div>
+
+  </div>
+</mat-card>

@@ -1,0 +1,20 @@
+.search-box {
+  flex-direction: column;
+  box-sizing: border-box;
+  display: flex;
+}
+
+.search-box .mat-form-field {
+  padding: 0 2em;
+}
+
+.green-check-icon {
+  color: forestgreen;
+}
+
+.red-check-icon {
+  color: red;
+}
+.spacer {
+  height: 20px;
+}

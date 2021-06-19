@@ -1,0 +1,15 @@
+{
+  "ExpandedNodes": [
+    "",
+    "\\src",
+    "\\src\\app",
+    "\\src\\app\\components",
+    "\\src\\app\\components\\controls",
+    "\\src\\app\\components\\verify",
+    "\\src\\app\\store\\dailytrade-data",
+    "\\src\\assets",
+    "\\src\\environments"
+  ],
+  "SelectedNode": "\\src\\app\\components\\verify\\verifyemail.component.html",
+  "PreviewInSolutionExplorer": false
+}

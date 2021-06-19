@@ -1,0 +1,49 @@
+<button mat-icon-button class="close" aria-label="Close" title="Close" style="float: right;" (click)="cancel()">
+  <mat-icon>close</mat-icon>
+</button>
+<h1 mat-dialog-title>{{userName ? ('users.management.EditUser' | translate:userName) : ('users.management.NewUser' | translate)}}</h1>
+
+<mat-tab-group disableRipple="true">
+  <mat-tab label="Personal" *ngIf="canViewUserPersonnel">
+    <app-user-profile-editor [user]="data.user" [updateFromUserList]="data.updateFromUserList" isEditMode="isEditMode"></app-user-profile-editor>
+  </mat-tab>
+  <mat-tab label="Roles" *ngIf="canViewUserRole">
+    <app-user-role-list [user]="data.user" [updateFromUserList]="data.updateFromUserList" isEditMode="true"></app-user-role-list>
+  </mat-tab>
+  <mat-tab label="Subscription" *ngIf="canViewUserSubscription">
+    <app-user-subscription-list [user]="data.user" [updateFromUserList]="data.updateFromUserList" isEditMode="isEditMode"></app-user-subscription-list>
+    <div class="spacer"></div>
+  </mat-tab>
+  <mat-tab label="Payments" *ngIf="canViewUserPayment">
+    <app-user-payments-list [user]="data.user" isEditMode="true"></app-user-payments-list>
+    <div class="spacer"></div>
+  </mat-tab>
+
+  <mat-tab label="Trading Tools" *ngIf="canViewUserTradingTools">
+    <app-tradingtools-info [user]="data.user" [updateFromUserList]="data.updateFromUserList" isEditMode="true"></app-tradingtools-info>
+    <div class="spacer"></div>
+  </mat-tab>
+  <mat-tab label="Investment Type" *ngIf="canViewUserInvestmentType">
+    <app-investmenttype-info [user]="data.user" [updateFromUserList]="data.updateFromUserList" isEditMode="true"></app-investmenttype-info>
+    <div class="spacer"></div>
+  </mat-tab>
+  <mat-tab label="Investor Level" *ngIf="canViewUserInvesterLevel">
+    <app-investorlevel-info [user]="data.user" [updateFromUserList]="data.updateFromUserList" isEditMode="true"></app-investorlevel-info>
+    <div class="spacer"></div>
+  </mat-tab>
+
+  <mat-tab label="Others" *ngIf="canViewUserOthers">
+    <app-user-other-values [user]="data.user" [updateFromUserList]="data.updateFromUserList" isEditMode="true"></app-user-other-values>
+    <div class="spacer"></div>
+  </mat-tab>
+
+  <mat-tab *ngIf="data.user && data.user.hasOwnProperty('userquestions') && canViewUserDisclaimer" label="Disclaimer" >
+    <app-userdisclaimer-control [user]="data.user"></app-userdisclaimer-control>
+    <div class="spacer"></div>
+  </mat-tab>
+</mat-tab-group>
+
+<div mat-dialog-actions>
+  <button mat-raised-button (click)="save();" color="primary">Save</button>
+  <button mat-raised-button (click)="cancel()" color="warn">Cancel</button>
+</div>

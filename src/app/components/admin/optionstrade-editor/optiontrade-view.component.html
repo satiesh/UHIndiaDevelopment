@@ -1,0 +1,82 @@
+<button mat-icon-button class="close" aria-label="Close" title="Close" style="float: right;" (click)="cancel()">
+  <mat-icon>close</mat-icon>
+</button>
+<h1 mat-dialog-title>{{'options.management.ViewComments'|translate}}</h1>
+<div fxLayout="row" fxLayout.lt-md="column" fxLayoutGap="1em">
+  <mat-label fxFlex="20%"><strong>{{'options.editor.Symbol' | translate}}</strong></mat-label>
+  <mat-label fxFlex="30%">{{ticker.symbol}}</mat-label>
+  <mat-label fxFlex="20%"><strong>{{'options.editor.Type' | translate}}</strong></mat-label>
+  <mat-label fxFlex="30%">{{ticker.type}}</mat-label>
+</div>
+<div fxLayout="row" fxLayout.lt-md="column" fxLayoutGap="1em">
+  <mat-label fxFlex="20%"><strong>{{'options.editor.PostedBy' | translate}}</strong></mat-label>
+  <mat-label fxFlex="30%">{{ticker.postedby}}</mat-label>
+  <mat-label fxFlex="20%"><strong>{{'options.editor.PostedFor' | translate}}</strong></mat-label>
+  <mat-label fxFlex="30%">{{ticker.postedFor}}</mat-label>
+</div>
+<div>
+  <div class="spacer"></div>
+  <div>
+    <mat-label>{{'options.editor.Transaction' | translate}}</mat-label>
+  </div>
+  <div *ngIf="ticker.trans.length>0" fxLayout="row" fxLayout.lt-md="column" fxLayoutGap="1em">
+    <div class="mat-elevation-z8" fxFlex="100%">
+      <mat-table id="tt" [dataSource]="transDataSource" matSort>
+        <ng-container matColumnDef="strikeprice">
+          <mat-header-cell fxFlex="40%" *matHeaderCellDef mat-sort-header> {{'options.management.Price' | translate}} </mat-header-cell>
+          <mat-cell fxFlex="40%" *matCellDef="let row"> {{row.strikeprice | currency}} </mat-cell>
+        </ng-container>
+        <ng-container matColumnDef="premiumpaid">
+          <mat-header-cell fxFlex="40%" *matHeaderCellDef mat-sort-header> {{'options.management.Premium' | translate}} </mat-header-cell>
+          <mat-cell fxFlex="40%" *matCellDef="let row"> {{row.premiumpaid | currency}} </mat-cell>
+        </ng-container>
+        <ng-container matColumnDef="transtype">
+          <mat-header-cell fxFlex="40%" *matHeaderCellDef mat-sort-header> {{'options.management.TransactionType' | translate}} </mat-header-cell>
+          <mat-cell fxFlex="40%" *matCellDef="let row"> {{row.transtype}} </mat-cell>
+        </ng-container>
+        <ng-container matColumnDef="expdate">
+          <mat-header-cell fxFlex="40%" *matHeaderCellDef mat-sort-header> {{'options.management.ExpiryDate' | translate}} </mat-header-cell>
+          <mat-cell fxFlex="40%" *matCellDef="let row"> {{checkDate(row.expdate) | date: 'EEEE, MMMM d, y'}} </mat-cell>
+        </ng-container>
+        <mat-header-row *matHeaderRowDef="transDisplayedColumns"></mat-header-row>
+        <mat-row *matRowDef="let row; columns: transDisplayedColumns;">
+        </mat-row>
+      </mat-table>
+    </div>
+  </div>
+</div>
+<div class="spacer"></div>
+<div>
+  <mat-label>{{'options.management.Comments' | translate}}</mat-label>
+</div>
+<div class="mat-elevation-z8">
+  <mat-table [dataSource]="dataSource" matSort matSortActive="createdon" matSortDirection="desc">
+    <ng-container matColumnDef="notestype">
+      <mat-header-cell fxFlex="10%" *matHeaderCellDef mat-sort-header> {{'options.management.NotesType' | translate}} </mat-header-cell>
+      <mat-cell fxFlex="10%" *matCellDef="let row"> {{row.notestype}} </mat-cell>
+    </ng-container>
+
+    <ng-container matColumnDef="notesvalue">
+      <mat-header-cell fxFlex="55%" *matHeaderCellDef mat-sort-header> {{'options.management.Notes' | translate}} </mat-header-cell>
+      <mat-cell fxFlex="55%" *matCellDef="let row"> {{row.notesvalue}} </mat-cell>
+    </ng-container>
+
+    <ng-container matColumnDef="notespostedby">
+      <mat-header-cell fxFlex="10%" *matHeaderCellDef mat-sort-header> {{'options.management.NotesPostedBy' | translate}} </mat-header-cell>
+      <mat-cell fxFlex="10%" *matCellDef="let row"> {{row.notespostedby}} </mat-cell>
+    </ng-container>
+    <ng-container matColumnDef="createdon">
+      <mat-header-cell fxFlex="15%" *matHeaderCellDef mat-sort-header> {{'options.management.NotesCreatedOn' | translate}} </mat-header-cell>
+      <mat-cell fxFlex="15%" *matCellDef="let row">{{checkDate(row.createdon)| date: 'EEEE, MMMM d, y'}} </mat-cell>
+    </ng-container>
+    <mat-header-row *matHeaderRowDef="displayedColumns"></mat-header-row>
+    <mat-row *matRowDef="let row; columns: displayedColumns;">
+    </mat-row>
+  </mat-table>
+
+  <mat-paginator [pageSizeOptions]="[5, 10, 25, 100]"></mat-paginator>
+</div>
+<div class="spacer"></div>
+<div>
+  <button mat-raised-button color="warn" (click)="cancel()">Cancel</button>
+</div>

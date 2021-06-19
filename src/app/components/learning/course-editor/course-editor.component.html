@@ -1,0 +1,112 @@
+<form #form="ngForm" [formGroup]="courseForm" novalidate (ngSubmit)="save()" fxLayout="column" [fxLayoutGap]="isEditMode ? '1em' : '0'" autocomplete="off">
+  <div fxLayout="row" fxLayout.lt-md="column" fxLayoutGap="1em">
+    <mat-form-field [floatLabel]="floatLabels" class="app-validate">
+      <mat-label>{{'learning.editor.Title' | translate}}</mat-label>
+      
+      <input matInput formControlName="Name" [readonly]="!isEditMode" />
+      <mat-error *ngIf="Name.hasError('required')">
+        {{'learning.editor.TitleRequired' | translate}}
+      </mat-error>
+    </mat-form-field>
+  </div>
+  <div fxLayout="row" fxLayout.lt-md="column" fxLayoutGap="1em">
+    <mat-label>{{'learning.editor.Active' | translate}}</mat-label>
+    <mat-slide-toggle formControlName="IsActive" color="accent" [ngModel]="true">{{IsActive ? 'ACTIVE' : 'InActive'}}</mat-slide-toggle>
+  </div>
+
+  <div fxLayout="row" fxLayout.lt-md="column" fxLayoutGap="1em">
+    <mat-form-field [floatLabel]="floatLabels" class="app-validate">
+      <mat-label>{{'learning.editor.GeneralAudience' | translate}}</mat-label>
+      <input matInput formControlName="GeneralAudience" [readonly]="!isEditMode" />
+      <mat-error *ngIf="GeneralAudience.hasError('required')">
+        {{'learning.editor.GeneralAudienceRequired' | translate}}
+      </mat-error>
+    </mat-form-field>
+  </div>
+
+
+  <div fxLayout="row" fxLayout.lt-md="column" fxLayoutGap="1em">
+    <mat-form-field [floatLabel]="floatLabels" class="app-validate">
+      <mat-label>{{'learning.editor.CourseDescription' | translate}}</mat-label>
+      <input matInput formControlName="CourseDescription" [readonly]="!isEditMode" />
+      <mat-error *ngIf="CourseDescription.hasError('required')">
+        {{'learning.editor.CourseDescriptionRequired' | translate}}
+      </mat-error>
+    </mat-form-field>
+  </div>
+  <div fxLayout="row" fxLayout.lt-md="column" fxLayoutGap="1em">
+    <mat-form-field [floatLabel]="floatLabels" class="app-validate">
+      <mat-label>{{'learning.editor.Price' | translate}}</mat-label>
+      <input matInput formControlName="Price" [readonly]="!isEditMode" (blur)="transformAmount($event)" />
+      <mat-error *ngIf="Price.hasError('required')">
+        {{'learning.editor.PriceRequired' | translate}}
+      </mat-error>
+    </mat-form-field>
+    <mat-form-field [floatLabel]="floatLabels"  class="app-validate">
+      <mat-label>{{'learning.editor.NumberofSessions' | translate}}</mat-label>
+      <input matInput formControlName="NumberofSessions" [readonly]="!isEditMode" />
+    </mat-form-field>
+  </div>
+  <div fxLayout="row" fxLayout.lt-md="column" fxLayoutGap="1em">
+    <mat-form-field [floatLabel]="floatLabels" class="app-validate">
+      <mat-label>{{'learning.editor.Instructor' | translate}}</mat-label>
+      <input matInput formControlName="Instructor" [readonly]="!isEditMode" />
+    </mat-form-field>
+    <mat-form-field [floatLabel]="floatLabels" class="app-validate">
+      <mat-label>{{'learning.editor.Prerequisites' | translate}}</mat-label>
+      <input matInput formControlName="Prerequisites" [readonly]="!isEditMode" />
+      <mat-error *ngIf="Prerequisites.hasError('required')">
+        {{'learning.editor.PrerequisitesRequired' | translate}}
+      </mat-error>
+    </mat-form-field>
+  </div>
+
+
+  <div fxLayout="row" fxLayout.lt-md="column" fxLayoutGap="1em">
+    <mat-form-field [floatLabel]="floatLabels" class="app-validate">
+      <mat-label>{{'learning.editor.StartDate' | translate}}</mat-label>
+      <input matInput [matDatepicker]="picker" formControlName="StartDate" [readonly]="!isEditMode" >
+      <mat-datepicker-toggle matSuffix [for]="picker"></mat-datepicker-toggle>
+      <mat-datepicker #picker></mat-datepicker>
+      <mat-error *ngIf="StartDate.hasError('required')">
+        {{'learning.editor.StartDateRequired' | translate}}
+      </mat-error>
+    </mat-form-field>
+    <mat-form-field [floatLabel]="floatLabels" class="app-validate">
+      <mat-label>{{'learning.editor.Schedule' | translate}}</mat-label>
+      <input matInput formControlName="Schedule" [readonly]="!isEditMode" />
+      <mat-error *ngIf="Schedule.hasError('required')">
+        {{'learning.editor.ScheduleRequired' | translate}}
+      </mat-error>
+    </mat-form-field>
+  </div>
+ 
+
+  <div fxLayout="column" fxLayout.lt-md="column" fxLayoutGap="1em">
+    <mat-label fxFlex="8%">{{'learning.editor.ShortDescription' | translate}}</mat-label>
+    <angular-editor id="shortDescription"  *ngIf="UserRole == 'Administrator';else bindingData" formControlName="ShortDescription" [config]="editorConfig" ></angular-editor>
+    <ng-template #bindingData ><p class="float-right text-bold">{{shortDesc}}</p></ng-template>
+    <mat-error *ngIf="ShortDescription.hasError('required')">
+      {{'learning.editor.ShortDescriptionRequired' | translate}}
+    </mat-error>
+  </div>
+  <div fxLayout="column" fxLayout.lt-md="column" fxLayoutGap="1em">
+    <mat-label fxFlex="8%">{{'learning.editor.Agenda' | translate}}</mat-label>
+    <angular-editor id="agenda"  *ngIf="UserRole == 'Administrator';else bindingData"  formControlName="Agenda"  [config]="editorConfig" contenteditable="false"></angular-editor>
+    <ng-template #bindingData ><p class="float-right text-bold">{{AgendaBind}}</p></ng-template>
+    <mat-error *ngIf="Agenda.hasError('required')">
+      {{'learning.editor.AgendaRequired' | translate}}
+    </mat-error>
+  </div>
+
+  <div fxLayout="column" fxLayout.lt-md="column" fxLayoutGap="1em">
+    <mat-label fxFlex="8%">{{'learning.editor.CourseAudience' | translate}}</mat-label>
+    <angular-editor id="courseaudience" *ngIf="UserRole == 'Administrator';else bindingData"  formControlName="CourseAudience"  [config]="editorConfig"></angular-editor>
+    <ng-template #bindingData ><p class="float-right text-bold">{{CourseAudienceBind}}</p></ng-template>
+    <mat-error *ngIf="CourseAudience.hasError('required')">
+      {{'learning.editor.CourseAudienceRequired' | translate}}
+    </mat-error>
+  </div>
+
+</form>
+

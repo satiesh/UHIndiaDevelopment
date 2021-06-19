@@ -1,0 +1,10 @@
+<button mat-icon-button class="close" aria-label="Close" title="Close" style="float: right;" (click)="cancel()">
+  <mat-icon>close</mat-icon>
+</button>
+<h1 mat-dialog-title>{{channelName ? ('messaging.management.ChannelEdit' | translate:channelName) : ('messaging.management.NewChannel' | translate)}}</h1>
+<app-channel-editor [channel]="data.channel" isEditMode="isEditMode"></app-channel-editor>
+<div class="spacer"></div>
+<div>
+  <button mat-raised-button (click)="channelControl.save()" color="primary">Save</button>&nbsp;
+  <button mat-raised-button (click)="cancel()" color="warn">Cancel</button>
+</div>

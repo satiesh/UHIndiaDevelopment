@@ -1,0 +1,108 @@
+  <form #form="ngForm" [formGroup]="userProfileForm" novalidate (ngSubmit)="save()" fxLayout="column" autocomplete="off">
+  <div fxLayout="row" fxLayout.lt-md="column" fxLayoutGap="1em">
+    <mat-form-field class="app-validate" fxFlex>
+      <mat-label>{{'users.editor.FirstName' | translate}}</mat-label>
+      <input matInput formControlName="firstName" />
+      <mat-error *ngIf="firstName.hasError('required')">
+        {{'users.editor.FirstNameRequired' | translate}}
+      </mat-error>
+    </mat-form-field>
+
+    <mat-form-field class="app-validate" fxFlex>
+      <mat-label>{{'users.editor.LastName' | translate}}</mat-label>
+      <input matInput formControlName="lastName" />
+      <mat-error *ngIf="lastName.hasError('required')">
+        {{'users.editor.LastNameRequired' | translate}}
+      </mat-error>
+    </mat-form-field>
+  </div>
+  <div fxLayout="row" fxLayout.lt-md="column" fxLayoutGap="1em">
+    <mat-form-field class="app-validate" fxFlex>
+      <mat-label>{{'users.editor.Address1' | translate}}</mat-label>
+      <input matInput formControlName="address" />
+      <mat-error *ngIf="address.hasError('required')">
+        {{'users.editor.AddressRequired' | translate}}
+      </mat-error>
+    </mat-form-field>
+    <mat-form-field class="app-validate" fxFlex>
+      <mat-label>{{'users.editor.Address2' | translate}}</mat-label>
+      <input matInput formControlName="address1" />
+    </mat-form-field>
+  </div>
+  <div fxLayout="row" fxLayout.lt-md="column" fxLayoutGap="1em">
+    <mat-form-field class="app-validate" fxFlex>
+      <mat-label>{{'users.editor.City' | translate}}</mat-label>
+      <input matInput formControlName="city" />
+      <mat-error *ngIf="city.hasError('required')">
+        {{'users.editor.CityRequired' | translate}}
+      </mat-error>
+    </mat-form-field>
+    <mat-form-field class="app-validate" fxFlex>
+      <mat-label>{{'users.editor.State' | translate}}</mat-label>
+      <input matInput formControlName="state" />
+      <mat-error *ngIf="state.hasError('required')">
+        {{'users.editor.StateRequired' | translate}}
+      </mat-error>
+    </mat-form-field>
+  </div>
+  <div fxLayout="row" fxLayout.lt-md="column" fxLayoutGap="1em">
+    <mat-form-field class="app-validate" fxFlex>
+      <mat-label>{{'users.editor.Postal' | translate}}</mat-label>
+      <input matInput formControlName="postalzip" />
+      <mat-error *ngIf="postalzip.hasError('required')">
+        {{'users.editor.PostalZipRequired' | translate}}
+      </mat-error>
+    </mat-form-field>
+    <mat-form-field class="app-validate" fxFlex>
+      <mat-label>{{'users.editor.Country' | translate}}</mat-label>
+      <input matInput formControlName="country" />
+      <mat-error *ngIf="country.hasError('required')">
+        {{'users.editor.CountryRequired' | translate}}
+      </mat-error>
+    </mat-form-field>
+  </div>
+  <div fxLayout="row" fxLayout.lt-md="column" fxLayoutGap="1em">
+    <mat-form-field class="app-validate" fxFlex>
+      <mat-label>{{'users.editor.MobileNumber' | translate}}</mat-label>
+
+      <input *ngIf="isProduction" matInput formControlName="mobilenumber" (change)="mobileChange($event)" (blur)="sendVerificationCode($event)" [readOnly]="isVerifyingCode" />
+      <input *ngIf="!isProduction" matInput formControlName="mobilenumber" (change)="mobileChange($event)" [readOnly]="isVerifyingCode" />
+      <mat-error *ngIf="mobilenumber.hasError('required')">
+        {{'users.editor.MobileNumberRequired' | translate}}
+      </mat-error>
+      <mat-error *ngIf="mobilenumber.hasError('invalidMobile') ">
+        {{'users.editor.InValidMobileNumber' | translate}}
+      </mat-error>
+    </mat-form-field>
+  </div>
+</form>
+
+  <form #form="ngForm" [formGroup]="verifyCodeForm" novalidate fxLayout="column" autocomplete="off">
+
+    <mat-card class="mat-elevation-z6" *ngIf="isMobileValid && !isMobileVerified && sendingCodeIndicator">
+      <mat-card-subtitle><strong>Please Wait...</strong></mat-card-subtitle>
+      <mat-card-content>
+        <mat-spinner [diameter]="20"></mat-spinner>&nbsp;We are sending a six digit verification code to verify the given mobile nuber is valid.
+      </mat-card-content>
+    </mat-card>
+    <mat-card class="mat-elevation-z6" *ngIf="isMobileValid && !isMobileVerified && !sendingCodeIndicator">
+      <mat-card-subtitle><strong>{{'users.editor.VerificationCodeSend' | translate}}</strong></mat-card-subtitle>
+      <mat-card-content>
+        <div fxLayout="row" fxLayout.lt-md="column" fxLayoutGap="1em">
+          <mat-form-field class="app-validate" fxFlex>
+            <mat-label>{{'users.editor.VerificationCode' | translate}}</mat-label>
+            <input matInput formControlName="verifycode" />
+            <mat-error *ngIf="verifycode.hasError('required')">
+              {{'users.editor.VerifyCodeRequired' | translate}}
+            </mat-error>
+          </mat-form-field>
+        </div>
+      </mat-card-content>
+      <mat-card-actions>
+        <button mat-raised-button color="primary" class="verifyresend-btn" [disabled]="!verifyCodeForm.valid || isVerifyingCode" (click)="verifysixdigitcode()">
+          <mat-spinner *ngIf="isVerifyingCode" [diameter]="20"></mat-spinner>Verify
+        </button>&nbsp;
+        <button mat-raised-button color="accent" class="verifyresend-btn" [disabled]="isVerifyingCode" (click)="resendcode()"><mat-spinner *ngIf="isResendingCode" [diameter]="20"></mat-spinner>Resend ></button>
+      </mat-card-actions>
+    </mat-card>
+  </form>

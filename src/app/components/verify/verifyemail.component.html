@@ -1,0 +1,52 @@
+<div class="header">
+  <div class="logo"><div class="logoimg"></div></div>
+  <div class="topRight"><a href="https://www.hoodcapitaluh.com/" target="_blank">Visit Website</a></div>
+
+
+</div>
+<div class="page-content" fxLayout="column" fxLayoutAlign="center center" fxFlexFill>
+
+  <div class="spacer"></div>
+  <div>
+    <mat-card class="mat-elevation-z6">
+      <div class="register-form-title">
+        <h3>Thank You for Registering</h3>
+        <div class="uh-ack-center">
+          <p>
+            <span class="uh-ack-center"> Please check your email account for a message from UrbanHood that requires you to click a link to verify your email address is your own. If you don’t see the email in your inbox, please check your Junk or Spam folder.</span>
+          </p>
+        </div>
+        <div class="uh-ack-center">
+          <p>
+            <span class="uh-ack-center">If you did not receive an email message to confirm your email address, please press the button below.</span>
+          </p>
+        </div>
+      </div>
+      <mat-card-content>
+      </mat-card-content>
+      <mat-card-actions>
+        <div class="social-logins-buttons" style="flex-direction: column; box-sizing: border-box; display: flex; place-content: stretch space-between; align-items: stretch; max-width: 100%;">
+          <button mat-raised-button color="primary" (click)="authService.SendVerificationMail()">{{'mainMenu.ResendVerification' | translate | uppercase}}</button>
+        </div>
+      </mat-card-actions>
+      <mat-card-footer>
+        <div class="uh-ack-center">
+          <!-- Already have an account?<button mat-button class="uh-link-bold" routerLink="/login">{{'mainMenu.SignIn' | translate}}</button>-->
+          Already have an account?&nbsp;<a class="uh-link-bold uh-link-color" routerLink="/login">{{'mainMenu.SignIn' | translate}}</a>
+        </div>
+        <div class="spacer"></div>
+        <div class="uh-ack-center">
+          <button mat-button routerLink="/forgotpassword">{{'mainMenu.ForgotPassword' | translate | uppercase}}</button>
+        </div>
+        <div class="spacer"></div>
+        <div class="uh-ack-center">By creating an account or continuing to use Urbanhood website, you acknowledge and agree that you have accepted the <a target="_blank" data-uid="id-4" href="#" role="link" class="uh-link-bold uh-link-color">Terms of Service</a> and have reviewed the <a target="_blank" data-uid="id-5" href="#" role="link" class="uh-link-bold uh-link-color">Privacy Policy</a>.</div>
+        <div class="spacer"></div>
+        <div class="spacer"></div>
+      </mat-card-footer>
+
+    </mat-card>
+
+  </div>
+</div>
+<footer><p class="text-copyright">© 2021 Urbanhood. Powered by <a class="color_primary" href="https://www.urbanfoodalliance.org/" target="_blank">Urbanfood Alliance</a> </p></footer>
+

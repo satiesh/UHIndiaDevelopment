@@ -1,0 +1,55 @@
+<app-page-header title="Roles" icon="assignment_ind"></app-page-header>
+<div [@fadeInOut] class="page-content">
+
+  <div class="search-box">
+    <mat-form-field>
+      <input matInput (keyup)="applyFilter($event.target.value)" placeholder="{{'roles.management.Search' | translate}}">
+    </mat-form-field>
+  </div>
+
+  <div class="mat-elevation-z8">
+    <mat-progress-bar *ngIf="loadingIndicator$|async" mode="query"></mat-progress-bar>
+    <mat-table [dataSource]="dataSource" matSort>
+
+      <ng-container matColumnDef="RoleName">
+        <mat-header-cell fxFlex="40%" *matHeaderCellDef mat-sort-header> {{'role.management.Name' | translate}} </mat-header-cell>
+        <mat-cell fxFlex="40%" *matCellDef="let row"> {{row.RoleName}} </mat-cell>
+      </ng-container>
+
+      <ng-container matColumnDef="RoleDescription">
+        <mat-header-cell fxFlex="40%" *matHeaderCellDef mat-sort-header> {{'role.management.Description' | translate}} </mat-header-cell>
+        <mat-cell fxFlex="40%" *matCellDef="let row"> {{row.RoleDescription}} </mat-cell>
+      </ng-container>
+
+      <ng-container matColumnDef="IsActive">
+        <mat-header-cell fxFlex="5%" *matHeaderCellDef mat-sort-header> {{'role.management.Active' | translate}} </mat-header-cell>
+        <mat-cell fxFlex="5%" *matCellDef="let row"> <mat-icon class="mat-button-icon green-check-icon" *ngIf="row.IsActive">check</mat-icon><mat-icon class="mat-button-icon red-check-icon" *ngIf="!row.IsActive">close</mat-icon>  </mat-cell>
+      </ng-container>
+ 
+      <ng-container *ngIf="canManageRoles" matColumnDef="actions">
+        <mat-header-cell *matHeaderCellDef fxFlex="225px">
+          <button mat-button color="primary" matTooltip="{{'role.management.NewRole' | translate}}" (click)="editRole()">
+            <mat-icon class="mat-button-icon">add</mat-icon>{{'role.management.NewRole' | translate}}
+          </button>
+          <button mat-button color="primary" matTooltip="{{'users.management.Refresh' | translate}}" (click)="reloadRoles()">
+            <mat-icon class="mat-button-icon">refresh</mat-icon>
+          </button>
+        </mat-header-cell>
+        <mat-cell *matCellDef="let role" fxFlex="140px" fxFlexOffset="30px">
+          <button mat-icon-button matTooltip="{{'roles.management.Edit' | translate}}" (click)="editRole(role)">
+            <mat-icon>edit</mat-icon>
+          </button>
+          <!--<button mat-icon-button matTooltip="{{'roles.management.Delete' | translate}}" (click)="confirmDelete(role)">
+            <mat-icon color="warn">delete</mat-icon>
+          </button>-->
+        </mat-cell>
+      </ng-container>
+
+      <mat-header-row *matHeaderRowDef="displayedColumns"></mat-header-row>
+      <mat-row *matRowDef="let row; columns: displayedColumns;">
+      </mat-row>
+    </mat-table>
+
+    <mat-paginator [pageSizeOptions]="[10, 25, 100]"></mat-paginator>
+  </div>
+</div>

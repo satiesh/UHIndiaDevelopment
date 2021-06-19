@@ -1,0 +1,26 @@
+<button mat-icon-button class="close" aria-label="Close" title="Close" style="float: right;" (click)="cancel()">
+  <mat-icon>close</mat-icon>
+</button>
+<h1 mat-dialog-title>{{courseName ? ('learning.management.RegisterCourse' | translate:courseName) : ('learning.management.NewCourse' | translate)}}</h1>
+<div fxLayout="row" fxLayout.lt-md="column" fxLayoutGap="1em" style="padding: 1px;margin-bottom: 1em">
+  <mat-label fxFlex="20%"><strong>{{'learning.editor.Title' | translate}}</strong></mat-label>
+  <span>
+    {{data.course.Name}}
+  </span>
+</div>
+<div fxLayout="row" fxLayout.lt-md="column" fxLayoutGap="1em" style="padding: 1px;margin-bottom: 1em">
+  <mat-label fxFlex="20%"><strong>{{'learning.editor.Price' | translate}}</strong></mat-label>
+  <span>
+    {{data.course.Price| currency}}
+  </span>
+</div>
+
+<div mat-dialog-content>
+  <app-payment-course [course]="data.course" isEditMode="true"></app-payment-course>
+</div>
+<div class="spacer"></div>
+
+<div mat-dialog-actions>
+  <button mat-raised-button  color="primary">Pay</button>
+  <button mat-raised-button (click)="cancel()" color="warn">Cancel</button>
+</div>

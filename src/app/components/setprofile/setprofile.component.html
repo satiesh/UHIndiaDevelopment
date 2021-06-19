@@ -1,0 +1,120 @@
+<div class="header">
+  <div class="logo"><div class="logoimg"></div></div>
+  <div class="topRight"><a href="https://www.hoodcapitaluh.com/" target="_blank">Visit Website</a></div>
+
+
+</div>
+
+<div class="page-content" fxLayout="column" fxLayoutAlign="center center" fxFlexFill>
+
+  <div class="spacer"></div>
+
+  <div fxLayout="row" fxLayout.lt-md="column" fxLayoutGap="1em">
+    <mat-card class="mat-elevation-z6">
+
+      <div class="uh-mat-header">
+        <div class="uh-mat-header-title">{{'pageHeader.NewUserSetup' | translate}}</div>
+      </div>
+      <div class="spacer"></div>
+      <div class="uh-ack-center">
+        <span>{{'pageHeader.NewUserSetupSubTitle' | translate}}</span>
+      </div>
+
+      <!--<div class="uh-ack-center">
+        <span><i>{{'pageHeader.ContactSupport' | translate}}</i></span>
+      </div>-->
+      <div *ngIf="subscriptionloadingIndicator$ || questionLoadingIndicator$ |async">
+        <mat-progress-bar mode="query"></mat-progress-bar>
+        <p class="uh-ack-center">Please wait loading data....</p>
+      </div>
+      <mat-card-content>
+        <mat-horizontal-stepper #stepper [linear]="isLinear">
+          <mat-step [stepControl]="disclaimerIControl.questionForm">
+            <ng-template matStepLabel>{{'profile.stepper.Disclaimer' | translate}}</ng-template>
+            <div class="single-stepperButton">
+              <button (click)="onStepperNext()" mat-raised-button color="primary" [disabled]="(!disclaimerIControl.readMeSlider || !disclaimerIControl.checkFormValidity())">Next</button>
+            </div>
+            <div class="spacer"></div>
+            <app-disclaimerI-control></app-disclaimerI-control>
+            <div class="single-stepperButton">
+              <button (click)="onStepperNext()" mat-raised-button color="primary" [disabled]="(!disclaimerIControl.readMeSlider || !disclaimerIControl.checkFormValidity())">Next</button>
+            </div>
+          </mat-step>
+          <mat-step [stepControl]="profileControl.userProfileForm">
+            <ng-template matStepLabel>{{'profile.stepper.Profile' | translate}}</ng-template>
+            <div class="stepperButton">
+              <button mat-raised-button color="accent" matStepperPrevious>Previous</button>
+              <button *ngIf="isProduction" (click)="onStepperNext()" mat-raised-button color="primary" [disabled]="((!profileControl.userProfileForm.valid) || !profileControl.isMobileVerified)">Next</button>
+              <button *ngIf="!isProduction" (click)="onStepperNext()" mat-raised-button color="primary" [disabled]="((!profileControl.userProfileForm.valid))">Next</button>
+            </div>
+            <div class="spacer"></div>
+            <app-profile-control></app-profile-control>
+            <div class="spacer"></div>
+            <div class="stepperButton">
+              <button mat-raised-button color="accent" matStepperPrevious>Previous</button>
+              <button *ngIf="isProduction" (click)="onStepperNext()" mat-raised-button color="primary" [disabled]="((!profileControl.userProfileForm.valid) || !profileControl.isMobileVerified)">Next</button>
+              <button *ngIf="!isProduction" (click)="onStepperNext()" mat-raised-button color="primary" [disabled]="((!profileControl.userProfileForm.valid))">Next</button>
+            </div>
+          </mat-step>
+          <mat-step>
+            <ng-template matStepLabel>{{'profile.stepper.Subscription' | translate}}</ng-template>
+            <div class="stepperButton">
+              <button mat-raised-button color="accent" matStepperPrevious>Previous</button>
+              <button (click)="onStepperNext()" mat-raised-button color="primary" [disabled]="!subscriptionControl.isSubscriptionSelected">Next</button>
+            </div>
+            <div class="spacer"></div>
+            <app-subscription [includeFreeSubscription]="true"></app-subscription>
+            <div class="spacer"></div>
+            <div class="stepperButton">
+              <button mat-raised-button color="accent" matStepperPrevious>Previous</button>
+              <button (click)="onStepperNext()" mat-raised-button color="primary" [disabled]="!subscriptionControl.isSubscriptionSelected">Next</button>
+            </div>
+          </mat-step>
+          <mat-step [stepControl]="paymentControl.stripeTest">
+            <ng-template matStepLabel>{{'profile.stepper.Payment' | translate}}</ng-template>
+            <div class="spacer"></div>
+            <div class="stepperButton">
+              <button mat-raised-button color="accent" [disabled]="isPaymentProcessing" matStepperPrevious>Previous</button>
+              <button (click)="onStepperNext()" mat-raised-button color="primary" [disabled]="isPaymentProcessing" *ngIf="enablePaymentStep">
+                <mat-spinner *ngIf="isPaymentProcessing" [diameter]="20"></mat-spinner>Pay&nbsp;{{paymentControl.amountvalcoupon|currency}}
+              </button>
+              <button (click)="freeSubscriptionSetup()" mat-raised-button color="primary" [disabled]="isPaymentProcessing" *ngIf="!enablePaymentStep">
+                <mat-spinner *ngIf="isPaymentProcessing" [diameter]="20"></mat-spinner>Next
+              </button>
+            </div>
+            <div class="spacer"></div>
+            <app-payment-token [selectedSubscription]="selectedSubscriptionid"></app-payment-token>
+            <div class="spacer"></div>
+            <div class="stepperButton">
+              <button mat-raised-button color="accent" [disabled]="isPaymentProcessing" matStepperPrevious>Previous</button>
+              <button (click)="onStepperNext()" mat-raised-button color="primary" [disabled]="isPaymentProcessing" *ngIf="enablePaymentStep">
+                <mat-spinner *ngIf="isPaymentProcessing" [diameter]="20"></mat-spinner>Pay&nbsp;{{paymentControl.amountvalcoupon|currency}}
+              </button>
+              <button (click)="freeSubscriptionSetup()" mat-raised-button color="primary" [disabled]="isPaymentProcessing" *ngIf="!enablePaymentStep">
+                <mat-spinner *ngIf="isPaymentProcessing" [diameter]="20"></mat-spinner>Next
+              </button>
+            </div>
+          </mat-step>
+          <mat-step [stepControl]="summaryControl">
+            <ng-template matStepLabel>{{'profile.stepper.Summary' | translate}}</ng-template>
+            <div class="spacer"></div>
+            <div class="single-stepperButton">
+              <button mat-raised-button color="primary" (click)="generatePdf('open')"><mat-icon>picture_as_pdf</mat-icon>&nbsp;View Agreement Form</button>&nbsp;
+              <!-- <button mat-raised-button color="primary" (click)="generatePdf('download')"><mat-icon>picture_as_pdf</mat-icon>&nbsp;Download Agreement Form</button>&nbsp;-->
+              <button mat-raised-button color="primary" routerLink="/redirect">Take me to Dashboard</button>
+            </div>
+            <div class="spacer"></div>
+            <app-summary-control></app-summary-control>
+            <div class="spacer"></div>
+            <div class="single-stepperButton">
+              <button mat-raised-button color="primary" (click)="generatePdf('open')"><mat-icon>picture_as_pdf</mat-icon>View Agreement Form</button>&nbsp;
+              <!-- <button mat-raised-button color="primary" (click)="generatePdf('download')"><mat-icon>picture_as_pdf</mat-icon>Download Agreement Form</button>&nbsp;-->
+              <button mat-raised-button color="primary" routerLink="/redirect">Take me to Dashboard</button>
+            </div>
+          </mat-step>
+        </mat-horizontal-stepper>
+      </mat-card-content>
+    </mat-card>
+  </div>
+</div>
+<footer><p class="text-copyright">© 2021 Urbanhood. Powered by <a class="color_primary" href="https://www.urbanfoodalliance.org/" target="_blank">Urbanfood Alliance</a> </p></footer>

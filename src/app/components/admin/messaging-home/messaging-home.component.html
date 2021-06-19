@@ -1,0 +1,41 @@
+<app-page-header title="MessagingHome" icon="message"></app-page-header>
+<div [@fadeInOut] class="page-content">
+  <div fxLayout="row wrap" fxLayoutAlign="space-evenly">
+    <div fxFlex="30" fxFlex.sm="23.3" fxFlex.xs="30" style="padding: 2px;margin-bottom: 1em">
+      <mat-card class="card">
+        <mat-card-title>{{'messaging.management.ChannelGroup' | translate}}</mat-card-title>
+        <mat-card-content>
+          Configure broadcast channels like discord,telegram etc..
+        </mat-card-content>
+        <mat-card-actions>
+          <button mat-raised-button color="primary" [routerLink]="['/auth/admin/channels']">Manage Channel Group</button>
+        </mat-card-actions>
+      </mat-card>
+
+    </div>
+    <div fxFlex="30" fxFlex.sm="23.3" fxFlex.xs="30" style="padding: 2px;margin-bottom: 1em">
+      <mat-card class="card">
+        <mat-card-title>{{'messaging.management.Templates' | translate}}</mat-card-title>
+        <mat-card-content>
+          Configure standard templates for sending messages.
+        </mat-card-content>
+        <mat-card-actions>
+          <button mat-raised-button color="primary" [routerLink]="['/auth/admin/templates']">Manage Templates</button>
+        </mat-card-actions>
+      </mat-card>
+
+    </div>
+    <div fxFlex="30" fxFlex.sm="23.3" fxFlex.xs="30" style="padding: 2px;margin-bottom: 1em">
+      <mat-card class="card">
+        <mat-card-title>{{'messaging.management.Messages' | translate}}</mat-card-title>
+        <mat-card-content>
+          View, Send Messages...
+        </mat-card-content>
+        <mat-card-actions>
+          <button mat-raised-button color="primary">Manage Messages</button>
+        </mat-card-actions>
+      </mat-card>
+
+    </div>
+  </div>
+</div>

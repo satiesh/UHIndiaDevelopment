@@ -1,0 +1,28 @@
+<button mat-icon-button class="close" aria-label="Close" title="Close" style="float: right;" (click)="cancel()">
+  <mat-icon>close</mat-icon>
+</button>
+<h1 mat-dialog-title>{{roleName ? ('role.management.Edit' | translate:roleName) : ('role.management.NewRole' | translate)}}</h1>
+<button mat-button class="close" (click)="cancel()">X</button>
+<mat-card-content>
+  <mat-horizontal-stepper #stepper [linear]="isLinear">
+    <mat-step>
+      <ng-template matStepLabel>{{('role.management.ManageRole' | translate)}}</ng-template>
+      <div mat-dialog-content>
+        <app-role-editor [role]="data.role" isEditMode="true"></app-role-editor>
+      </div>
+      <div class="single-stepperButton">
+        <button (click)="onStepperNext()" mat-raised-button color="primary" [disabled]="(!roleControl.roleForm.valid)">Next</button>
+      </div>
+    </mat-step>
+    <mat-step>
+      <ng-template matStepLabel>{{('role.management.ManagePermission' | translate)}}</ng-template>
+      <div mat-dialog-content>
+        <app-permission-list [role]="data.role"></app-permission-list>
+      </div>
+      <div class="stepperButton">
+        <button mat-raised-button color="accent" matStepperPrevious>Previous</button>
+        <button (click)="onStepperNext()" mat-raised-button color="primary" [disabled]="(!roleControl.roleForm.valid)">Submit</button>
+      </div>
+    </mat-step>
+  </mat-horizontal-stepper>
+</mat-card-content>

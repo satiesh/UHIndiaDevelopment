@@ -1,0 +1,16 @@
+<button mat-icon-button class="close" aria-label="Close" title="Close" style="float: right;" (click)="cancel()">
+  <mat-icon>close</mat-icon>
+</button>
+<h1 mat-dialog-title>{{courseName ? ('learning.management.Details' | translate:courseName) : ('learning.management.NewCourse' | translate)}}</h1>
+<div mat-dialog-content>
+  <mat-horizontal-stepper #stepper [linear]=true>
+    <mat-step [stepControl]="courseEditoeControl">
+      <ng-template matStepLabel>About</ng-template>
+      <app-course-editor [course]="data.course" isEditMode="false"></app-course-editor>
+      </mat-step>
+  </mat-horizontal-stepper>
+</div>
+<div mat-dialog-actions>
+  <button mat-raised-button color="primary">Register</button>
+  <button mat-raised-button color="warn">Cancel</button>
+</div>

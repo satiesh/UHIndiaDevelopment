@@ -1,0 +1,44 @@
+<form #form="ngForm" [formGroup]="subscriptionForm" novalidate (ngSubmit)="save()" fxLayout="column" [fxLayoutGap]="isEditMode ? '1em' : '0'" autocomplete="off">
+  <div fxLayout="row" fxLayout.lt-md="column" fxLayoutGap="1em">
+    <mat-form-field [floatLabel]="floatLabels" fxFlex>
+      <mat-label>{{'subscription.editor.Name' | translate}}</mat-label>
+      <input matInput formControlName="Name" [readonly]="!isEditMode" />
+      <mat-error *ngIf="Name.hasError('required')">
+        {{'subscription.editor.NameRequired' | translate}}
+      </mat-error>
+    </mat-form-field>
+  </div>
+  <div fxLayout="row" fxLayout.lt-md="column" fxLayoutGap="1em">
+    <mat-form-field [floatLabel]="floatLabels" fxFlex>
+      <mat-label>{{'subscription.editor.Description' | translate}}</mat-label>
+      <input matInput formControlName="Description" [readonly]="!isEditMode" />
+    </mat-form-field>
+  </div>
+  <div fxLayout="row" fxLayout.lt-md="column" fxLayoutGap="1em">
+    <mat-label>{{'subscription.editor.Active' | translate}}</mat-label>
+    <mat-slide-toggle formControlName="IsActive" color="accent">{{IsActive ? 'ACTIVE' : 'InActive'}}</mat-slide-toggle>
+  </div>
+
+  <div fxLayout="row" fxLayout.lt-md="column" fxLayoutGap="1em">
+    <mat-form-field [floatLabel]="floatLabels" fxFlex>
+      <mat-label>{{'subscription.editor.Price' | translate}}</mat-label>
+      <input matInput formControlName="Price" [readonly]="!isEditMode" (blur)="transformAmount($event)" />
+      <mat-error *ngIf="Price.hasError('required')">
+        {{'subscription.editor.PriceRequired' | translate}}
+      </mat-error>
+    </mat-form-field>
+  </div>
+
+  <div fxLayout="row" fxLayout.lt-md="column" fxLayoutGap="1em">
+    <mat-form-field [floatLabel]="floatLabels" fxFlex class="app-validate">
+      <mat-label>{{'subscription.editor.GroupName' | translate}}</mat-label>
+      <select matNativeControl formControlName="GroupName" name="psf">
+        <option *ngFor="let psf of postedGroups" [value]="psf">{{psf}}</option>
+      </select>
+      <mat-error *ngIf="GroupName.hasError('required')">
+        {{'subscription.editor.GroupNameRequired' | translate}}
+      </mat-error>
+    </mat-form-field>
+  </div>
+
+</form>

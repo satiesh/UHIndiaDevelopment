@@ -1,0 +1,101 @@
+<div class="spacer"></div>
+<form #form="ngForm" [formGroup]="channelForm" novalidate fxLayout="column" [fxLayoutGap]="isEditMode ? '1em' : '0'" autocomplete="off">
+  <div formGroupName="channelFormSection">
+    <div fxLayout="row" fxLayout.lt-md="column" fxLayoutGap="1em">
+      <mat-form-field [floatLabel]="floatLabels" fxFlex class="app-validate">
+        <mat-label>{{'messaging.editor.ChannelName' | translate}}</mat-label>
+        <input matInput formControlName="name" [readonly]="!isEditMode" />
+        <mat-error *ngIf="name.hasError('required')">
+          {{'messaging.editor.ChannelNameRequired' | translate}}
+        </mat-error>
+      </mat-form-field>
+    </div>
+    <div fxLayout="row" fxLayout.lt-md="column" fxLayoutGap="1em">
+      <mat-form-field [floatLabel]="floatLabels" fxFlex class="app-validate">
+        <mat-label>{{'messaging.editor.ChannelAccountSID' | translate}}</mat-label>
+        <input matInput formControlName="accountsid" [readonly]="!isEditMode" />
+        <mat-error *ngIf="accountsid.hasError('required')">
+          {{'messaging.editor.ChannelAccountSIDRequired' | translate}}
+        </mat-error>
+      </mat-form-field>
+      <mat-form-field [floatLabel]="floatLabels" fxFlex class="app-validate">
+        <mat-label>{{'messaging.editor.ChannelAuthToken' | translate}}</mat-label>
+        <input matInput formControlName="authtoken" [readonly]="!isEditMode" />
+        <mat-error *ngIf="authtoken.hasError('required')">
+          {{'messaging.editor.ChannelAuthTokenRequired' | translate}}
+        </mat-error>
+      </mat-form-field>
+    </div>
+    <div fxLayout="row" fxLayout.lt-md="column" fxLayoutGap="1em">
+      <mat-form-field [floatLabel]="floatLabels" fxFlex class="app-validate">
+        <mat-label>{{'messaging.editor.MemberGroup' | translate}}</mat-label>
+        <select matNativeControl formControlName="membergroup" name="psf">
+          <option *ngFor="let psf of postedGroups" [value]="psf">{{psf}}</option>
+        </select>
+      </mat-form-field>
+    </div>
+  </div>
+  <div formGroupName="channelgroupsection">
+    <div fxLayout="row" fxLayout.lt-md="column" fxLayoutGap="1em">
+      <mat-form-field [floatLabel]="floatLabels" fxFlex>
+        <mat-label>{{'messaging.editor.ChannelGroupName' | translate}}</mat-label>
+        <input matInput formControlName="groupname" [readonly]="!isEditMode" />
+        <mat-error *ngIf="groupname.hasError('required')">
+          {{'messaging.editor.ChannelGroupNameRequired' | translate}}
+        </mat-error>
+      </mat-form-field>
+      <mat-form-field [floatLabel]="floatLabels" fxFlex>
+        <mat-label>{{'messaging.editor.ChannelGroupUniqueId' | translate}}</mat-label>
+        <input matInput formControlName="uniqueid" [readonly]="!isEditMode" />
+        <mat-error *ngIf="uniqueid.hasError('required')">
+          {{'messaging.editor.ChannelGroupUinqueIdRequired' | translate}}
+        </mat-error>
+      </mat-form-field>
+      <mat-checkbox class="example-margin" formControlName="isactive">{{'messaging.editor.ChannelGroupActive' | translate}}</mat-checkbox>
+
+      <!--<mat-form-field [floatLabel]="floatLabels" fxFlex>
+
+        <mat-label>{{'messaging.editor.ChannelGroupActive' | translate}}</mat-label>
+        <input matInput formControlName="isactive" [readonly]="!isEditMode" />
+        <mat-error *ngIf="uniqueid.hasError('required')">
+          {{'messaging.editor.ChannelGroupActiveRequired' | translate}}
+        </mat-error>
+      </mat-form-field>-->
+      <button mat-raised-button type="button" color="accent" style="margin-right: 1em;" (click)="addToTable()">ADD</button>
+    </div>
+  </div>
+  <div class="spacer"></div>
+  <div fxLayout="row" *ngIf="nchannelgroup.length>0" fxLayout.lt-md="column" fxLayoutGap="1em">
+    <mat-label fxFlex="10%">{{'messaging.editor.ChannelGroup' | translate}}</mat-label>
+    <div class="mat-elevation-z8" fxFlex="80%">
+      <mat-table id="tt1" [dataSource]="dataSource" matSort>
+        <ng-container matColumnDef="name">
+          <mat-header-cell fxFlex="40%" *matHeaderCellDef mat-sort-header> {{'messaging.editor.ChannelGroupName' | translate}} </mat-header-cell>
+          <mat-cell fxFlex="40%" *matCellDef="let row"> {{row.name}} </mat-cell>
+        </ng-container>
+        <ng-container matColumnDef="uniqueid">
+          <mat-header-cell fxFlex="40%" *matHeaderCellDef mat-sort-header> {{'messaging.editor.ChannelGroupUniqueId' | translate}} </mat-header-cell>
+          <mat-cell fxFlex="40%" *matCellDef="let row"> {{row.uniqueid}} </mat-cell>
+        </ng-container>
+        <ng-container matColumnDef="isactive">
+          <mat-header-cell *matHeaderCellDef>{{'messaging.editor.ChannelGroupActive' | translate}}</mat-header-cell>
+          <mat-cell *matCellDef="let row">
+            <mat-checkbox [checked]="row.isactive"></mat-checkbox>
+          </mat-cell>
+        </ng-container>
+        <ng-container matColumnDef="actions">
+          <mat-header-cell *matHeaderCellDef>
+            </mat-header-cell>
+            <mat-cell *matCellDef="let row" fxFlex="140px" fxFlexOffset="30px">
+              <button mat-icon-button matTooltip="{{'messaging.management.Delete' | translate}}" (click)="confirmDelete(row)">
+                <mat-icon color="warn">delete</mat-icon>
+              </button>
+            </mat-cell>
+        </ng-container>
+        <mat-header-row *matHeaderRowDef="displayedColumns"></mat-header-row>
+        <mat-row *matRowDef="let row; columns: displayedColumns;">
+        </mat-row>
+      </mat-table>
+    </div>
+  </div>
+</form>

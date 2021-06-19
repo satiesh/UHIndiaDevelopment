@@ -1,0 +1,62 @@
+<app-page-header title="Dashboard" icon="dashboard"></app-page-header>
+<div class="page-content">
+  <div [@fadeInOut]>
+    <div *ngIf="configurations.showDailyStockTrade" class="bottom-space">
+      <h4>{{'home.MyProduct' | translate}}</h4>
+      <button mat-icon-button class="close" aria-label="Close" title="Close" style="float: right;" (click)="configurations.showDailyStockTrade = false">
+        <mat-icon>close</mat-icon>
+      </button>
+      <div class="clearfix"></div>
+      <myproduct-control></myproduct-control>
+    </div>
+    <div *ngIf="configurations.showDailyStockTrade" class="bottom-space">
+      <h4>{{'home.TradeByUser' | translate}}</h4>
+      <mat-progress-bar *ngIf="(loadingTradingFeederIndicator$|async) && (loadingOptionIndicator$|async)" mode="query"></mat-progress-bar>
+      <google-chart [data]="myData" type="PieChart" [width]="600" [height]="400" [options]="options" *ngIf="isOptionsTradeLoaded$|async"></google-chart>
+    </div>
+    <div *ngIf="configurations.showDailyStockTrade" class="bottom-space">
+      <h4>{{'home.NyOptionTrade' | translate}}</h4>
+      <button mat-icon-button class="close" aria-label="Close" title="Close" style="float: right;" (click)="configurations.showDailyStockTrade = false">
+        <mat-icon>close</mat-icon>
+      </button>
+      <div class="clearfix"></div>
+      <mytradeoption-control></mytradeoption-control>
+    </div>
+
+    <div *ngIf="configurations.showDailyStockTrade" class="bottom-space">
+      <h4>{{'home.NyStockTrade' | translate}}</h4>
+      <button mat-icon-button class="close" aria-label="Close" title="Close" style="float: right;" (click)="configurations.showDailyStockTrade = false">
+        <mat-icon>close</mat-icon>
+      </button>
+      <div class="clearfix"></div>
+      <mytradestock-control></mytradestock-control>
+    </div>
+    <div *ngIf="configurations.showDailyStockTrade" class="bottom-space">
+      <h4>{{'home.FreeStockTrade' | translate}}</h4>
+      <button mat-icon-button class="close" aria-label="Close" title="Close" style="float: right;" (click)="configurations.showDailyStockTrade = false">
+        <mat-icon>close</mat-icon>
+      </button>
+      <div class="clearfix"></div>
+      <app-freestockcontrol-list></app-freestockcontrol-list>
+    </div>
+    
+    <!--
+    <div *ngIf="configurations.showDailyStockTrade" class="bottom-space">
+      <h4>{{'home.DailyStockTrade' | translate}}</h4>
+      <button mat-icon-button class="close" aria-label="Close" title="Close" style="float: right;" (click)="configurations.showDailyStockTrade = false">
+        <mat-icon>close</mat-icon>
+      </button>
+      <div class="clearfix"></div>
+      <app-dailyticker></app-dailyticker>
+    </div>
+    <div *ngIf="configurations.showDailyStockTrade" class="bottom-space">
+      <h4>{{'home.OptionTrade' | translate}}</h4>
+      <button mat-icon-button class="close" aria-label="Close" title="Close" style="float: right;" (click)="configurations.showDailyStockTrade = false">
+        <mat-icon>close</mat-icon>
+      </button>
+      <div class="clearfix"></div>
+      <app-optionticker-control></app-optionticker-control>
+    </div>
+  -->
+  </div>
+</div>

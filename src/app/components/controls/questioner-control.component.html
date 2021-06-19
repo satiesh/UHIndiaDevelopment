@@ -1,0 +1,16 @@
+<div *ngIf="isQuestionsLoaded$ |async">
+  <form #form="ngForm" [formGroup]="questionForm" novalidate (ngSubmit)="save()" fxLayout="column" autocomplete="off">
+    <div class="uh-ack-justify" fxLayout="column" fxLayout.lt-md="row">
+      <div formArrayName="questions" *ngFor="let order of questionsFormArray.controls; let i = index">
+        <div>{{i+1}}.&nbsp;{{questionsData[i].question}}</div>
+        <div>
+          <mat-radio-group aria-labelledby="example-radio-group-label" class="example-radio-group" formControlName={{i}}>
+            <mat-radio-button class="example-radio-button" *ngFor="let option of answerTypes" [value]="option" (change)="radioChange($event,questionsData[i])">{{option}}&nbsp;</mat-radio-button>
+          </mat-radio-group>
+        </div>
+        <div class="spacer"></div>
+      </div>
+    </div>
+  </form>
+
+</div>

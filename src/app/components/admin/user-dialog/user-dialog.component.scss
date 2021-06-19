@@ -1,0 +1,28 @@
+.mat-tab-label {
+  border: 1px solid transparent;
+  border-top-left-radius: .25rem;
+  border-top-right-radius: .25rem;
+}
+
+.mat-tab-label-active {
+  color:forestgreen;
+  background-color: #fff;
+  border-color: #dee2e6 #dee2e6 #fff;
+  /*border-bottom-color: #f3704c!important;*/
+}
+
+.mat-ink-bar {
+  display: none;
+}
+.close {
+  margin-bottom: -40px;
+  position: relative;
+  z-index: 1;
+}
+
+.bottom-space {
+  margin-bottom: 2em;
+}
+.spacer {
+  height: 20px;
+}

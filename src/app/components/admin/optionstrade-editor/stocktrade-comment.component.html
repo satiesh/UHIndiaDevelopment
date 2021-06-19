@@ -1,0 +1,122 @@
+<mat-dialog-content>
+  <button mat-icon-button class="close" aria-label="Close" title="Close" style="float: right;" (click)="cancel()">
+    <mat-icon>close</mat-icon>
+  </button>
+  <h1 mat-dialog-title>
+    {{
+ticker.isstockactive? ('options.management.StockAddAditionalComments'|translate):('options.management.StockCloseTrade'|translate)
+    }}
+  </h1>
+  <form #form="ngForm" [formGroup]="tickerForm" novalidate (ngSubmit)="save()" fxLayout="column" [fxLayoutGap]="isEditMode ? '1em' : '0'" autocomplete="off">
+    <div fxLayout="row" fxLayout.lt-md="column" fxLayoutGap="1em">
+      <mat-label fxFlex="20%"><strong>{{'options.editor.Symbol' | translate}}</strong></mat-label>
+      <mat-label fxFlex="30%">{{ticker.symbol}}</mat-label>
+    </div>
+    <div class="spacer"></div>
+    <div fxLayout="row" fxLayout.lt-md="column" fxLayoutGap="1em">
+      <mat-label fxFlex="20%"><strong>{{'options.editor.PostedBy' | translate}}</strong></mat-label>
+      <mat-label fxFlex="30%">{{ticker.postedby}}</mat-label>
+      <mat-label fxFlex="20%"><strong>{{'options.editor.PostedFor' | translate}}</strong></mat-label>
+      <mat-label fxFlex="30%">{{ticker.postedFor}}</mat-label>
+    </div>
+    <div class="spacer"></div>
+    <div fxLayout="row" fxLayout.lt-md="column" fxLayoutGap="1em" *ngIf="!ticker.isstockactive">
+      <mat-label fxFlex="20%"><strong>{{'options.editor.SellPrice' | translate}}</strong></mat-label>
+      <mat-label fxFlex="30%">{{ticker.stocksellprice}}</mat-label>
+      <mat-label fxFlex="20%"><strong>{{'options.editor.ExitDate' | translate}}</strong></mat-label>
+      <mat-label fxFlex="30%">{{checkDate(ticker.stockexitdate)| date: 'EEEE, MMMM d, y'}}</mat-label>
+    </div>
+
+    <div class="spacer"></div>
+    <mat-card *ngIf="ticker.currentStockPrice.length>0">
+      <mat-card-header>
+        <mat-card-title>Stock</mat-card-title>
+      </mat-card-header>
+      <mat-card-content>
+        <div fxLayout="row" fxLayout.lt-md="column" fxLayoutGap="1em">
+          <mat-label fxFlex="40%"><strong>{{'options.editor.StockPrice' | translate}}</strong></mat-label>
+          <mat-label fxFlex="40%">{{ticker.currentStockPrice}}</mat-label>
+          <mat-label fxFlex="10%"><strong>{{'options.editor.AboveResistance' | translate}}</strong></mat-label>
+          <mat-label fxFlex="10%">{{ticker.aboveResistance}}</mat-label>
+          <mat-label fxFlex="10%"><strong>{{'options.editor.BelowResistance' | translate}}</strong></mat-label>
+          <mat-label fxFlex="10%">{{ticker.belowResistance}}</mat-label>
+          <mat-label fxFlex="10%"><strong>{{'options.editor.StopLoss' | translate}}</strong></mat-label>
+          <mat-label fxFlex="10%">{{ticker.stopLoss}}</mat-label>
+          <mat-label fxFlex="10%"><strong>{{'options.editor.Support' | translate}}</strong></mat-label>
+          <mat-label fxFlex="10%">{{ticker.support}}</mat-label>
+        </div>
+        <div class="spacer"></div>
+        <div>
+          <mat-label>{{'options.management.Comments' | translate}}</mat-label>
+        </div>
+        <div>
+          <mat-table [dataSource]="stockdataSource" matSort matSortActive="createdon" matSortDirection="desc">
+            <ng-container matColumnDef="notestype">
+              <mat-header-cell fxFlex="10%" *matHeaderCellDef mat-sort-header> {{'options.management.NotesType' | translate}} </mat-header-cell>
+              <mat-cell fxFlex="10%" *matCellDef="let row"> {{row.notestype}} </mat-cell>
+            </ng-container>
+
+            <ng-container matColumnDef="notesvalue">
+              <mat-header-cell fxFlex="55%" *matHeaderCellDef mat-sort-header> {{'options.management.Notes' | translate}} </mat-header-cell>
+              <mat-cell fxFlex="55%" *matCellDef="let row"> {{row.notesvalue}} </mat-cell>
+            </ng-container>
+
+            <ng-container matColumnDef="notespostedby">
+              <mat-header-cell fxFlex="10%" *matHeaderCellDef mat-sort-header> {{'options.management.NotesPostedBy' | translate}} </mat-header-cell>
+              <mat-cell fxFlex="10%" *matCellDef="let row"> {{row.notespostedby}} </mat-cell>
+            </ng-container>
+            <ng-container matColumnDef="createdon">
+              <mat-header-cell fxFlex="15%" *matHeaderCellDef mat-sort-header> {{'options.management.NotesCreatedOn' | translate}} </mat-header-cell>
+              <mat-cell fxFlex="15%" *matCellDef="let row">{{checkDate(row.createdon)| date: 'EEEE, MMMM d, y'}} </mat-cell>
+            </ng-container>
+            <mat-header-row *matHeaderRowDef="displayedColumns"></mat-header-row>
+            <mat-row *matRowDef="let row; columns: displayedColumns;">
+            </mat-row>
+          </mat-table>
+
+          <mat-paginator [pageSizeOptions]="[5, 10, 25, 100]"></mat-paginator>
+        </div>
+        <div class="spacer"></div>
+
+        <div formGroupName="stocknotesSection" *ngIf="ticker.isstockactive">
+          <div fxLayout="row" fxLayout.lt-md="column" fxLayoutGap="1em">
+            <mat-form-field [floatLabel]="floatLabels" fxFlex>
+              <mat-label>{{'options.editor.StockNotes' | translate}}</mat-label>
+              <textarea matInput formControlName="stocknotes"></textarea>
+              <mat-error *ngIf="stocknotes.hasError('required')">
+                {{'options.editor.NotesRequired' | translate}}
+              </mat-error>
+            </mat-form-field>
+          </div>
+
+          <div fxLayout="row" fxLayout.lt-md="column" fxLayoutGap="1em">
+            <mat-slide-toggle formControlName="isstockactive" color="accent" (change)="toggleStock($event)">Close Stock Trade</mat-slide-toggle>
+          </div>
+
+          <div fxLayout="row" fxLayout.lt-md="column" fxLayoutGap="1em" *ngIf="showCloseStock">
+            <mat-form-field [floatLabel]="floatLabels" fxFlex class="app-validate">
+              <mat-label>{{'options.editor.SellPrice' | translate}}</mat-label>
+              <input matInput formControlName="stocksellprice" />
+            </mat-form-field>
+            <mat-form-field [floatLabel]="floatLabels" fxFlex class="app-validate">
+              <mat-label>{{'options.editor.ExitDate' | translate}}</mat-label>
+              <input matInput formControlName="stockexitdate" [matDatepicker]="picker2">
+              <mat-datepicker-toggle matSuffix [for]="picker2"></mat-datepicker-toggle>
+              <mat-datepicker #picker2></mat-datepicker>
+            </mat-form-field>
+          </div>
+        </div>
+
+
+      </mat-card-content>
+    </mat-card>
+  </form>
+
+
+  <div class="spacer"></div>
+  <div>
+    <button mat-raised-button color="primary" *ngIf="ticker.isstockactive" type="button" (click)="save()" style="margin-right: 1em;">Save</button>
+    <button mat-raised-button color="warn" (click)="cancel()">Cancel</button>
+  </div>
+
+</mat-dialog-content>

@@ -1,0 +1,53 @@
+<mat-card class="mat-elevation-z8" fxLayout.lt-lg="column">
+  <div>
+    <mat-progress-bar *ngIf="loadingIndicator" mode="query"></mat-progress-bar>
+    <div *ngIf="isOptionsTradeLoaded$ && this.isUserOptionTradeLoaded$|async">
+      <mat-table [dataSource]="dataSource" matSort matSortActive="createdon" matSortDirection="desc">
+
+        <ng-container matColumnDef="symbol">
+          <mat-header-cell fxFlex="40%" *matHeaderCellDef mat-sort-header> {{'options.management.Symbol' | translate}} </mat-header-cell>
+          <mat-cell fxFlex="40%" *matCellDef="let row"> {{row.symbol}} </mat-cell>
+        </ng-container>
+
+        <ng-container matColumnDef="postedby">
+          <mat-header-cell fxFlex="40%" *matHeaderCellDef mat-sort-header> {{'options.management.PostedBy' | translate}} </mat-header-cell>
+          <mat-cell fxFlex="40%" *matCellDef="let row"> {{row.postedby}} </mat-cell>
+        </ng-container>
+        <ng-container matColumnDef="type">
+          <mat-header-cell fxFlex="20%" *matHeaderCellDef mat-sort-header> {{'options.management.Type' | translate}} </mat-header-cell>
+          <mat-cell fxFlex="20%" *matCellDef="let row"> {{row.type}} </mat-cell>
+        </ng-container>
+        <ng-container matColumnDef="createdon">
+          <mat-header-cell fxFlex="20%" *matHeaderCellDef mat-sort-header> {{'options.management.CreatedOn' | translate}} </mat-header-cell>
+          ch
+          <mat-cell fxFlex="20%" *matCellDef="let row">{{checkDate(row.createdon)| date: 'EEEE, MMMM d, y'}} </mat-cell>
+        </ng-container>
+        <ng-container matColumnDef="actions">
+          <mat-header-cell *matHeaderCellDef fxFlex="100px">
+            <button mat-button color="primary" matTooltip="{{'options.management.Refresh' | translate}}" (click)="reloadOptions()">
+              <mat-icon class="mat-button-icon">refresh</mat-icon>
+            </button>
+          </mat-header-cell>
+          <mat-cell *matCellDef="let ticker" fxFlex="140px">
+            <button mat-icon-button matTooltip="{{ticker.pinned? 'options.management.PinTaken': 'options.management.Pin'| translate}}" (click)="togglePin(ticker)">
+              <mat-icon class="green-thumsup-icon" *ngIf="ticker.pinned">thumb_up</mat-icon>
+              <mat-icon class="red-thumsup-icon" *ngIf="!ticker.pinned">thumb_down</mat-icon>
+            </button>
+            <button mat-icon-button matTooltip="{{'options.management.ViewDetails' | translate}}" (click)="ViewComments(ticker)">
+              <mat-icon>comment</mat-icon>
+            </button>
+            <button mat-icon-button matTooltip="{{'options.management.Close' | translate}}" *ngIf="ticker.isactive">
+              <mat-cell> <mat-icon class="mat-button-icon green-check-icon" *ngIf="ticker.isactive">check</mat-icon></mat-cell>
+            </button>
+            <button mat-icon-button matTooltip="{{'options.management.Closed' | translate}}" *ngIf="!ticker.isactive">
+              <mat-cell><mat-icon class="mat-button-icon red-check-icon">close</mat-icon>  </mat-cell>
+            </button>
+          </mat-cell>
+        </ng-container>
+        <mat-header-row *matHeaderRowDef="displayedColumns"></mat-header-row>
+        <mat-row *matRowDef="let row; columns: displayedColumns;">
+        </mat-row>
+      </mat-table>
+    </div>
+  </div>
+</mat-card>

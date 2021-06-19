@@ -1,0 +1,41 @@
+<form #form="ngForm" [formGroup]="registerForm" (ngSubmit)="register()" novalidate class="app-register-form">
+
+  
+  
+  <mat-form-field class="app-validate">
+    <mat-label>{{'users.editor.Email' | translate}}</mat-label>
+    <input matInput formControlName="email"  />
+    <mat-error *ngIf="email.hasError('required')">
+      {{'users.editor.EmailRequired' | translate}}
+    </mat-error>
+    <mat-error *ngIf="!email.hasError('required') && email.hasError('pattern')">
+      {{'users.editor.InvalidEmail' | translate}}
+    </mat-error>
+    </mat-form-field>
+    <div formGroupName="password">
+    <mat-form-field class="app-validate">
+      <mat-label>{{'users.editor.NewPassword' | translate}}</mat-label>
+        <input matInput [type]="hide ? 'password' : 'text'" formControlName="newPassword" autocomplete="off" />
+        <mat-icon matSuffix (click)="hide = !hide">{{hide ? 'visibility_off' : 'visibility'}}</mat-icon>
+        <mat-error *ngIf="newPassword.hasError('required')">
+          {{'users.editor.NewPasswordRequired' | translate}}
+        </mat-error>
+        <mat-error *ngIf="!newPassword.hasError('required') && newPassword.hasError('pattern')">
+          {{'users.editor.NewPasswordRules' | translate}}
+        </mat-error>
+    </mat-form-field>
+    <mat-form-field class="app-validate">
+      <mat-label>{{'users.editor.ConfirmPassword' | translate}}</mat-label>
+      <input matInput [type]="hide ? 'password' : 'text'" formControlName="confirmPassword" />
+      <mat-icon matSuffix (click)="hide = !hide">{{hide ? 'visibility_off' : 'visibility'}}</mat-icon>
+      <mat-error *ngIf="confirmPassword.hasError('required')">
+        {{'users.editor.ConfirmationPasswordRequired' | translate}}
+      </mat-error>
+      <mat-error *ngIf="!confirmPassword.hasError('required') && confirmPassword.hasError('notEqual')">
+        {{'users.editor.PasswordMismatch' | translate}}
+      </mat-error>
+    </mat-form-field>
+    </div>
+    <!-- https://github.com/angular/material2/issues/8798 -->
+  </form>
+  

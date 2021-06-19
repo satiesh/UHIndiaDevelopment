@@ -1,0 +1,308 @@
+<!--<mat-dialog-content>-->
+<app-page-header title="EnterNewTrade" icon="assignment"></app-page-header>
+<div class="page-content">
+  <div>
+    <button mat-raised-button color="primary" (click)="save();" style="margin-right: 1em;">
+      <mat-spinner *ngIf="isSaving" [diameter]="20"></mat-spinner>Save
+    </button>
+    <button mat-raised-button color="warn" (click)="cancel()">Cancel</button>
+  </div>
+  <div class="spacer"></div>
+  <form #form="ngForm" [formGroup]="tickerForm" novalidate (ngSubmit)="save()" fxLayout="column" [fxLayoutGap]="isEditMode ? '1em' : '0'" autocomplete="off">
+    <div formGroupName="symbolSection">
+
+      <div fxLayout="row" fxLayout.lt-md="column" fxLayoutGap="1em">
+        <mat-form-field [floatLabel]="floatLabels" fxFlex class="app-validate">
+          <mat-label>{{'options.editor.Symbol' | translate}}</mat-label>
+          <input matInput formControlName="symbol" [readonly]="!isEditMode" />
+          <mat-error *ngIf="symbol.hasError('required')">
+            {{'stockoftheday.editor.SymbolRequired' | translate}}
+          </mat-error>
+        </mat-form-field>
+      </div>
+      <div fxLayout="row" fxLayout.lt-md="column" fxLayoutGap="1em">
+        <mat-label fxFlex="20%"><strong>{{'options.editor.PostedBy' | translate}}</strong></mat-label>
+        <mat-label fxFlex="30%">{{ticker.postedby}}</mat-label>
+        <mat-label fxFlex="20%"><strong>{{'options.editor.PostedFor' | translate}}</strong></mat-label>
+        <mat-label fxFlex="30%">{{ticker.postedFor}}</mat-label>
+      </div>
+
+      <div fxLayout="row" fxLayout.lt-md="column" fxLayoutGap="1em">
+        <mat-form-field [floatLabel]="floatLabels" fxFlex class="app-validate">
+          <mat-label>{{'options.editor.PostedBy' | translate}}</mat-label>
+          <select matNativeControl formControlName="postedBy" name="usrs">
+            <option *ngFor="let usr of tradingFeeder$|async" [value]="usr.displayName">{{usr.displayName}}</option>
+          </select>
+          <mat-error *ngIf="postedBy.hasError('required')">
+            {{'options.editor.PostedByRequired' | translate}}
+          </mat-error>
+        </mat-form-field>
+        <mat-form-field [floatLabel]="floatLabels" fxFlex class="app-validate">
+          <mat-label>{{'options.editor.PostedFor' | translate}}</mat-label>
+          <select matNativeControl formControlName="postedFor" name="psf">
+            <option *ngFor="let psf of postedGroups" [value]="psf">{{psf}}</option>
+          </select>
+          <mat-error *ngIf="postedFor.hasError('required')">
+            {{'options.editor.PostedForRequired' | translate}}
+          </mat-error>
+        </mat-form-field>
+      </div>
+      <div fxLayout="row" fxLayout.lt-md="column" fxLayoutGap="1em">
+        <mat-slide-toggle formControlName="broadcastTrade" color="accent">Broadcast Trade</mat-slide-toggle>
+      </div>
+    </div>
+    <mat-card>
+      <mat-card-header>
+        <mat-card-title>Option</mat-card-title>
+      </mat-card-header>
+      <mat-card-content>
+
+        <div formGroupName="entrySection">
+          <div fxLayout="row" fxLayout.lt-md="column" fxLayoutGap="1em">
+            <!--<mat-label fxFlex="10%">{{'options.editor.Type' | translate}}</mat-label>-->
+            <mat-radio-group aria-labelledby="example-radio-group-label" class="example-radio-group" formControlName="type">
+              <mat-radio-button class="example-radio-button" *ngFor="let option of optionTypes" [value]="option">{{option}}&nbsp;</mat-radio-button>
+            </mat-radio-group>
+            <mat-form-field [floatLabel]="floatLabels" fxFlex class="app-validate">
+              <mat-label>{{'options.editor.Spreads' | translate}}</mat-label>
+              <select matNativeControl #mySelect formControlName="spread" name="spds" (change)='onOptionsSelected(mySelect.value)'>
+                <option *ngFor="let sp of spreadTypes" [value]="sp">{{sp}}</option>
+              </select>
+              <mat-error *ngIf="spread.hasError('required')">
+                {{'options.editor.SpreadRequired' | translate}}
+              </mat-error>
+            </mat-form-field>
+
+          </div>
+        </div>
+        <div formGroupName="transdetails">
+
+          <div fxLayout="row" fxLayout.lt-md="column" fxLayoutGap="1em">
+            <mat-form-field [floatLabel]="floatLabels" fxFlex class="app-validate">
+              <mat-label *ngIf="showSingle ||showCovered ||showCalander">{{'options.editor.Price' | translate}}</mat-label>
+              <mat-label *ngIf="showSpread">{{'options.editor.BuyLegStrike' | translate}}</mat-label>
+
+              <input matInput formControlName="strikeprice" [readonly]="!isEditMode" />
+              <mat-error *ngIf="strikeprice.hasError('required')">
+                {{'options.editor.PriceRequired' | translate}}
+              </mat-error>
+            </mat-form-field>
+            <mat-form-field [floatLabel]="floatLabels" fxFlex class="app-validate" *ngIf="showSpread || showCovered">
+              <mat-label *ngIf="showSpread">{{'options.editor.SellLegStrike' | translate}}</mat-label>
+              <mat-label *ngIf="showCovered">{{'options.editor.StokeStrike' | translate}}</mat-label>
+              <input matInput formControlName="strikePrice2" [readonly]="!isEditMode" />
+              <mat-error *ngIf="strikePrice2.hasError('required')">
+                {{'options.editor.PriceRequired' | translate}}
+              </mat-error>
+            </mat-form-field>
+
+            <mat-form-field [floatLabel]="floatLabels" fxFlex>
+              <mat-label>{{'options.editor.Premium' | translate}}</mat-label>
+              <input matInput formControlName="premiumpaid" [readonly]="!isEditMode" />
+            </mat-form-field>
+
+            <mat-form-field [floatLabel]="floatLabels" fxFlex class="app-validate">
+              <mat-label>{{'options.editor.TransactionType' | translate}}</mat-label>
+              <select matNativeControl formControlName="transtype" name="trans">
+                <option *ngFor="let tran of transTypes" [value]="tran">{{tran}}</option>
+              </select>
+              <mat-error *ngIf="transtype.hasError('required')">
+                {{'options.editor.TransRequired' | translate}}
+              </mat-error>
+            </mat-form-field>
+
+            <mat-form-field [floatLabel]="floatLabels" fxFlex class="app-validate">
+              <mat-label *ngIf="!showCalander">{{'options.editor.ExpiryDate' | translate}}</mat-label>
+              <mat-label *ngIf="showCalander">{{'options.editor.BuyLegDate' | translate}}</mat-label>
+              <input matInput formControlName="expdate" [matDatepicker]="picker">
+              <mat-datepicker-toggle matSuffix [for]="picker"></mat-datepicker-toggle>
+              <mat-datepicker #picker></mat-datepicker>
+              <mat-error *ngIf="expdate.hasError('required')">
+                {{'options.editor.ExpiryDateRequired' | translate}}
+              </mat-error>
+            </mat-form-field>
+            <mat-form-field [floatLabel]="floatLabels" fxFlex class="app-validate" *ngIf="showCalander">
+              <mat-label>{{'options.editor.SellLegDate' | translate}}</mat-label>
+              <input matInput formControlName="selllegexpdate" [matDatepicker]="picker1">
+              <mat-datepicker-toggle matSuffix [for]="picker1"></mat-datepicker-toggle>
+              <mat-datepicker #picker1></mat-datepicker>
+              <mat-error *ngIf="selllegexpdate.hasError('required')">
+                {{'options.editor.ExpiryDateRequired' | translate}}
+              </mat-error>
+            </mat-form-field>
+
+
+            <!--  <button mat-raised-button type="button" color="accent" style="margin-right: 1em;" (click)="addToTable()">ADD</button>-->
+          </div>
+
+        </div>
+        <div *ngIf="TRANS_ELEMENT_DATA.length>0" fxLayout="row" fxLayout.lt-md="column" fxLayoutGap="1em">
+          <mat-label fxFlex="10%">{{'options.editor.Transaction' | translate}}</mat-label>
+          <div class="mat-elevation-z8" fxFlex="81%">
+            <mat-table id="tt" [dataSource]="transDataSource" matSort>
+
+              <div *ngIf="showSingle || showCalander">
+                <ng-container matColumnDef="strikeprice">
+                  <mat-header-cell fxFlex="40%" *matHeaderCellDef mat-sort-header> {{'options.management.Price' | translate}} </mat-header-cell>
+                  <mat-cell fxFlex="40%" *matCellDef="let row"> {{row.strikeprice | currency}} </mat-cell>
+                </ng-container>
+              </div>
+
+              <div *ngIf="showSpread">
+                <ng-container matColumnDef="strikeprice">
+                  <mat-header-cell fxFlex="40%" *matHeaderCellDef mat-sort-header> {{'options.management.BuyLegStrike' | translate}} </mat-header-cell>
+                  <mat-cell fxFlex="40%" *matCellDef="let row"> {{row.strikeprice | currency}} </mat-cell>
+                </ng-container>
+                <ng-container matColumnDef="strikeprice2">
+                  <mat-header-cell fxFlex="40%" *matHeaderCellDef mat-sort-header> {{'options.management.SellLegStrike' | translate}} </mat-header-cell>
+                  <mat-cell fxFlex="40%" *matCellDef="let row"> {{row.strikeprice2 | currency}} </mat-cell>
+                </ng-container>
+              </div>
+
+              <div *ngIf="showCovered">
+                <ng-container matColumnDef="strikeprice">
+                  <mat-header-cell fxFlex="40%" *matHeaderCellDef mat-sort-header> {{'options.management.Price' | translate}} </mat-header-cell>
+                  <mat-cell fxFlex="40%" *matCellDef="let row"> {{row.strikeprice | currency}} </mat-cell>
+                </ng-container>
+                <ng-container matColumnDef="strikeprice2">
+                  <mat-header-cell fxFlex="40%" *matHeaderCellDef mat-sort-header> {{'options.management.StokeStrike' | translate}} </mat-header-cell>
+                  <mat-cell fxFlex="40%" *matCellDef="let row"> {{row.strikeprice2 | currency}} </mat-cell>
+                </ng-container>
+              </div>
+              <ng-container matColumnDef="premiumpaid">
+                <mat-header-cell fxFlex="40%" *matHeaderCellDef mat-sort-header> {{'options.management.Premium' | translate}} </mat-header-cell>
+                <mat-cell fxFlex="40%" *matCellDef="let row"> {{row.premiumpaid | currency}} </mat-cell>
+              </ng-container>
+              <ng-container matColumnDef="transtype">
+                <mat-header-cell fxFlex="40%" *matHeaderCellDef mat-sort-header> {{'options.management.TransactionType' | translate}} </mat-header-cell>
+                <mat-cell fxFlex="40%" *matCellDef="let row"> {{row.transtype}} </mat-cell>
+              </ng-container>
+              <ng-container matColumnDef="expdate" *ngIf="!showCalander">
+                <mat-header-cell fxFlex="40%" *matHeaderCellDef mat-sort-header> {{'options.management.ExpiryDate' | translate}} </mat-header-cell>
+                <mat-cell fxFlex="40%" *matCellDef="let row"> {{row.expdate | date: 'EEEE, MMMM d, y'}} </mat-cell>
+              </ng-container>
+
+              <div *ngIf="showCalander">
+                <ng-container matColumnDef="expdate">
+                  <mat-header-cell fxFlex="40%" *matHeaderCellDef mat-sort-header> {{'options.management.BuyLegDate' | translate}} </mat-header-cell>
+                  <mat-cell fxFlex="40%" *matCellDef="let row"> {{row.expdate | date: 'EEEE, MMMM d, y'}} </mat-cell>
+                </ng-container>
+                <ng-container matColumnDef="selllegexpdate">
+                  <mat-header-cell fxFlex="40%" *matHeaderCellDef mat-sort-header> {{'options.management.SellLegDate' | translate}} </mat-header-cell>
+                  <mat-cell fxFlex="40%" *matCellDef="let row"> {{row.selllegexpdate | date: 'EEEE, MMMM d, y'}} </mat-cell>
+                </ng-container>
+              </div>
+              <mat-header-row *matHeaderRowDef="transDisplayedColumns"></mat-header-row>
+              <mat-row *matRowDef="let row; columns: transDisplayedColumns;">
+              </mat-row>
+            </mat-table>
+          </div>
+        </div>
+        <div formGroupName="notesSection">
+          <mat-form-field [floatLabel]="floatLabels" fxFlex class="app-validate">
+            <mat-label>{{'options.editor.Notes' | translate}}</mat-label>
+            <textarea matInput formControlName="notes"></textarea>
+          </mat-form-field>
+        </div>
+      </mat-card-content>
+    </mat-card>
+    <mat-card>
+      <mat-card-header>
+        <mat-card-title>Stock</mat-card-title>
+      </mat-card-header>
+      <mat-card-content>
+        <div formGroupName="stockSection">
+          <div fxLayout="row" fxLayout.lt-md="column" fxLayoutGap="1em">
+            <mat-form-field [floatLabel]="floatLabels" fxFlex class="app-validate">
+              <mat-label>{{'options.editor.StockPrice' | translate}}</mat-label>
+              <input matInput formControlName="currentStockPrice" [readonly]="!isEditMode" />
+
+              <!--<mat-error *ngIf="currentStockPrice.hasError('required')">
+        {{'options.editor.PriceRequired' | translate}}
+      </mat-error>-->
+            </mat-form-field>
+            <mat-form-field [floatLabel]="floatLabels" fxFlex class="app-validate">
+              <mat-label>{{'options.editor.AboveResistance' | translate}}</mat-label>
+              <input matInput formControlName="aboveResistance" [readonly]="!isEditMode" />
+
+              <!--<mat-error *ngIf="aboveResistance.hasError('required')">
+        {{'options.editor.AboveResistanceRequired' | translate}}
+      </mat-error>-->
+            </mat-form-field>
+            <mat-form-field [floatLabel]="floatLabels" fxFlex class="app-validate">
+              <mat-label>{{'options.editor.BelowResistance' | translate}}</mat-label>
+              <input matInput formControlName="belowResistance" [readonly]="!isEditMode" />
+
+              <!--<mat-error *ngIf="belowResistance.hasError('required')">
+        {{'options.editor.BelowResistanceceRequired' | translate}}
+      </mat-error>-->
+            </mat-form-field>
+            <mat-form-field [floatLabel]="floatLabels" fxFlex class="app-validate">
+              <mat-label>{{'options.editor.Support' | translate}}</mat-label>
+              <input matInput formControlName="support" [readonly]="!isEditMode" />
+            </mat-form-field>
+            <mat-form-field [floatLabel]="floatLabels" fxFlex class="app-validate">
+              <mat-label>{{'options.editor.StopLoss' | translate}}</mat-label>
+              <input matInput formControlName="stopLoss" [readonly]="!isEditMode" />
+            </mat-form-field>
+          </div>
+          <div fxLayout="row" fxLayout.lt-md="column" fxLayoutGap="1em">
+            <mat-form-field [floatLabel]="floatLabels" fxFlex class="app-validate">
+              <mat-label>{{'options.editor.StockNotes' | translate}}</mat-label>
+              <textarea matInput formControlName="stockComments"></textarea>
+            </mat-form-field>
+
+          </div>
+          <div fxLayout="row" fxLayout.lt-md="column" fxLayoutGap="1em">
+            <!--<mat-label>{{'options.editor.AboveResistance' | translate}}</mat-label>-->
+            <mat-checkbox id="amateur" class="amateur" color="primary"
+                          formControlName="stockoftheday">{{'options.editor.Stockoftheday' | translate}}</mat-checkbox>
+          </div>
+
+        </div>
+      </mat-card-content>
+    </mat-card>
+    <mat-card *ngIf="showBroadCast">
+      <mat-card-header>
+        <mat-card-title>{{'stockoftheday.editor.Broadcast' | translate}}</mat-card-title>
+      </mat-card-header>
+      <mat-card-content>
+        <div *ngIf="isChannelLoaded$|async" fxLayout="row" fxLayout.lt-md="column" fxLayoutGap="1em">
+          <div fxFlex="100%">
+            <mat-table id="tt1" [dataSource]="dataSource" matSort>
+              <ng-container matColumnDef="channelname">
+                <mat-header-cell fxFlex="40%" *matHeaderCellDef mat-sort-header> {{'stockoftheday.management.BroadcastChannelName' | translate}} </mat-header-cell>
+                <mat-cell fxFlex="40%" *matCellDef="let row"> {{row.channelname}} </mat-cell>
+              </ng-container>
+              <ng-container matColumnDef="group">
+                <mat-header-cell fxFlex="40%" *matHeaderCellDef mat-sort-header> {{'stockoftheday.management.BroadcastChannelGroup' | translate}} </mat-header-cell>
+                <mat-cell fxFlex="40%" *matCellDef="let row"> {{row.group}} </mat-cell>
+              </ng-container>
+              <ng-container matColumnDef="selected">
+                <mat-header-cell *matHeaderCellDef>{{'stockoftheday.management.BroadcastSelected' | translate}}</mat-header-cell>
+                <mat-cell *matCellDef="let row">
+                  <mat-checkbox [checked]="row.selected"></mat-checkbox>
+                </mat-cell>
+              </ng-container>
+              <mat-header-row *matHeaderRowDef="displayedColumns"></mat-header-row>
+              <mat-row *matRowDef="let row; columns: displayedColumns;">
+              </mat-row>
+            </mat-table>
+          </div>
+        </div>
+      </mat-card-content>
+    </mat-card>
+  </form>
+  <div class="spacer"></div>
+  <div class="spacer"></div>
+  <div>
+    <!--<button mat-raised-button color="primary" (click)="save();" style="margin-right: 1em;">Save</button>-->
+    <button mat-raised-button color="primary" (click)="save();" style="margin-right: 1em;">
+      <mat-spinner *ngIf="isSaving" [diameter]="20"></mat-spinner>Save
+    </button>
+    <button mat-raised-button color="warn" (click)="cancel()">Cancel</button>
+  </div>
+  <!--</mat-dialog-content>-->
+
+</div>
+

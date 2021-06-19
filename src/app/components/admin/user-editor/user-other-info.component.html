@@ -1,0 +1,92 @@
+<div class="spacer"></div>
+<form #form="ngForm" [formGroup]="userOtherInfoForm" novalidate fxLayout="column" autocomplete="off">
+  <div fxLayout="row" fxLayout.lt-md="column" fxLayoutGap="1em" *ngIf="isInvestmentTypesLoaded$ && isInvestorLevelLoaded$ && isTradingToolsLoaded$|async">
+    <mat-form-field class="app-validate" fxFlex>
+      <mat-label>{{'users.editor.InvestmentType' | translate}}</mat-label>
+      <!--<input matInput formControlName="investmentType" />-->
+      <mat-select formControlName="investmentType" multiple>
+        <mat-option *ngFor="let investment of selectInvestmentTypes$|async" [value]="investment.id">{{investment.Name}}</mat-option>
+      </mat-select>
+    </mat-form-field>
+    <mat-form-field class="app-validate" fxFlex>
+      <mat-label>{{'users.editor.InvestorLevel' | translate}}</mat-label>
+      <!--<input matInput formControlName="investmentType" />-->
+      <mat-select formControlName="investorLevel"
+                  multiple>
+        <mat-option *ngFor="let investor of selectInvestorLevel$|async" [value]="investor.id">{{investor.Name}}</mat-option>
+      </mat-select>
+    </mat-form-field>
+  </div>
+  <div fxLayout="row" fxLayout.lt-md="column" fxLayoutGap="1em">
+    <mat-form-field class="app-validate" fxFlex>
+      <mat-label>{{'users.editor.TradingTools' | translate}}</mat-label>
+      <!--<input matInput formControlName="investmentType" />-->
+      <mat-select formControlName="tradingtools"
+                  multiple>
+        <mat-option *ngFor="let trading of selectTradingTools$|async" [value]="trading.id">{{trading.Name}}</mat-option>
+      </mat-select>
+    </mat-form-field>
+  </div>
+  <div fxLayout="row" fxLayout.lt-md="column" fxLayoutGap="1em">
+    <mat-label>{{'users.editor.DisclaimerAccepted' | translate}}</mat-label>
+    <mat-slide-toggle formControlName="disclaimeraccepted" color="accent"></mat-slide-toggle>
+  </div>
+  <div>
+    <button mat-raised-button color="primary" style="margin-right: 1em;" type="button" (click)="save()">Save</button>
+  </div>
+</form>
+
+
+
+<div class="table-flex-container" *ngIf="isInvestmentTypesLoaded$ |async">
+  <h3><mat-label>{{'users.editor.InvestmentType' | translate}}</mat-label></h3>
+  <mat-table [dataSource]="itsdataSource" matSort id="type">
+    <!-- Position Column -->
+    <ng-container matColumnDef="Name">
+      <mat-header-cell *matHeaderCellDef mat-sort-header> Name </mat-header-cell>
+      <mat-cell *matCellDef="let element"> {{element.Name}} </mat-cell>
+    </ng-container>
+
+    <!-- Name Column -->
+    <ng-container matColumnDef="IsActive">
+      <mat-header-cell *matHeaderCellDef mat-sort-header>Select</mat-header-cell>
+      <mat-cell *matCellDef="let row">
+        <mat-checkbox [checked]="row.IsActive" [(ngModel)]="row.IsActive"></mat-checkbox>
+      </mat-cell>
+    </ng-container>
+
+    <mat-header-row *matHeaderRowDef="itsdisplayedColumns"></mat-header-row>
+    <mat-row *matRowDef="let row; columns: itsdisplayedColumns;"></mat-row>
+  </mat-table>
+  <mat-paginator #itsmatPaginator [pageSizeOptions]="[5]"></mat-paginator>
+</div>
+
+
+<div>
+  <h3><mat-label>{{'users.editor.InvestorLevel' | translate}}</mat-label></h3>
+</div>
+<div class="table-flex-container" *ngIf="isInvestorLevelLoaded$ |async">
+  <mat-table [dataSource]="dataSource" matSort id="level">
+    <!-- Position Column -->
+    <ng-container matColumnDef="Name">
+      <mat-header-cell *matHeaderCellDef mat-sort-header> Name </mat-header-cell>
+      <mat-cell *matCellDef="let element"> {{element.Name}} </mat-cell>
+    </ng-container>
+
+    <!-- Name Column -->
+
+    <ng-container matColumnDef="IsActive">
+      <mat-header-cell *matHeaderCellDef> Select </mat-header-cell>
+      <mat-cell *matCellDef="let row">
+        <mat-radio-group [(ngModel)]="selectedLevel">
+          <mat-radio-button (click)="selectedlevel(row)"  [value]="row"></mat-radio-button>
+        </mat-radio-group>
+      </mat-cell>
+    </ng-container>
+
+    <mat-header-row *matHeaderRowDef="displayedColumns"></mat-header-row>
+    <mat-row *matRowDef="let row; columns: displayedColumns;"></mat-row>
+  </mat-table>
+  <mat-paginator #matPaginator [pageSizeOptions]="[5]"></mat-paginator>
+</div>
+

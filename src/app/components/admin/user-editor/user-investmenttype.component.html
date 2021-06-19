@@ -1,0 +1,26 @@
+<div class="spacer"></div>
+<mat-progress-bar *ngIf="loadingIndicator$|async" mode="query"></mat-progress-bar>
+<div class="table-flex-container" *ngIf="isInvestmentTypesLoaded$ |async">
+  <mat-table [dataSource]="dataSource" matSort id="level">
+    <!-- Position Column -->
+    <ng-container matColumnDef="Name">
+      <mat-header-cell *matHeaderCellDef mat-sort-header> Name </mat-header-cell>
+      <mat-cell *matCellDef="let element"> {{element.Name}} </mat-cell>
+    </ng-container>
+    <!-- Name Column -->
+    <ng-container matColumnDef="IsActive">
+      <mat-header-cell *matHeaderCellDef mat-sort-header>Select</mat-header-cell>
+      <mat-cell *matCellDef="let row">
+        <mat-checkbox [checked]="row.IsActive" [(ngModel)]="row.IsActive" (click)="madeChange()"></mat-checkbox>
+      </mat-cell>
+    </ng-container>
+
+    <mat-header-row *matHeaderRowDef="displayedColumns"></mat-header-row>
+    <mat-row *matRowDef="let row; columns: displayedColumns;"></mat-row>
+  </mat-table>
+  <mat-paginator [pageSizeOptions]="[10,15,25,100]"></mat-paginator>
+</div>
+<div class="spacer"></div>
+<!--<div>
+  <button mat-raised-button color="primary" style="margin-right: 1em;" type="button" (click)="save()">Save</button>
+</div>-->

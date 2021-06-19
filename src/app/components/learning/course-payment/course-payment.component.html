@@ -1,0 +1,14 @@
+<form #form="ngForm" [formGroup]="stripeTest" novalidate fxLayout="column" autocomplete="off">
+  <div fxLayout="row" fxLayout.lt-md="column" fxLayoutGap="1em">
+    <p class="uh-ack-justify">
+      <strong>{{currentuser.userprofile.firstName}}</strong>, you ae about to register to the course Please fill in the credit card information and the above mentioned amount will be charged to your card.
+    </p>
+  </div>
+  <mat-card class="mat-elevation-z6">
+    <input matInput formControlName="name" hidden />
+    <input matInput formControlName="amount" hidden />
+    <ngx-stripe-card [options]="cardOptions"
+                     [elementsOptions]="elementsOptions"></ngx-stripe-card>
+  </mat-card>
+  <div class="spacer"></div>
+</form>

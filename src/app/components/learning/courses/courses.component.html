@@ -1,0 +1,63 @@
+<app-page-header title="Courses" icon="notes"></app-page-header>
+<div [@fadeInOut] class="page-content">
+  <div *ngIf="canManageCourses" fxLayout="row" style="height: 100%; flex-direction: row; box-sizing: border-box; display: flex; place-content: center flex-end; align-items: center;">
+    <button mat-button color="primary" matTooltip="{{'learning.management.NewCourse' | translate}}" (click)="editCourse()">
+      <mat-icon class="mat-button-icon">library_add</mat-icon>{{'learning.management.NewCourse' | translate}}
+    </button>
+    <button mat-button color="primary" matTooltip="{{'learning.management.Refresh' | translate}}" (click)="reloadCourse()">
+      <mat-icon class="mat-button-icon">refresh</mat-icon>
+    </button>
+  </div>
+  <div>
+    <mat-progress-bar  mode="query"></mat-progress-bar>
+    <div fxLayout="row wrap" fxLayoutAlign="space-evenly">
+      <div fxFlex="50" fxFlex.sm="33.3" fxFlex.xs="50" *ngFor="let tile of sourceCourses" style="padding: 2px;margin-bottom: 1em">
+        <mat-card class="card">
+          <mat-card-title>{{tile.Name}}</mat-card-title>
+
+          <mat-card-subtitle>
+            <strong>Prerequisites</strong>: {{tile.Prerequisites}}<br>
+          </mat-card-subtitle>
+
+          <mat-card-content>
+            <div fxLayout="row" fxLayout.lt-md="column" fxLayoutGap="1em" style="padding: 1px;margin-bottom: 1em">
+              <mat-label fxFlex="20%">{{'learning.editor.GeneralAudience' | translate}}</mat-label>
+              <span>
+                {{tile.GeneralAudience}}
+              </span>
+            </div>
+            <div fxLayout="row" fxLayout.lt-md="column" fxLayoutGap="1em" style="padding: 1px;margin-bottom: 1em">
+              <mat-label fxFlex="20%">{{'learning.editor.Prerequisites' | translate}}</mat-label>
+              <span>
+                {{tile.Prerequisites}}
+              </span>
+            </div>
+
+            <div fxLayout="row" fxLayout.lt-md="column" fxLayoutGap="1em" style="padding: 1px;margin-bottom: 1em">
+              <mat-label fxFlex="20%">{{'learning.editor.StartDate' | translate}}</mat-label>
+              <span>
+                {{checkDate(tile.StartDate)| date: 'EEEE, MMMM d, y'}}
+              </span>
+            </div>
+            <div fxLayout="row" fxLayout.lt-md="column" fxLayoutGap="1em" style="padding: 1px;margin-bottom: 1em">
+              <mat-label fxFlex="20%">{{'learning.editor.Schedule' | translate}}</mat-label>
+              <span>
+                {{tile.Schedule}}
+              </span>
+            </div>
+            <div fxLayout="row" fxLayout.lt-md="column" fxLayoutGap="1em" style="padding: 1px;margin-bottom: 1em">
+              <mat-label fxFlex="20%">{{'learning.editor.ShortDescription' | translate}}</mat-label>
+              <span [innerHTML]="tile.ShortDescription">
+
+              </span>
+            </div>
+          </mat-card-content>
+          <mat-card-actions fxLayout="row" fxLayoutAlign="center">
+            <button mat-raised-button color="primary" (click)="registerCourse(tile)">REGISTER</button>&nbsp;
+            <button mat-raised-button color="accent" (click)="editCourse(tile)">MORE INFO</button>
+          </mat-card-actions>
+        </mat-card>
+      </div>
+    </div>
+  </div>
+</div>

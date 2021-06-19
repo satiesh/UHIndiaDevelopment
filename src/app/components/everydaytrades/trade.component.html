@@ -1,0 +1,62 @@
+<app-page-header title="ViewTrades" icon="notes"></app-page-header>
+<div class="page-content">
+  <div class="mat-elevation-z6">
+    <div class="spacer"></div>
+    <div class="page-content">
+      <div *ngIf="loadingIndicator$|async">
+        <mat-progress-bar mode="query"></mat-progress-bar>
+        <p>Please wait loading...</p>
+      </div>
+      <mat-tab-group disableRipple="true" *ngIf="(isCurrentUserLoaded$|async)">
+        <mat-tab label="Today's Trade">
+          <div class="mat-elevation-z8">
+            <app-everydaytrade-list [dailyOptionTrade]="selectDailyOptionsTrade$|async"></app-everydaytrade-list>
+          </div>
+        </mat-tab>
+        <mat-tab label="Open Option Trades">
+          <app-opentrades-list></app-opentrades-list>
+          <div class="spacer"></div>
+          <!--<app-subscription></app-subscription>-->
+        </mat-tab>
+        <mat-tab label="Closed Option Trades">
+          <app-closedtrades-list></app-closedtrades-list>
+          <div class="spacer"></div>
+          <!--<app-subscription></app-subscription>-->
+        </mat-tab>
+        <mat-tab label="Open Stock Trades">
+          <app-openstocktrades-list></app-openstocktrades-list>
+          <div class="spacer"></div>
+          <!--<app-subscription></app-subscription>-->
+        </mat-tab>
+        <mat-tab label="Closed Stock Trades">
+          <app-closedstocktrades-list></app-closedstocktrades-list>
+          <div class="spacer"></div>
+          <!--<app-subscription></app-subscription>-->
+        </mat-tab>
+        <mat-tab label="All Past Trade History" *ngIf="!canManageOptionTrade">
+          <app-alltrades-list></app-alltrades-list>
+          <div class="spacer"></div>
+          <!--<app-subscription></app-subscription>-->
+        </mat-tab>
+        <mat-tab label="All Past Trade History" *ngIf="canManageOptionTrade">
+          <app-optionstrade-list></app-optionstrade-list>
+          <div class="spacer"></div>
+          <!--<app-subscription></app-subscription>-->
+        </mat-tab>
+
+        <!--
+
+            <mat-tab label="Free Stock Of The Day" *ngIf="!canManageStockOftheDay">
+              <app-freestockofday-list></app-freestockofday-list>
+              <div class="spacer"></div>
+            </mat-tab>
+            <mat-tab label="Free Stocks List" *ngIf="canManageStockOftheDay">
+              <app-dailytrade-list></app-dailytrade-list>
+              <div class="spacer"></div>
+            </mat-tab>
+        -->
+
+      </mat-tab-group>
+    </div>
+  </div>
+</div>

@@ -1,0 +1,21 @@
+<form #form="ngForm" [formGroup]="roleForm" novalidate (ngSubmit)="save()" fxLayout="column" [fxLayoutGap]="isEditMode ? '1em' : '0'" autocomplete="off">
+  <div fxLayout="row" fxLayout.lt-md="column" fxLayoutGap="1em">
+    <mat-form-field [floatLabel]="floatLabels" fxFlex>
+      <mat-label>{{'role.editor.Name' | translate}}</mat-label>
+      <input matInput formControlName="RoleName" [readonly]="!isEditMode" />
+      <mat-error *ngIf="RoleName.hasError('required')">
+        {{'role.editor.NameRequired' | translate}}
+      </mat-error>
+    </mat-form-field>
+  </div>
+  <div fxLayout="row" fxLayout.lt-md="column" fxLayoutGap="1em">
+    <mat-form-field [floatLabel]="floatLabels" fxFlex>
+      <mat-label>{{'role.editor.Description' | translate}}</mat-label>
+      <input matInput formControlName="RoleDescription" [readonly]="!isEditMode" />
+    </mat-form-field>
+  </div>
+  <div fxLayout="row" fxLayout.lt-md="column" fxLayoutGap="1em">
+    <mat-label>{{'role.editor.Active' | translate}}</mat-label>
+    <mat-slide-toggle formControlName="IsActive" color="accent">{{IsActive ? 'ACTIVE' : 'InActive'}}</mat-slide-toggle>
+  </div>
+</form>

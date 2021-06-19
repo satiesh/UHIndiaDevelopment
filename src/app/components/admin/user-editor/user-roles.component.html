@@ -1,0 +1,29 @@
+<mat-progress-bar *ngIf="loadingIndicator$|async" mode="query"></mat-progress-bar>
+<mat-table [dataSource]="dataSource" matSort>
+
+  <ng-container matColumnDef="RoleName">
+    <mat-header-cell fxFlex="20%" *matHeaderCellDef mat-sort-header> {{'role.management.Name' | translate}} </mat-header-cell>
+    <mat-cell fxFlex="20%" *matCellDef="let row"> {{row.RoleName}} </mat-cell>
+  </ng-container>
+
+  <ng-container matColumnDef="Permission">
+    <mat-header-cell fxFlex="70%" *matHeaderCellDef mat-sort-header> {{'role.management.Permission' | translate}} </mat-header-cell>
+    <mat-cell fxFlex="70%" *matCellDef="let row">
+      <div style="width:95%;word-wrap: break-word;">{{row.Permission}}</div>
+    </mat-cell>
+  </ng-container>
+
+  <ng-container matColumnDef="IsActive">
+    <mat-header-cell fxFlex="5%" *matHeaderCellDef mat-sort-header> {{'role.management.Active' | translate}} </mat-header-cell>
+    <mat-cell *matCellDef="let row">
+      <mat-checkbox [checked]="row.IsActive" [(ngModel)]="row.IsActive" (click)="madeChange()"></mat-checkbox>
+    </mat-cell>
+  </ng-container>
+  <mat-header-row *matHeaderRowDef="displayedColumns"></mat-header-row>
+  <mat-row *matRowDef="let row; columns: displayedColumns;">
+  </mat-row>
+</mat-table>
+<div class="spacer"></div>
+<!--<div>
+  <button mat-raised-button color="primary" style="margin-right: 1em;" (click)="save()">Save</button>
+</div>-->

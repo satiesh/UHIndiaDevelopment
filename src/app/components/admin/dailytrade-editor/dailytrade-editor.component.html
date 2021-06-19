@@ -1,0 +1,127 @@
+<form #form="ngForm" [formGroup]="tickerForm" novalidate (ngSubmit)="save()" fxLayout="column" [fxLayoutGap]="isEditMode ? '1em' : '0'" autocomplete="off">
+  <div fxLayout="row" fxLayout.lt-md="column" fxLayoutGap="1em">
+    <mat-form-field [floatLabel]="floatLabels" fxFlex class="app-validate">
+      <mat-label>{{'stockoftheday.editor.Symbol' | translate}}</mat-label>
+      <input matInput formControlName="symbol" [readonly]="!isEditMode" />
+      <mat-error *ngIf="symbol.hasError('required')">
+        {{'stockoftheday.editor.SymbolRequired' | translate}}
+      </mat-error>
+    </mat-form-field>
+    <mat-form-field [floatLabel]="floatLabels" fxFlex class="app-validate">
+      <mat-label>{{'stockoftheday.editor.Sector' | translate}}</mat-label>
+      <input matInput formControlName="sector" [readonly]="!isEditMode" />
+      <!--<mat-error *ngIf="sector.hasError('required')">
+        {{'stockoftheday.editor.SectorRequired' | translate}}
+      </mat-error>-->
+    </mat-form-field>
+  </div>
+  <div fxLayout="row" fxLayout.lt-md="column" fxLayoutGap="1em">
+
+    <mat-form-field [floatLabel]="floatLabels" fxFlex class="app-validate">
+      <mat-label>{{'stockoftheday.editor.MarketCap' | translate}}</mat-label>
+      <input matInput formControlName="marketcap" [readonly]="!isEditMode" />
+      <!--<mat-error *ngIf="marketcap.hasError('required')">
+        {{'stockoftheday.editor.MarketCapRequired' | translate}}
+      </mat-error>-->
+    </mat-form-field>
+    <mat-form-field [floatLabel]="floatLabels" fxFlex class="app-validate">
+      <mat-label>{{'stockoftheday.editor.Volume' | translate}}</mat-label>
+      <input matInput formControlName="volume" [readonly]="!isEditMode" />
+      <!--<mat-error *ngIf="volume.hasError('required')">
+        {{'stockoftheday.editor.VolumeRequired' | translate}}
+      </mat-error>-->
+    </mat-form-field>
+  </div>
+
+  <div fxLayout="row" fxLayout.lt-md="column" fxLayoutGap="1em">
+
+    <mat-form-field [floatLabel]="floatLabels" fxFlex class="app-validate">
+      <mat-label>{{'stockoftheday.editor.TradingPriceRange' | translate}}</mat-label>
+      <input matInput formControlName="tradingpricerange" [readonly]="!isEditMode" />
+      <!--<mat-error *ngIf="tradingpricerange.hasError('required')">
+        {{'stockoftheday.editor.TradingPriceRangeRequired' | translate}}
+      </mat-error>-->
+    </mat-form-field>
+    <mat-form-field [floatLabel]="floatLabels" fxFlex class="app-validate">
+      <mat-label>{{'stockoftheday.editor.Quote' | translate}}</mat-label>
+      <input matInput formControlName="quote" [readonly]="!isEditMode" />
+      <!--<mat-error *ngIf="quote.hasError('required')">
+        {{'stockoftheday.editor.QuoteRequired' | translate}}
+      </mat-error>-->
+    </mat-form-field>
+  </div>
+
+  <div fxLayout="row" fxLayout.lt-md="column" fxLayoutGap="1em">
+
+    <mat-form-field [floatLabel]="floatLabels" fxFlex class="app-validate">
+      <mat-label>{{'stockoftheday.editor.Type' | translate}}</mat-label>
+      <input matInput formControlName="type" [readonly]="!isEditMode" />
+      <!--<mat-error *ngIf="type.hasError('required')">
+        {{'stockoftheday.editor.TypeRequired' | translate}}
+      </mat-error>-->
+    </mat-form-field>
+    <mat-form-field [floatLabel]="floatLabels" fxFlex class="app-validate">
+      <mat-label>{{'stockoftheday.editor.Support' | translate}}</mat-label>
+      <input matInput formControlName="support" [readonly]="!isEditMode" />
+      <mat-error *ngIf="support.hasError('required')">
+        {{'stockoftheday.editor.SupportRequired' | translate}}
+      </mat-error>
+    </mat-form-field>
+  </div>
+
+  <div fxLayout="row" fxLayout.lt-md="column" fxLayoutGap="1em">
+
+    <mat-form-field [floatLabel]="floatLabels" fxFlex class="app-validate">
+      <mat-label>{{'stockoftheday.editor.ResistanceTarget' | translate}}</mat-label>
+      <input matInput formControlName="resistancetarget" [readonly]="!isEditMode" />
+      <mat-error *ngIf="resistancetarget.hasError('required')">
+        {{'stockoftheday.editor.ResistanceTargetRequired' | translate}}
+      </mat-error>
+    </mat-form-field>
+    <mat-form-field [floatLabel]="floatLabels" fxFlex class="app-validate">
+      <mat-label>{{'stockoftheday.editor.StopLoss' | translate}}</mat-label>
+      <input matInput formControlName="stoploss" [readonly]="!isEditMode" />
+      <mat-error *ngIf="stoploss.hasError('required')">
+        {{'stockoftheday.editor.StopLossRequired' | translate}}
+      </mat-error>
+    </mat-form-field>
+  </div>
+  <div fxLayout="row" fxLayout.lt-md="column" fxLayoutGap="1em">
+    <mat-label>{{'stockoftheday.editor.Active' | translate}}</mat-label>
+    <mat-slide-toggle formControlName="isactive" color="accent">{{isactive ? 'ACTIVE' : 'INACTIVE'}}</mat-slide-toggle>
+  </div>
+  <div fxLayout="row" fxLayout.lt-md="column" fxLayoutGap="1em">
+    <mat-form-field [floatLabel]="floatLabels" fxFlex class="app-validate">
+      <mat-label>{{'stockoftheday.editor.Notes' | translate}}</mat-label>
+      <textarea matInput formControlName="notes"></textarea>
+    </mat-form-field>
+    <!--<mat-label fxFlex="10%">{{'stockoftheday.editor.Notes' | translate}}</mat-label>
+  <angular-editor id="Notes" formControlName="notes" [config]="editorConfig"></angular-editor>-->
+  </div>
+</form>
+
+<!--<div class="spacer"></div>
+<div *ngIf="isChannelLoaded$|async" fxLayout="row" fxLayout.lt-md="column" fxLayoutGap="1em">
+  <mat-label fxFlex="10%">{{'stockoftheday.editor.Broadcast' | translate}}</mat-label>
+  <div class="mat-elevation-z8" fxFlex="81%">
+    <mat-table [dataSource]="dataSource" matSort>
+      <ng-container matColumnDef="channelname">
+        <mat-header-cell fxFlex="40%" *matHeaderCellDef mat-sort-header> {{'stockoftheday.management.BroadcastChannelName' | translate}} </mat-header-cell>
+        <mat-cell fxFlex="40%" *matCellDef="let row"> {{row.channelname}} </mat-cell>
+      </ng-container>
+      <ng-container matColumnDef="group">
+        <mat-header-cell fxFlex="40%" *matHeaderCellDef mat-sort-header> {{'stockoftheday.management.BroadcastChannelGroup' | translate}} </mat-header-cell>
+        <mat-cell fxFlex="40%" *matCellDef="let row"> {{row.group}} </mat-cell>
+      </ng-container>
+      <ng-container matColumnDef="selected">
+        <mat-header-cell *matHeaderCellDef>{{'stockoftheday.management.BroadcastSelected' | translate}}</mat-header-cell>
+        <mat-cell *matCellDef="let row">
+          <mat-checkbox [checked]="row.selected" [(ngModel)]="row.selected"></mat-checkbox>
+        </mat-cell>
+      </ng-container>
+      <mat-header-row *matHeaderRowDef="displayedColumns"></mat-header-row>
+      <mat-row *matRowDef="let row; columns: displayedColumns;">
+      </mat-row>
+    </mat-table>
+  </div>
+</div>-->

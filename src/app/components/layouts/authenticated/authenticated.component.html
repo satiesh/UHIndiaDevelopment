@@ -1,0 +1,129 @@
+<div id="app_container" [class.is-mobile]="mobileQuery.matches" class="nav-container">
+  <mat-toolbar ngPreserveWhitespaces color="primary" class="app-toolbar">
+    <!--<mat-toolbar-row *ngIf="showCustom">
+      <span>Enable notifications for the trades gettting posted?</span>
+      <span class="app-toolbar-spacer"></span>
+      <button mat-raised-button color="accent" (click)="requestPermission()">
+        <span>{{'mainMenu.Enable' | translate}}</span>
+      </button>
+      <button mat-button (click)="deleteToken()">
+        <span>{{'mainMenu.DontEnable' | translate}}</span>
+      </button>
+    </mat-toolbar-row>-->
+
+    <mat-toolbar-row>
+      <button mat-icon-button (click)="mainNav.toggle()"><mat-icon>menu</mat-icon></button>
+      <h1 class="app-name"><a routerLink="/" class="appTitle">{{appTitle}}</a></h1>
+      <span class="app-toolbar-spacer"></span>
+      <button *ngIf="!isUserLoggedIn" mat-button (click)="router.navigateByUrl('/login')">
+        <mat-icon>lock_open</mat-icon>
+        <span>{{'mainMenu.Login' | translate}}</span>
+      </button>
+
+      <button *ngIf="isUserLoggedIn" class="side-button" mat-button [matMenuTriggerFor]="accountMenu" matTooltip="{{'mainMenu.UserAccount' | translate}}">
+        <mat-icon class="menu-button">account_circle</mat-icon>
+        <span fxHide.lt-sm>{{this.selectedUser.displayName | translate}}</span>
+      </button>
+      <mat-menu #accountMenu="matMenu">
+        <button mat-menu-item (click)="router.navigateByUrl('/auth/profile')">
+          <mat-icon>person</mat-icon><span>{{'mainMenu.Profile' | translate}}</span>
+        </button>
+        <button mat-menu-item>
+          <mat-icon>settings</mat-icon><span>{{'mainMenu.Settings' | translate}}</span>
+        </button>
+        <button mat-menu-item (click)="logout()">
+          <mat-icon>lock</mat-icon><span>{{'mainMenu.Logout' | translate}}</span>
+        </button>
+      </mat-menu>
+    </mat-toolbar-row>
+  </mat-toolbar>
+  <mat-sidenav-container class="app-sidenav-container"
+                         [style.marginTop.px]="mobileQuery.matches ? 56 : 0">
+    <mat-sidenav #mainNav class="app-sidenav-nav mat-elevation-z6" [mode]="mobileQuery.matches ? 'over' : 'side'"
+                 [fixedInViewport]="mobileQuery.matches" fixedTopGap="56" [opened]="!mobileQuery.matches">
+      <mat-nav-list *ngIf="isUserLoggedIn">
+        <a mat-list-item routerLinkActive="active" [routerLinkActiveOptions]="{ exact: true }" routerLink="/auth/dashboard"><mat-icon>dashboard</mat-icon>{{'mainMenu.Home' | translate}}</a>
+      </mat-nav-list>
+
+      <mat-nav-list *ngIf="isUserLoggedIn">
+        <!--<mat-expansion-panel *ngIf="canViewCourses || canManageCourses">-->
+        <mat-expansion-panel>
+          <mat-expansion-panel-header>
+            <mat-panel-title>
+              <mat-icon>open_with</mat-icon>{{'mainMenu.Trades' | translate}}
+            </mat-panel-title>
+          </mat-expansion-panel-header>
+          <a mat-list-item routerLinkActive="active" *ngIf="canManageOptionTrade" routerLink="/auth/admin/newtrade"><mat-icon>assignment</mat-icon>{{'mainMenu.EnterNewTrade' | translate}}</a>
+          <a mat-list-item routerLinkActive="active" *ngIf="canViewOptionTrade" routerLink="/auth/trades"><mat-icon>notes</mat-icon>{{'mainMenu.ViewTrade' | translate}}</a>
+          <!--<a mat-list-item routerLinkActive="active" *ngIf="canManageStockOftheDay" routerLink="/auth/admin/dailytrade"><mat-icon>money</mat-icon>{{'mainMenu.Freestockoftheday' | translate}}</a>-->
+        </mat-expansion-panel>
+      </mat-nav-list>
+
+      <!--<mat-nav-list *ngIf="isUserLoggedIn">
+    <mat-expansion-panel *ngIf="canViewCourses || canManageCourses">
+    <a mat-list-item routerLinkActive="active" [routerLinkActiveOptions]="{ exact: true }" routerLink="/auth/dailytrade"><mat-icon>assignment</mat-icon>{{'mainMenu.DailyTrade' | translate}}</a>
+
+  </mat-nav-list>-->
+
+
+
+
+      <mat-nav-list *ngIf="isUserLoggedIn">
+        <!--<mat-expansion-panel *ngIf="canViewCourses || canManageCourses">-->
+        <mat-expansion-panel >
+          <mat-expansion-panel-header>
+            <mat-panel-title>
+              <mat-icon>school</mat-icon>{{'mainMenu.Learning' | translate}}
+            </mat-panel-title>
+          </mat-expansion-panel-header>
+          <a mat-list-item routerLinkActive="active" *ngIf="canViewCourses" routerLink="/auth/courses"><mat-icon>notes</mat-icon>{{'mainMenu.Course' | translate}}</a>
+        </mat-expansion-panel>
+      </mat-nav-list>
+
+      <mat-nav-list *ngIf="isUserLoggedIn">
+
+        <mat-expansion-panel *ngIf="canManageCourses || canManageUsers  ||canManageRoles ||canManageSubscriptions"
+                             #admin [class.mat-elevation-z0]="!admin.expanded">
+          <mat-expansion-panel-header>
+            <mat-panel-title>
+              <mat-icon>security</mat-icon>Admin
+            </mat-panel-title>
+          </mat-expansion-panel-header>
+          <a mat-list-item routerLinkActive="active" *ngIf="canViewUsers" routerLink="/auth/admin/users"><mat-icon>people</mat-icon>Users</a>
+          <a mat-list-item routerLinkActive="active" *ngIf="canViewRoles" routerLink="/auth/admin/roles"><mat-icon>assignment_ind</mat-icon>Roles</a>
+          <a mat-list-item routerLinkActive="active" *ngIf="canViewSubscriptions" routerLink="/auth/admin/subscription"><mat-icon>trip_origin</mat-icon>Subscription</a>
+          <!--<a mat-list-item routerLinkActive="active" *ngIf="canViewStockOftheDay" routerLink="/auth/admin/dailytrade"><mat-icon>money</mat-icon>Stock of the Day</a>
+      <a mat-list-item routerLinkActive="active" *ngIf="canViewStockOftheDay" routerLink="/auth/admin/optionstrade"><mat-icon>open_with</mat-icon>Trades</a>-->
+          <a mat-list-item routerLinkActive="active" *ngIf="canViewCoupons" routerLink="/auth/admin/coupons"><mat-icon>local_atm</mat-icon>Coupons</a>
+          <a mat-list-item routerLinkActive="active" *ngIf="canViewCoupons" routerLink="/auth/admin/messaging"><mat-icon>message</mat-icon>Messaging</a>
+        </mat-expansion-panel>
+      </mat-nav-list>
+
+      <mat-nav-list *ngIf="isUserLoggedIn">
+        <!--<mat-expansion-panel *ngIf="canViewCourses || canManageCourses">-->
+        <mat-expansion-panel>
+          <mat-expansion-panel-header>
+            <mat-panel-title>
+              <mat-icon>description</mat-icon>{{'mainMenu.Reports' | translate}}
+            </mat-panel-title>
+          </mat-expansion-panel-header>
+          <a mat-list-item routerLinkActive="active" routerLink="/auth/reports"><mat-icon>line_weight</mat-icon>{{'mainMenu.OptionsReports' | translate}}</a>
+        </mat-expansion-panel>
+      </mat-nav-list>
+
+      <mat-nav-list>
+        <a mat-list-item routerLinkActive="active" routerLink="/about"><mat-icon>info</mat-icon>{{'mainMenu.About' | translate}}</a>
+      </mat-nav-list>
+    </mat-sidenav>
+
+    <mat-sidenav-content>
+      <div fxLayout="column" fxFill>
+        <div id="mainContent" fxFlex>
+          <router-outlet></router-outlet>
+        </div>
+        <app-footer></app-footer>
+      </div>
+    </mat-sidenav-content>
+  </mat-sidenav-container>
+
+</div>

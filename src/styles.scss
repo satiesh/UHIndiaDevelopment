@@ -1,0 +1,229 @@
+/* You can add global styles to this file, and also import other style files */
+@import '../node_modules/@angular/material/theming';
+
+@import '../node_modules/ngx-toasta/styles/style-material.css';
+@include mat-core();
+$primary: mat-palette($mat-indigo);
+$accent: mat-palette($mat-pink, A200, A100, A400);
+
+$theme: mat-light-theme($primary, $accent);
+@include angular-material-theme($theme);
+
+html, body {
+  height: 100%;
+}
+
+body {
+  font-family: "Roboto","Helvetica Neue Light","Helvetica Neue",Helvetica,Arial,"Lucida Grande",sans-serif;
+  margin: 0;
+}
+
+
+
+
+.page-content {
+  padding: 0 2em;
+}
+
+.mat-card-content,
+.mat-card-header .mat-card-title,
+.mat-expansion-panel-content {
+  font-size: 16px;
+}
+
+.mat-panel-title {
+  display: inline-block;
+  vertical-align: middle;
+}
+
+.mat-form-field.app-validate.ng-valid {
+
+  $valid-color: #42A948;
+
+  .mat-form-field-label {
+    color: $valid-color;
+  }
+
+  .mat-form-field-underline {
+    background-color: $valid-color;
+  }
+}
+
+.mat-dialog-sm {
+  min-width: 40vw;
+
+  @media screen and (max-width: 959px) {
+    min-width: 90vw;
+  }
+}
+
+.mat-dialog-md {
+  min-width: 50vw;
+
+  @media screen and (max-width: 959px) {
+    min-width: 90vw;
+  }
+}
+
+.mat-dialog-lg {
+  min-width: 90vw;
+
+  @media screen and (max-width: 959px) {
+    min-width: 90vw;
+  }
+}
+
+.mat-button-icon {
+  margin-right: 16px;
+}
+
+.mat-icon.mat-icon-lg {
+  width: 48px;
+  height: 48px;
+  font-size: 48px;
+}
+
+.vertical-center {
+  display: inline-block;
+  vertical-align: middle;
+}
+
+#toasta.toasta-position-top-right {
+  top: 80px;
+  right: 20px;
+}
+
+#toasta .toast-text .toast-msg {
+  max-width: 1000px;
+  max-height: 800px;
+  display: inline-block;
+  overflow: auto;
+}
+
+/*.logo-section{
+    width: 150px;
+    height: 150px !important;
+    display: inline-block;
+    padding: 92px 0 0;
+    min-height: 150px !important; 
+    }*/
+
+header {
+  display: block;
+  overflow: hidden;
+}
+
+.logo {
+  float: left;
+}
+
+.topRight {
+  float: right;
+  padding: 26px 15px 0 0;
+  text-align: right;
+}
+
+.logoimg {
+  width: 90px;
+  height: 72px;
+  background-image: url(/assets/img/logo.png);
+  background-size: 100%;
+}
+
+.mat-flat-button.mat-primary, .mat-raised-button.mat-primary, .mat-fab.mat-primary, .mat-mini-fab.mat-primary {
+  background-color: #E72466;
+}
+
+.mat-step-header .mat-step-icon-selected, .mat-step-header .mat-step-icon-state-done, .mat-step-header .mat-step-icon-state-edit {
+  background-color: #E72466;
+}
+
+.mat-raised-button.mat-accent {
+  height: 52px;
+}
+
+.mat-form-field {
+  margin-top: 0;
+}
+
+.mat-checkbox-layout .mat-checkbox-label {
+  line-height: 19px;
+  padding: 0 0 0 6px;
+}
+
+.mat-expansion-panel-body {
+  padding: 0 0 !important;
+}
+
+.mat-toolbar.mat-primary {
+  background: #000;
+  color: white;
+}
+
+div.header {
+  background-color: #000;
+  color: #fff;
+  display: block;
+  overflow: hidden;
+  padding: 5px 0;
+}
+
+.topRight a {
+  color: #fff;
+  text-decoration: none;
+}
+
+.topRight a:hover {
+  color: #E72466;
+}
+
+footer {
+  background: #efefef;
+  color: #999;
+  text-align: center;
+  padding: 10px 0 1px;
+  width: 100%;
+  display: block;
+  margin: 30px 0 0;
+}
+
+footer a {
+  color: #E72466;
+}
+
+.ng-dirty div:nth-child(1) {
+  margin: 0 0 10px;
+}
+
+.page-content .mat-icon {
+  line-height: 16px;
+}
+
+.mat-button-icon {
+  margin-right: 9px;
+  margin-left: 6px;
+}
+
+.mat-list-item.mat-focus-indicator.active {
+  background-color: #E72466;
+  color: #fff;
+}
+
+.text-bold {
+  font-weight: 600;
+}
+
+.full-width-dialog .mat-dialog-container {
+  max-width: 100vw !important;
+}
+
+.uh-ack-center {
+  text-align:center;
+  margin: 0 auto;
+}
+
+@media screen  and (max-width: 768px) {
+  .uh-ack-center {
+    width: 80%;
+  }
+}

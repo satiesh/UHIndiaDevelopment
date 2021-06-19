@@ -1,0 +1,133 @@
+<div>
+
+  <div>
+    <div class="spacer"></div>
+    <h1 class="text-center">Stock of The Day (updated every 24 hours)</h1>
+    <mat-progress-bar *ngIf="stockofthedayloadingIndicator$|async" mode="query"></mat-progress-bar>
+         
+    <!-- <div class="page-content mt-5">
+       
+      <div>
+        <div fxLayout="row" fxLayoutAlign="space-evenly">
+          <ng-container *ngIf="stockOftheDaySource.length > 0; else noStock">
+          <div fxFlex="50" fxFlex.sm="80" fxFlex.xs="100" *ngFor="let trade of stockOftheDaySource" style="padding: 2px;margin-bottom: 1em">
+            <mat-card class="card">
+              <mat-card-title fxLayoutAlign="center">Updated {{checkDate(trade.createdon)| date: ' dd/mm/yy , EEEE'}}</mat-card-title>
+    
+
+              <mat-card-content>
+                <div fxLayout="row" fxLayout.lt-md="row" fxLayoutGap="1em" style="padding: 1px;margin-bottom: 1em">
+                  <mat-label fxFlex="30%"><strong>Symbol :</strong></mat-label>
+                  <span>{{trade.symbol}}</span>
+                 
+                </div>
+                <div fxLayout="row" fxLayout.lt-md="row" fxLayoutGap="1em" style="padding: 1px;margin-bottom: 1em">
+                  <mat-label fxFlex="30%"><strong>Current Stock Price  :</strong> </mat-label>
+                  <span>{{trade.currentStockPrice}}</span>
+                </div>
+    
+                <div fxLayout="row" fxLayout.lt-md="row" fxLayoutGap="1em" style="padding: 1px;margin-bottom: 1em">
+                  <mat-label fxFlex="30%"><strong> Price :</strong> </mat-label>
+                 <span> {{trade.trans[0].strikeprice}}</span>
+              
+                </div>
+                <div fxLayout="row" fxLayout.lt-md="row" fxLayoutGap="1em" style="padding: 1px;margin-bottom: 1em">
+                  <mat-label fxFlex="30%"><strong> Posted For :</strong> </mat-label>
+                 <span> {{trade.postedFor}}</span>
+              
+                </div>
+                <div fxLayout="row" fxLayout.lt-md="row" fxLayoutGap="1em" style="padding: 1px;margin-bottom: 1em">
+                  <mat-label fxFlex="30%"><strong> Transaction Type :</strong> </mat-label>
+                 <span> {{trade.trans[0].transtype}}</span>
+              
+                </div>
+                <div fxLayout="row" fxLayout.lt-md="row" fxLayoutGap="1em" style="padding: 1px;margin-bottom: 1em">
+                  <mat-label fxFlex="30%"><strong> Above Resistance :</strong> </mat-label>
+                 <span> {{trade.aboveResistance}}</span>
+              
+                </div>
+                <div fxLayout="row" fxLayout.lt-md="row" fxLayoutGap="1em" style="padding: 1px;margin-bottom: 1em">
+                  <mat-label fxFlex="30%"><strong> Below Resistance :</strong> </mat-label>
+                 <span> {{trade.belowResistance}}</span>
+              
+                </div>
+                <div fxLayout="row" fxLayout.lt-md="row" fxLayoutGap="1em" style="padding: 1px;margin-bottom: 1em">
+                  <mat-label fxFlex="30%"><strong> Stop Loss :</strong> </mat-label>
+                 <span> {{trade.stopLoss}}</span>
+              
+                </div>
+              </mat-card-content>
+             
+            </mat-card>
+          </div>
+        </ng-container>
+          <ng-template #noStock>
+            <div fxFlex="80" fxFlex.sm="33.3" fxFlex.xs="50" style="padding: 2px;margin-bottom: 1em">
+            <mat-card class="card">
+              <mat-card-title fxLayoutAlign="center">No Stocks Today</mat-card-title>
+             
+            </mat-card>
+            </div>
+          </ng-template>
+       
+        </div>
+      </div>
+    </div>
+     -->
+     <ng-container *ngIf="stockOftheDaySource.length > 0; else noStock">   
+     <div class="big" *ngFor="let trade of stockOftheDaySource" >
+      <article class="recipe">
+       <div class="pizza-box">
+         <img src="assets/img/stockoftheday.jpg" width="1500" height="1458" alt="">
+       </div>
+       <div class="recipe-content" >
+         <!-- <p class="recipe-tags">
+           <span class="recipe-tag">Updated </span>
+           <span class="recipe-tag">{{checkDate(trade.createdon)| date: ' dd/mm/yy , EEEE'}}</span>
+         </p> -->
+   
+         <h1 class="recipe-title"><a href="#">Updated {{checkDate(trade.createdon)| date: 'dd/MM/yy , EEEE'}}</a></h1>
+   
+         <!-- <p class="recipe-metadata">
+           <span class="recipe-rating">★★★★★</span>
+         </p> -->
+   
+         <p class="recipe-desc"> <span class="recipe-rating">★</span> <span class="text-bold">Symbol</span>  - {{trade.symbol}}.</p>
+         <p class="recipe-desc"> <span class="recipe-rating">★</span> <span class="text-bold">Current Stock Price </span>  - {{trade.currentStockPrice | currency}}.</p>
+         <p class="recipe-desc"> <span class="recipe-rating">★</span> <span class="text-bold"> Price </span>  -{{trade.trans[0].strikeprice | currency}}.</p>
+         <p class="recipe-desc"> <span class="recipe-rating">★</span> <span class="text-bold">Posted For</span> - {{trade.postedFor}}.</p>
+         <p class="recipe-desc"> <span class="recipe-rating">★</span> <span class="text-bold">Transaction Type</span> - {{trade.trans[0].transtype}}.</p>
+         <p class="recipe-desc"> <span class="recipe-rating">★</span>  <span class="text-bold">Above Resistance</span> - {{trade.aboveResistance}}.</p>
+         <p class="recipe-desc"> <span class="recipe-rating">★</span> <span class="text-bold">Below Resistance</span>  - {{trade.belowResistance}}.</p>
+         <p class="recipe-desc"> <span class="recipe-rating">★</span> <span class="text-bold">Stop Loss</span>  - {{trade.stopLoss}}.</p>
+        
+   
+         <!-- <button class="recipe-save" type="button">
+           <svg  width="24" height="24" viewBox="0 0 24 24" fill="#000000"><path d="M 6.0097656 2 C 4.9143111 2 4.0097656 2.9025988 4.0097656 3.9980469 L 4 22 L 12 19 L 20 22 L 20 20.556641 L 20 4 C 20 2.9069372 19.093063 2 18 2 L 6.0097656 2 z M 6.0097656 4 L 18 4 L 18 19.113281 L 12 16.863281 L 6.0019531 19.113281 L 6.0097656 4 z" fill="currentColor"/></svg>
+           Buy
+         </button> -->
+   
+       </div>
+     </article>
+   </div>
+     </ng-container>
+    
+     <ng-template  #noStock> 
+     <div class="big">
+      <article class="recipe bg-white">
+       <div class="pizza-box">
+         <img src="assets/img/stockoftheday.jpg" width="1500" height="1458" alt="">
+       </div>
+       <div class="recipe-content" >
+         
+   
+         <h1 class="recipe-title text-center"><a href="#">No Stocks Today</a></h1>
+   
+        
+   
+       </div>
+     </article>
+   </div>
+  </ng-template>
+    </div>
+</div>

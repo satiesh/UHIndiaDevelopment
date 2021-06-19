@@ -1,0 +1,37 @@
+<div class="spacer"></div>
+
+<div>
+  <button mat-raised-button color="primary" (click)="generatePdf('open')"><mat-icon>picture_as_pdf</mat-icon>&nbsp;View Agreement Form</button>
+</div>
+<div class="spacer"></div>
+
+<div *ngIf="isQuestionsLoaded$ |async">
+  <div class="uh-ack-justify">
+    <p><b>Sections 1: Usage-Based Services/Nonprofessional Subscriber Status</b></p>
+    <p>{{section1para0}}</p>
+    <p><b>Sections 2: Trems and Conditions</b></p>
+
+    <p>{{section2para0}}</p>
+    <p>{{section2para1}}</p>
+    <p>{{section2para2}}</p>
+    <p><b>{{this.user && this.user.hasOwnProperty('userdisclaimer') &&  this.user.userdisclaimer.accepted ? "Yes" : "No"}}</b></p>
+
+    <p><b>Sections 3: Questions</b></p>
+    <!--Questions Section-->
+    <div *ngFor="let order of questionPdfArray; let i = index">
+      <div>{{i+1}}.&nbsp;{{order.question}}<br /><b>{{order.result}}</b></div>
+      <div class="spacer"></div>
+    </div>
+    <!--End Questions Section-->
+    <p><b>Sections 4: Certifcation</b></p>
+    <p>{{section4para0}}</p>
+    <p><b>{{this.user && this.user.hasOwnProperty('userdisclaimer') &&  this.user.userdisclaimer.accepted ?  "I Agree" : "I Disagree"}}</b></p>
+  </div>
+  <div class="spacer"></div>
+  <div>
+    <button mat-raised-button color="primary" (click)="generatePdf('open')"><mat-icon>picture_as_pdf</mat-icon>&nbsp;View Agreement Form</button>
+  </div>
+</div>
+
+
+

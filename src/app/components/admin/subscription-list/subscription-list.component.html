@@ -1,0 +1,59 @@
+<app-page-header title="Subscription" icon="trip_origin"></app-page-header>
+<div [@fadeInOut] class="page-content">
+
+  <div class="search-box">
+    <mat-form-field>
+      <input matInput (keyup)="applyFilter($event.target.value)" placeholder="{{'subscription.management.Search' | translate}}">
+    </mat-form-field>
+  </div>
+
+  <div class="mat-elevation-z8">
+    <mat-progress-bar *ngIf="loadingIndicator$|async" mode="query"></mat-progress-bar>
+    <mat-table [dataSource]="dataSource" matSort>
+
+      <ng-container matColumnDef="Name">
+        <mat-header-cell fxFlex="20%" *matHeaderCellDef mat-sort-header> {{'subscription.management.Name' | translate}} </mat-header-cell>
+        <mat-cell fxFlex="20%" *matCellDef="let row"> {{row.Name}} </mat-cell>
+      </ng-container>
+
+      <ng-container matColumnDef="Description">
+        <mat-header-cell fxFlex="40%" *matHeaderCellDef mat-sort-header> {{'subscription.management.Description' | translate}} </mat-header-cell>
+        <mat-cell fxFlex="40%" *matCellDef="let row"> {{row.Description}} </mat-cell>
+      </ng-container>
+
+      <ng-container matColumnDef="IsActive">
+        <mat-header-cell fxFlex="5%" *matHeaderCellDef mat-sort-header> {{'subscription.management.Active' | translate}} </mat-header-cell>
+        <mat-cell fxFlex="5%" *matCellDef="let row"> <mat-icon class="mat-button-icon green-check-icon" *ngIf="row.IsActive">check</mat-icon><mat-icon class="mat-button-icon red-check-icon" *ngIf="!row.IsActive">close</mat-icon>  </mat-cell>
+      </ng-container>
+      <ng-container matColumnDef="Price">
+        <mat-header-cell fxFlex="10%" *matHeaderCellDef mat-sort-header> {{'subscription.management.Price' | translate}} </mat-header-cell>
+        <mat-cell fxFlex="10%" *matCellDef="let row"> {{row.Price | currency}} </mat-cell>
+      </ng-container>
+
+      <ng-container *ngIf="canManageSubscriptions" matColumnDef="actions">
+        <mat-header-cell *matHeaderCellDef fxFlex="20%">
+          <button mat-button color="primary" matTooltip="{{'subscription.management.NewSubscription' | translate}}" (click)="editCourse()">
+            <mat-icon class="mat-button-icon">add</mat-icon>{{'subscription.management.NewSubscription' | translate}}
+          </button>
+          <button mat-button color="primary" matTooltip="{{'users.management.Refresh' | translate}}" (click)="reloadSubscription()">
+            <mat-icon class="mat-button-icon">refresh</mat-icon>
+          </button>
+        </mat-header-cell>
+        <mat-cell *matCellDef="let subscription" fxFlex="140px" fxFlexOffset="30px">
+          <button mat-icon-button matTooltip="{{'subscription.management.Edit' | translate}}" (click)="editCourse(subscription)">
+            <mat-icon>edit</mat-icon>
+          </button>
+          <!--<button mat-icon-button matTooltip="{{'subscription.management.Delete' | translate}}" (click)="confirmDelete(subscription)">
+            <mat-icon color="warn">delete</mat-icon>
+          </button>-->
+        </mat-cell>
+      </ng-container>
+
+      <mat-header-row *matHeaderRowDef="displayedColumns"></mat-header-row>
+      <mat-row *matRowDef="let row; columns: displayedColumns;">
+      </mat-row>
+    </mat-table>
+
+    <mat-paginator [pageSizeOptions]="[10, 25, 100]"></mat-paginator>
+  </div>
+</div>

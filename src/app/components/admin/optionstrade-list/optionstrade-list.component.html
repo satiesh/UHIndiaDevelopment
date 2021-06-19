@@ -1,0 +1,86 @@
+<!--<app-page-header title="OptionsTrade" icon="open_with"></app-page-header>-->
+<!--<div [@fadeInOut] class="page-content">-->
+<div>
+  <div class="spacer"></div>
+  <h1>All Past Trade History</h1>
+  <div class="search-box">
+    <mat-form-field>
+      <input matInput (keyup)="applyFilter($event.target.value)" placeholder="{{'options.management.Search' | translate}}">
+    </mat-form-field>
+  </div>
+  <div>
+    <!--<div class="mat-elevation-z8">-->
+    <mat-progress-bar *ngIf="loadingIndicator$|async" mode="query"></mat-progress-bar>
+    <div style="display: flex; justify-content: flex-end">
+      <mat-icon class="mat-button-icon green-check-icon">lock_open</mat-icon>Option Trade Open&nbsp;|&nbsp;
+      <mat-icon class="mat-button-icon green-check-icon">lock</mat-icon>Option Trade Closed&nbsp;|&nbsp;
+      <mat-icon class="mat-button-icon stock-check-icon">lock_open</mat-icon>Stock Trade Open&nbsp;|&nbsp;
+      <mat-icon class="mat-button-icon stock-check-icon">lock</mat-icon>Stock Trade Closed
+    </div>
+    <div style="display: flex; justify-content: flex-end">
+      <button mat-button color="primary" matTooltip="{{'options.management.NewTicker' | translate}}" (click)="newTrade()">
+        <mat-icon class="mat-button-icon">assignment</mat-icon>{{'options.management.NewTicker' | translate}}
+      </button>
+      <button mat-button color="primary" matTooltip="{{'options.management.Refresh' | translate}}" (click)="reloadOptions()">
+        <mat-icon class="mat-button-icon" (click)="reloadOptions()">
+          refresh
+        </mat-icon>Reload
+      </button>
+    </div>
+    <mat-table [dataSource]="dataSource" matSort matSortActive="createdon" matSortDirection="desc">
+
+      <ng-container matColumnDef="symbol">
+        <mat-header-cell fxFlex="10%" *matHeaderCellDef mat-sort-header> {{'options.management.Symbol' | translate}} </mat-header-cell>
+        <mat-cell fxFlex="10%" *matCellDef="let row"> {{row.symbol}} </mat-cell>
+      </ng-container>
+      <ng-container matColumnDef="postedby">
+        <mat-header-cell fxFlex="15%" *matHeaderCellDef mat-sort-header> {{'options.management.PostedBy' | translate}} </mat-header-cell>
+        <mat-cell fxFlex="15%" *matCellDef="let row"> {{row.postedby}} </mat-cell>
+      </ng-container>
+      <ng-container matColumnDef="createdon">
+        <mat-header-cell fxFlex="60%" *matHeaderCellDef mat-sort-header> {{'options.management.CreatedOn' | translate}} </mat-header-cell>
+        <mat-cell fxFlex="60%" *matCellDef="let row">{{checkDate(row.createdon)| date: 'EEEE, MMMM d, y'}} </mat-cell>
+      </ng-container>
+      <ng-container *ngIf="canManageOptionTrade" matColumnDef="actions">
+        <mat-header-cell *matHeaderCellDef fxFlex="20%">
+          Actions
+          <!--<button mat-button color="primary" matTooltip="{{'options.management.NewTicker' | translate}}" (click)="newTrade()">
+            <mat-icon class="mat-button-icon">add</mat-icon>{{'options.management.NewTicker' | translate}}
+          </button>
+          <button mat-button color="primary" matTooltip="{{'options.management.Refresh' | translate}}" (click)="reloadOptions()">
+            <mat-icon class="mat-button-icon">refresh</mat-icon>
+          </button>-->
+        </mat-header-cell>
+        <mat-cell *matCellDef="let ticker" fxFlex="20%">
+          <!--<button mat-icon-button matTooltip="{{'options.management.AddComments' | translate}}" (click)="AddComments(ticker,false)">
+            <mat-icon>comment</mat-icon>
+          </button>-->
+          <button mat-icon-button matTooltip="{{'options.management.Close' | translate}}" (click)="AddOptionComments(ticker,false)" *ngIf="ticker.trans.length>0 && (ticker.isoptionactive|| ticker.isoptionactive==null)">
+            <mat-cell> <mat-icon class="mat-button-icon green-check-icon">lock_open</mat-icon></mat-cell>
+          </button>
+          <button mat-icon-button matTooltip="{{'options.management.Closed' | translate}}" (click)="AddOptionComments(ticker,true)" *ngIf="ticker.trans.length>0 && (!ticker.isoptionactive  && ticker.isoptionactive!=null)">
+            <mat-cell><mat-icon class="mat-button-icon green-check-icon">lock</mat-icon>  </mat-cell>
+          </button>
+
+          <button mat-icon-button matTooltip="{{'options.management.Close' | translate}}" (click)="AddStockComments(ticker,false)" *ngIf="ticker.currentStockPrice.length>0 && (ticker.isstockactive || ticker.isstockactive==null)">
+            <mat-cell> <mat-icon class="mat-button-icon stock-check-icon">lock_open</mat-icon></mat-cell>
+          </button>
+          <button mat-icon-button matTooltip="{{'options.management.Closed' | translate}}" (click)="AddStockComments(ticker,false)" *ngIf="ticker.currentStockPrice.length>0 && (!ticker.isstockactive && ticker.isstockactive!=null)">
+            <mat-cell><mat-icon class="mat-button-icon stock-check-icon">lock</mat-icon>  </mat-cell>
+          </button>
+          <button mat-icon-button matTooltip="{{'options.management.DeleteOption' | translate}}" *ngIf="canDeleteOptionTrade" (click)="confirmDelete(ticker)">
+            <mat-cell><mat-icon color="warn">delete</mat-icon></mat-cell>
+          </button>
+        </mat-cell>
+      </ng-container>
+
+      <mat-header-row *matHeaderRowDef="displayedColumns"></mat-header-row>
+      <mat-row *matRowDef="let row; columns: displayedColumns;">
+      </mat-row>
+    </mat-table>
+    <mat-paginator [pageSizeOptions]="[10, 25, 100]"></mat-paginator>
+    <div style="display: flex; justify-content: center" *ngIf="!recordFound">
+      <h2>No Data Found!</h2>
+    </div>
+  </div>
+</div>

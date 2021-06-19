@@ -1,0 +1,51 @@
+<div>
+  <!-- <mat-progress-bar *ngIf="loadingIndicator" mode="query"></mat-progress-bar>-->
+  <div *ngIf="isSubscriptionLoaded$|async">
+    <div class="spacer"></div>
+    <div>
+      <button mat-raised-button color="primary"  *ngIf=user style="margin-right: 1em;" (click)="openChangeDialog()">{{'users.management.ChangeSubscription'| translate}}</button>
+      <button mat-raised-button color="primary" *ngIf=!user style="margin-right: 1em;" (click)="openChangeDialog()">{{'users.management.AssignSubscription' | translate}}</button>
+      <button mat-raised-button color="warn" style="margin-right: 1em;" *ngIf="!isFreeSubscription && user" (click)="openCancellationDialog()">{{'users.management.CancelSubscription' | translate}}</button>
+      <button mat-raised-button color="accent" style="margin-right: 1em;" (click)="reload()">{{'users.management.RefeshSubscription' | translate}}</button>
+    </div>
+    <div class="spacer"></div>
+    <mat-table [dataSource]="dataSource" matSort>
+
+      <ng-container matColumnDef="description">
+        <mat-header-cell fxFlex="40%" *matHeaderCellDef mat-sort-header>{{'users.management.SubscriptionDescription' | translate}} </mat-header-cell>
+        <mat-cell fxFlex="40%" *matCellDef="let row"> {{row.description}} </mat-cell>
+      </ng-container>
+      <ng-container matColumnDef="price">
+        <mat-header-cell fxFlex="10%" *matHeaderCellDef mat-sort-header> {{'users.management.SubscriptionPrice' | translate}} </mat-header-cell>
+        <mat-cell fxFlex="10%" *matCellDef="let row"> {{row.price | currency}} </mat-cell>
+      </ng-container>
+
+      <ng-container matColumnDef="isActive">
+        <mat-header-cell fxFlex="20%" *matHeaderCellDef mat-sort-header> {{'users.management.SubscriptionActive' | translate}} </mat-header-cell>
+        <mat-cell fxFlex="20%" *matCellDef="let row"> <mat-icon class="mat-button-icon green-check-icon" *ngIf="row.isActive">check</mat-icon><mat-icon class="mat-button-icon red-check-icon" *ngIf="!row.isActive">close</mat-icon>  </mat-cell>
+      </ng-container>
+
+      <ng-container matColumnDef="transactionDate">
+        <mat-header-cell fxFlex="20%" *matHeaderCellDef mat-sort-header> {{'users.management.SubscriptionDate' | translate}} </mat-header-cell>
+        <mat-cell fxFlex="20%" *matCellDef="let row">{{checkDate(row.transactionDate)| date: 'EEEE, MMMM d, y'}} </mat-cell>
+      </ng-container>
+      <ng-container matColumnDef="renewalDate">
+        <mat-header-cell fxFlex="20%" *matHeaderCellDef mat-sort-header> {{'users.management.RenewalDate' | translate}} </mat-header-cell>
+        <mat-cell fxFlex="20%" *matCellDef="let row">{{checkDate(row.renewalDate)| date: 'EEEE, MMMM d, y'}} </mat-cell>
+      </ng-container>
+      <mat-header-row *matHeaderRowDef="displayedColumns"></mat-header-row>
+      <mat-row *matRowDef="let row; columns: displayedColumns;">
+      </mat-row>
+    </mat-table>
+    <mat-paginator [pageSizeOptions]="[10, 25, 100]"></mat-paginator>
+
+    <div class="spacer"></div>
+    <div>
+      <button mat-raised-button color="primary" *ngIf=user style="margin-right: 1em;" (click)="openChangeDialog()">{{'users.management.ChangeSubscription'| translate}}</button>
+      <button mat-raised-button color="primary" *ngIf=!user style="margin-right: 1em;" (click)="openChangeDialog()">{{'users.management.AssignSubscription' | translate}}</button>
+      <button mat-raised-button color="warn" style="margin-right: 1em;" *ngIf="!isFreeSubscription && user" (click)="openCancellationDialog()">{{'users.management.CancelSubscription' | translate}}</button>
+      <button mat-raised-button color="accent" style="margin-right: 1em;" (click)="reload()">{{'users.management.RefeshSubscription' | translate}}</button>
+    </div>
+  </div>
+
+</div>

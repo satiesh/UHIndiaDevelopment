@@ -1,0 +1,59 @@
+<form #form="ngForm" [formGroup]="stripeTest" novalidate fxLayout="column" autocomplete="off">
+  <div fxLayout="row" fxLayout.lt-md="column" fxLayoutGap="1em">
+    <p *ngIf="amountval!='0'">
+      <strong>{{firstname}}</strong>, you have selected <strong>{{subscriptionname}}</strong> as your subscription. Once you fill in the credit card information below, an amount of <strong>{{amountvalcoupon|currency}}</strong> will be charged to your card.
+    </p>
+    <p *ngIf="amountval=='0'">
+      <strong>{{firstname}}</strong>, you have selected <strong>{{subscriptionname}}</strong> as your subscription. Click next to go to summary page.
+    </p>
+  </div>
+  <mat-card class="mat-elevation-z6" *ngIf="amountval!='0'">
+    <mat-card-title>{{'profile.CreditCardTitle' | translate}}</mat-card-title>
+    <mat-card-content>
+      <input matInput formControlName="name" hidden />
+      <input matInput formControlName="amount" hidden />
+      <ngx-stripe-card [options]="cardOptions"
+                       [elementsOptions]="elementsOptions"></ngx-stripe-card>
+      </mat-card-content>
+  </mat-card>
+</form>
+
+<form #form="ngForm" [formGroup]="couponDetails" novalidate fxLayout="column" autocomplete="off">
+  <div class="spacer"></div>
+  <mat-card class="mat-elevation-z6" *ngIf="amountval!='0' && !couponProcessed">
+    <mat-card-title>{{'profile.Coupon' | translate}}</mat-card-title>
+    <mat-card-content>
+      <mat-form-field fxFlex>
+        <mat-label>{{'profile.CouponCode' | translate}}</mat-label>
+        <input matInput formControlName="couponcode" />
+      </mat-form-field>
+    </mat-card-content>
+    <mat-card-actions fxLayout="row" fxLayoutAlign="center">
+      <button mat-raised-button type="button" color="accent" (click)="applyCoupon()">Apply Coupon</button>
+    </mat-card-actions>
+  </mat-card>
+
+  <div *ngIf="amountval!='0' && couponProcessed">
+    <mat-table [dataSource]="dataSource" class="mat-elevation-z6">
+      <ng-container matColumnDef="couponcode">
+        <mat-header-cell fxFlex="20%" *matHeaderCellDef>{{'profile.stepper.AppliedCouponCode' | translate}} </mat-header-cell>
+        <mat-cell fxFlex="20%" *matCellDef="let row"> {{row.couponcode}} </mat-cell>
+      </ng-container>
+      <ng-container matColumnDef="amount">
+        <mat-header-cell fxFlex="20%" *matHeaderCellDef>{{'profile.stepper.AppliedCouponAmount' | translate}} </mat-header-cell>
+        <mat-cell fxFlex="20%" *matCellDef="let row"> {{row.amount|currency}} </mat-cell>
+      </ng-container>
+      <ng-container matColumnDef="actions">
+        <mat-header-cell *matHeaderCellDef fxFlex="15%">{{'profile.stepper.RemoveCoupon' | translate}}</mat-header-cell>
+        <mat-cell *matCellDef="let ticker" fxFlex="140px" fxFlexOffset="30px">
+          <button mat-icon-button matTooltip="{{'profile.stepper.RemoveCoupon' | translate}}" (click)="removeCoupon()">
+            <mat-icon>close</mat-icon>
+          </button>
+        </mat-cell>
+      </ng-container>
+      <mat-header-row *matHeaderRowDef="displayedColumns"></mat-header-row>
+      <mat-row *matRowDef="let row; columns: displayedColumns;">
+      </mat-row>
+    </mat-table>
+  </div>
+</form>

@@ -1,0 +1,31 @@
+<div class="spacer"></div>
+ <!-- <mat-progress-bar *ngIf="loadingIndicator" mode="query"></mat-progress-bar>-->
+  <div class="table-flex-container" *ngIf="isSubscriptionLoaded$ && isCourseLoaded$|async">
+    <mat-table [dataSource]="dataSource" matSort>
+
+      <ng-container matColumnDef="description">
+        <mat-header-cell fxFlex="40%" *matHeaderCellDef mat-sort-header> {{'users.management.PaymentDescription' | translate}} </mat-header-cell>
+        <mat-cell fxFlex="40%" *matCellDef="let row"> {{row.description}} </mat-cell>
+      </ng-container>
+      <ng-container matColumnDef="price">
+        <mat-header-cell fxFlex="10%" *matHeaderCellDef mat-sort-header> {{'users.management.PaymentPrice' | translate}} </mat-header-cell>
+        <mat-cell fxFlex="10%" *matCellDef="let row"> {{row.price | currency}} </mat-cell>
+      </ng-container>
+
+      <ng-container matColumnDef="referenceId">
+        <mat-header-cell fxFlex="20%" *matHeaderCellDef mat-sort-header> {{'users.management.PaymentReferenceId' | translate}} </mat-header-cell>
+        <mat-cell fxFlex="20%" *matCellDef="let row"> {{row.referenceId}} </mat-cell>
+      </ng-container>
+
+      <ng-container matColumnDef="transactionDate">
+        <mat-header-cell fxFlex="20%" *matHeaderCellDef mat-sort-header> {{'users.management.PaymentDate' | translate}} </mat-header-cell>
+        <mat-cell fxFlex="20%" *matCellDef="let row">{{checkDate(row.transactionDate)| date: 'EEEE, MMMM d, y'}} </mat-cell>
+      </ng-container>
+      <mat-header-row *matHeaderRowDef="displayedColumns"></mat-header-row>
+      <mat-row *matRowDef="let row; columns: displayedColumns;">
+      </mat-row>
+    </mat-table>
+
+    <mat-paginator [pageSizeOptions]="[10, 25, 100]"></mat-paginator>
+  </div>
+

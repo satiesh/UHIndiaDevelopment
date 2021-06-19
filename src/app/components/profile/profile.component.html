@@ -1,0 +1,60 @@
+<div class="header">
+  <div class="logo"><div class="logoimg"></div></div>
+  <div class="topRight"><a href="https://www.hoodcapitaluh.com/" target="_blank">Visit Website</a></div>
+
+
+</div>
+
+<app-page-header title="Profile" icon="person"></app-page-header>
+<div class="page-content">
+  <div class="mat-elevation-z6">
+    <div class="spacer"></div>
+    <div class="page-content">
+      <div *ngIf="loadingIndicator$|async">
+        <mat-progress-bar mode="query"></mat-progress-bar>
+        <p>Please wait loading...</p>
+      </div>
+      <mat-tab-group disableRipple="true" *ngIf="(isCurrentUserLoaded$|async)">
+        <mat-tab label="Personal">
+          <div class="mat-elevation-z8">
+            <app-user-profile-editor [user]="selectCurrentUser$|async" isEditMode="true"></app-user-profile-editor>
+
+          </div>
+        </mat-tab>
+        <mat-tab label="Subscription">
+          <app-user-subscription-list [user]="selectCurrentUser$|async" isEditMode="true"></app-user-subscription-list>
+          <div class="spacer"></div>
+          <!--<app-subscription></app-subscription>-->
+        </mat-tab>
+        <mat-tab label="Payments">
+          <app-user-payments-list [user]="selectCurrentUser$|async" isEditMode="true"></app-user-payments-list>
+          <div class="spacer"></div>
+        </mat-tab>
+        <mat-tab label="Trading Tools">
+          <app-tradingtools-info [user]="selectCurrentUser$|async" isEditMode="true"></app-tradingtools-info>
+          <div class="spacer"></div>
+        </mat-tab>
+        <mat-tab label="Investment Type">
+          <app-investmenttype-info [user]="selectCurrentUser$|async" isEditMode="true"></app-investmenttype-info>
+          <div class="spacer"></div>
+        </mat-tab>
+        <mat-tab label="Investor Level">
+          <app-investorlevel-info [user]="selectCurrentUser$|async" isEditMode="true"></app-investorlevel-info>
+          <div class="spacer"></div>
+        </mat-tab>
+        <mat-tab label="Other Values">
+          <app-user-other-values [user]="selectCurrentUser$|async" isEditMode="true"></app-user-other-values>
+          <div class="spacer"></div>
+        </mat-tab>
+        <mat-tab label="Disclaimer">
+          <app-userdisclaimer-control [user]="selectCurrentUser$|async"></app-userdisclaimer-control>
+          <div class="spacer"></div>
+        </mat-tab>
+      </mat-tab-group>
+
+    </div>
+    <div class="spacer"></div>
+
+  </div>
+</div>
+<footer><p class="text-copyright">© 2021 Urbanhood. Powered by <a class="color_primary" href="https://www.urbanfoodalliance.org/" target="_blank">Urbanfood Alliance</a> </p></footer>

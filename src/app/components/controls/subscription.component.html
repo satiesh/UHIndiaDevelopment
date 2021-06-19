@@ -1,0 +1,27 @@
+<div class="table-flex-container" *ngIf="isSubscriptionLoaded$ |async">
+  <mat-table [dataSource]="dataSource" matSort matSortActive="Price" matSortDirection="asc">
+    <!-- Position Column -->
+    <ng-container matColumnDef="Name">
+      <mat-header-cell *matHeaderCellDef mat-sort-header> Name </mat-header-cell>
+      <mat-cell *matCellDef="let element"> {{element.Name}} </mat-cell>
+    </ng-container>
+
+    <!-- Name Column -->
+    <ng-container matColumnDef="Price">
+      <mat-header-cell *matHeaderCellDef mat-sort-header> Price </mat-header-cell>
+      <mat-cell *matCellDef="let element"> {{element.Price| currency}} </mat-cell>
+    </ng-container>
+    <ng-container matColumnDef="actions">
+      <mat-header-cell *matHeaderCellDef> Subscribe </mat-header-cell>
+      <mat-cell *matCellDef="let row">
+        <mat-radio-group [(ngModel)]="selectedSubscription">
+          <mat-radio-button (click)="subscribe(row)" [value]="row"></mat-radio-button>
+        </mat-radio-group>
+      </mat-cell>
+    </ng-container>
+
+    <mat-header-row *matHeaderRowDef="displayedColumns"></mat-header-row>
+    <mat-row *matRowDef="let row; columns: displayedColumns;"></mat-row>
+  </mat-table>
+</div>
+

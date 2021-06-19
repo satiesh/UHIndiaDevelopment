@@ -1,0 +1,45 @@
+<button *ngIf="!isPaymentProcessing" mat-icon-button class="close" aria-label="Close" title="Close" style="float: right;" (click)="cancel()">
+  <mat-icon>close</mat-icon>
+</button>
+<h1 mat-dialog-title>{{('users.management.CurrentSubscriptionChange' | translate:subscriptionName)}}</h1>
+<div>
+  <mat-horizontal-stepper #stepper [linear]="isLinear">
+    <mat-step>
+      <ng-template matStepLabel>{{'users.stepper.SelectSubscription' | translate}}</ng-template>
+      <div class="single-stepperButton">
+        <button (click)="onStepperNext()" mat-raised-button color="primary" [disabled]="!subscriptionControl.isSubscriptionSelected">Next</button>
+      </div>
+      <app-subscription [includeFreeSubscription]="false" [currentSelectedId]="currentSelectedId"></app-subscription>
+      <div class="spacer"></div>
+      <div class="single-stepperButton">
+        <button (click)="onStepperNext()" mat-raised-button color="primary" [disabled]="!subscriptionControl.isSubscriptionSelected">Next</button>
+      </div>
+    </mat-step>
+    <mat-step [stepControl]="paymentControl.stripeTest">
+      <ng-template matStepLabel>{{'users.stepper.MakePayment' | translate}}</ng-template>
+      <div class="stepperButton">
+        <button mat-raised-button color="accent" [disabled]="isPaymentProcessing" matStepperPrevious>Previous</button>
+        <button (click)="onStepperNext()" mat-raised-button color="primary" [disabled]="isPaymentProcessing" *ngIf="enablePaymentStep">
+          <mat-spinner *ngIf="isPaymentProcessing" [diameter]="20"></mat-spinner>Pay
+        </button>
+      </div>
+      <div class="spacer"></div>
+      <app-payment-token></app-payment-token>
+      <div class="spacer"></div>
+      <div class="stepperButton">
+        <button mat-raised-button color="accent" [disabled]="isPaymentProcessing" matStepperPrevious>Previous</button>
+        <button (click)="onStepperNext()" mat-raised-button color="primary" [disabled]="isPaymentProcessing" *ngIf="enablePaymentStep">
+          <mat-spinner *ngIf="isPaymentProcessing" [diameter]="20"></mat-spinner>Pay
+        </button>
+      </div>
+    </mat-step>
+    <mat-step [stepControl]="summaryControl">
+      <ng-template matStepLabel>{{'users.stepper.Summary' | translate}}</ng-template>
+      <div class="spacer"></div>
+      <app-summary-control></app-summary-control>
+      <div *ngIf="!updateFromUserList">
+        <button mat-raised-button color="primary" style="margin-right: 1em;" (click)="logout()">Logout</button>
+      </div>
+    </mat-step>
+  </mat-horizontal-stepper>
+</div>

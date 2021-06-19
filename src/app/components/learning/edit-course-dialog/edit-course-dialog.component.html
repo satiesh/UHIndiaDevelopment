@@ -1,0 +1,14 @@
+<button mat-icon-button class="close" aria-label="Close" title="Close" style="float: right;" (click)="cancel()">
+  <mat-icon>close</mat-icon>
+</button>
+<h1 mat-dialog-title *ngIf="RoleName === 'Administrator';else subscriber ">{{courseName ? ('learning.management.EditCourse' | translate:courseName) : ('learning.management.NewCourse' | translate)}}</h1>
+<ng-template #subscriber>
+<h1 mat-dialog-title>{{courseName ? ('learning.management.ViewCourse' | translate:courseName) : ('learning.management.NewCourse' | translate)}}</h1>
+</ng-template>
+<div mat-dialog-content>
+  <app-course-editor [course]="data.course" isEditMode="true"></app-course-editor>
+</div>
+<div mat-dialog-actions>
+  <button mat-raised-button *ngIf="RoleName === 'Administrator'" (click)="editCourse.save();" color="primary">Save</button>
+  <button mat-raised-button (click)="cancel()" color="warn">Cancel</button>
+</div>

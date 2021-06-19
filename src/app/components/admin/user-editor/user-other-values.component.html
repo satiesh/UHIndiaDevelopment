@@ -1,0 +1,43 @@
+<div class="spacer"></div>
+<form #form="ngForm" [formGroup]="userOtherValues" novalidate fxLayout="column" autocomplete="off">
+  <div fxLayout="row" fxLayout.lt-md="column" fxLayoutGap="1em">
+    <mat-form-field class="app-validate" fxFlex>
+      <mat-label>{{'users.editor.Investingobjective' | translate}}</mat-label>
+      <input matInput formControlName="investingobjective" [readonly]="!isEditMode" />
+    </mat-form-field>
+    <mat-form-field class="app-validate" fxFlex>
+      <mat-label>{{'users.editor.BestCommunicationMethod' | translate}}</mat-label>
+      <input matInput formControlName="bestCommunicationMethod" [readonly]="!isEditMode" />
+    </mat-form-field>
+  </div>
+  <div fxLayout="row" fxLayout.lt-md="column" fxLayoutGap="1em">
+    <mat-form-field class="app-validate" fxFlex>
+      <mat-label>{{'users.editor.BestTimeToCall' | translate}}</mat-label>
+      <input matInput formControlName="bestTimeToCall" [readonly]="!isEditMode" />
+    </mat-form-field>
+    <mat-form-field class="app-validate" fxFlex>
+      <mat-label>{{'users.editor.ProfessionalField' | translate}}</mat-label>
+      <input matInput formControlName="professionalField" [readonly]="!isEditMode" />
+    </mat-form-field>
+  </div>
+  <div fxLayout="row" fxLayout.lt-md="column" fxLayoutGap="1em">
+    <mat-form-field class="app-validate" fxFlex>
+      <mat-label>{{'users.editor.DiscordID' | translate}}</mat-label>
+      <input matInput formControlName="discordID" [readonly]="!isEditMode" />
+    </mat-form-field>
+    <mat-form-field class="app-validate" fxFlex>
+      <mat-label>{{'users.editor.CurrentPortfolioSize' | translate}}</mat-label>
+      <input matInput formControlName="currentPortfolioSize" [readonly]="!isEditMode" />
+    </mat-form-field>
+  </div>
+  <div fxLayout="row" fxLayout.lt-md="column" fxLayoutGap="1em">
+    <mat-form-field class="app-validate" fxFlex>
+      <mat-label>{{'users.editor.Volunteer' | translate}}</mat-label>
+      <input matInput formControlName="volunteer" [readonly]="!isEditMode" />
+    </mat-form-field>
+    <!--<mat-form-field class="app-validate" fxFlex>
+      <mat-label>{{'users.editor.Ipaddress' | translate}}</mat-label>
+      <input matInput formControlName="ipaddress" [readonly]="!isEditMode" />
+    </mat-form-field>-->
+  </div>
+</form>

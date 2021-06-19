@@ -1,0 +1,201 @@
+<mat-dialog-content>
+  <form #form="ngForm" [formGroup]="everydaytradeform" novalidate autocomplete="off">
+
+    <button mat-icon-button class="close" aria-label="Close" title="Close" style="float: right;" (click)="cancel()">
+      <mat-icon>close</mat-icon>
+    </button>
+    <h1 mat-dialog-title>{{'options.management.ViewDetails'|translate}}</h1>
+    <div fxLayout="row" fxLayout.lt-md="column" fxLayoutGap="1em">
+      <mat-label fxFlex="20%"><strong>{{'options.editor.Symbol' | translate}}</strong></mat-label>
+      <mat-label fxFlex="30%">{{ticker.symbol}}</mat-label>
+    </div>
+    <div class="spacer"></div>
+    <div fxLayout="row" fxLayout.lt-md="column" fxLayoutGap="1em">
+      <mat-label fxFlex="20%"><strong>{{'options.editor.PostedBy' | translate}}</strong></mat-label>
+      <mat-label fxFlex="30%">{{ticker.postedby}}</mat-label>
+      <mat-label fxFlex="20%"><strong>{{'options.editor.PostedFor' | translate}}</strong></mat-label>
+      <mat-label fxFlex="30%">{{ticker.postedFor}}</mat-label>
+    </div>
+    <div class="spacer"></div>
+
+    <mat-card *ngIf="ticker.trans.length>0">
+      <mat-card-header>
+        <mat-card-title>Option</mat-card-title>
+      </mat-card-header>
+      <mat-card-content>
+        <div fxLayout="row" fxLayout.lt-md="column" fxLayoutGap="1em">
+          <mat-label fxFlex="20%"><strong>{{'options.editor.Type' | translate}}</strong></mat-label>
+          <mat-label fxFlex="30%">{{ticker.type}}</mat-label>
+          <mat-label fxFlex="20%"><strong>{{'options.editor.Spread' | translate}}</strong></mat-label>
+          <mat-label fxFlex="30%">{{ticker.spread}}</mat-label>
+        </div>
+        <div>
+          <div class="spacer"></div>
+          <div>
+            <mat-label>{{'options.editor.Transaction' | translate}}</mat-label>
+          </div>
+          <div *ngIf="ticker.trans.length>0" fxLayout="row" fxLayout.lt-md="column" fxLayoutGap="1em">
+            <div fxFlex="100%">
+              <mat-table id="tt" [dataSource]="transDataSource" matSort>
+                <div *ngIf="ticker.spread==='SINGLE' || ticker.spread==='CALENDER'">
+                  <ng-container matColumnDef="strikeprice">
+                    <mat-header-cell fxFlex="40%" *matHeaderCellDef mat-sort-header> {{'options.management.Price' | translate}} </mat-header-cell>
+                    <mat-cell fxFlex="40%" *matCellDef="let row"> {{row.strikeprice | currency}} </mat-cell>
+                  </ng-container>
+                </div>
+
+                <div *ngIf="ticker.spread==='DEBIT SPREAD' || ticker.spread==='CREDIT SPREAD'">
+                  <ng-container matColumnDef="strikeprice">
+                    <mat-header-cell fxFlex="40%" *matHeaderCellDef mat-sort-header> {{'options.management.BuyLegStrike' | translate}} </mat-header-cell>
+                    <mat-cell fxFlex="40%" *matCellDef="let row"> {{row.strikeprice | currency}} </mat-cell>
+                  </ng-container>
+                  <ng-container matColumnDef="strikeprice2">
+                    <mat-header-cell fxFlex="40%" *matHeaderCellDef mat-sort-header> {{'options.management.SellLegStrike' | translate}} </mat-header-cell>
+                    <mat-cell fxFlex="40%" *matCellDef="let row"> {{row.strikeprice2 | currency}} </mat-cell>
+                  </ng-container>
+                </div>
+
+                <div *ngIf="ticker.spread==='COVERED CALLS'">
+                  <ng-container matColumnDef="strikeprice">
+                    <mat-header-cell fxFlex="40%" *matHeaderCellDef mat-sort-header> {{'options.management.Price' | translate}} </mat-header-cell>
+                    <mat-cell fxFlex="40%" *matCellDef="let row"> {{row.strikeprice | currency}} </mat-cell>
+                  </ng-container>
+                  <ng-container matColumnDef="strikeprice2">
+                    <mat-header-cell fxFlex="40%" *matHeaderCellDef mat-sort-header> {{'options.management.StokeStrike' | translate}} </mat-header-cell>
+                    <mat-cell fxFlex="40%" *matCellDef="let row"> {{row.strikeprice2 | currency}} </mat-cell>
+                  </ng-container>
+                </div>
+                <ng-container matColumnDef="premiumpaid">
+                  <mat-header-cell fxFlex="40%" *matHeaderCellDef mat-sort-header> {{'options.management.Premium' | translate}} </mat-header-cell>
+                  <mat-cell fxFlex="40%" *matCellDef="let row"> {{row.premiumpaid | currency}} </mat-cell>
+                </ng-container>
+                <ng-container matColumnDef="transtype">
+                  <mat-header-cell fxFlex="40%" *matHeaderCellDef mat-sort-header> {{'options.management.TransactionType' | translate}} </mat-header-cell>
+                  <mat-cell fxFlex="40%" *matCellDef="let row"> {{row.transtype}} </mat-cell>
+                </ng-container>
+
+                <ng-container *ngIf="ticker.spread!='CALENDER'" matColumnDef="expdate">
+                  <mat-header-cell fxFlex="40%" *matHeaderCellDef mat-sort-header> {{'options.management.ExpiryDate' | translate}} </mat-header-cell>
+                  <mat-cell fxFlex="40%" *matCellDef="let row"> {{checkDate(row.expdate) | date: 'EEEE, MMMM d, y'}} </mat-cell>
+                </ng-container>
+
+                <div *ngIf="ticker.spread==='CALENDER'">
+                  <ng-container matColumnDef="expdate">
+                    <mat-header-cell fxFlex="40%" *matHeaderCellDef mat-sort-header> {{'options.management.BuyLegDate' | translate}} </mat-header-cell>
+                    <mat-cell fxFlex="40%" *matCellDef="let row"> {{checkDate(row.expdate) | date: 'EEEE, MMMM d, y'}} </mat-cell>
+                  </ng-container>
+                  <ng-container matColumnDef="selllegexpdate">
+                    <mat-header-cell fxFlex="40%" *matHeaderCellDef mat-sort-header> {{'options.management.SellLegDate' | translate}} </mat-header-cell>
+                    <mat-cell fxFlex="40%" *matCellDef="let row"> {{checkDate(row.selllegexpdate) | date: 'EEEE, MMMM d, y'}} </mat-cell>
+                  </ng-container>
+                </div>
+
+                <mat-header-row *matHeaderRowDef="transDisplayedColumns"></mat-header-row>
+                <mat-row *matRowDef="let row; columns: transDisplayedColumns;">
+                </mat-row>
+              </mat-table>
+            </div>
+          </div>
+        </div>
+        <div class="spacer"></div>
+        <div>
+          <mat-label>{{'options.management.Comments' | translate}}</mat-label>
+        </div>
+        <div>
+          <mat-table [dataSource]="dataSource" matSort matSortActive="createdon" matSortDirection="desc">
+            <ng-container matColumnDef="notestype">
+              <mat-header-cell fxFlex="10%" *matHeaderCellDef mat-sort-header> {{'options.management.NotesType' | translate}} </mat-header-cell>
+              <mat-cell fxFlex="10%" *matCellDef="let row"> {{row.notestype}} </mat-cell>
+            </ng-container>
+
+            <ng-container matColumnDef="notesvalue">
+              <mat-header-cell fxFlex="45%" *matHeaderCellDef mat-sort-header> {{'options.management.Notes' | translate}} </mat-header-cell>
+              <mat-cell fxFlex="45%" *matCellDef="let row"> {{row.notesvalue}} </mat-cell>
+            </ng-container>
+
+            <ng-container matColumnDef="notespostedby">
+              <mat-header-cell fxFlex="10%" *matHeaderCellDef mat-sort-header> {{'options.management.NotesPostedBy' | translate}} </mat-header-cell>
+              <mat-cell fxFlex="10%" *matCellDef="let row"> {{row.notespostedby}} </mat-cell>
+            </ng-container>
+            <ng-container matColumnDef="createdon">
+              <mat-header-cell fxFlex="15%" *matHeaderCellDef mat-sort-header> {{'options.management.NotesCreatedOn' | translate}} </mat-header-cell>
+              <mat-cell fxFlex="35%" *matCellDef="let row">{{checkDate(row.createdon)| date: 'EEEE, MMMM d, y'}} </mat-cell>
+            </ng-container>
+            <mat-header-row *matHeaderRowDef="displayedColumns"></mat-header-row>
+            <mat-row *matRowDef="let row; columns: displayedColumns;">
+            </mat-row>
+          </mat-table>
+          <mat-paginator [pageSizeOptions]="[5, 10, 25, 100]"></mat-paginator>
+        </div>
+        <div formGroupName="optionSection">
+          <mat-checkbox id="takeoption" class="amateur" color="accent"
+                        formControlName="takeoption">Take this option trade</mat-checkbox>
+        </div>
+      </mat-card-content>
+
+    </mat-card>
+
+
+    <div class="spacer"></div>
+    <mat-card *ngIf="ticker.currentStockPrice.length>0">
+      <mat-card-header>
+        <mat-card-title>Stock</mat-card-title>
+      </mat-card-header>
+      <mat-card-content>
+        <div fxLayout="row" fxLayout.lt-md="column" fxLayoutGap="5em">
+          <mat-label><strong>{{'options.editor.StockPrice' | translate}}</strong></mat-label>
+          <mat-label>{{ticker.currentStockPrice}}</mat-label>
+          <mat-label><strong>{{'options.editor.AboveResistance' | translate}}</strong></mat-label>
+          <mat-label>{{ticker.currentStockPrice}}</mat-label>
+          <mat-label><strong>{{'options.editor.BelowResistance' | translate}}</strong></mat-label>
+          <mat-label>{{ticker.belowResistance}}</mat-label>
+          <mat-label><strong>{{'options.editor.Support' | translate}}</strong></mat-label>
+          <mat-label>{{ticker.support}}</mat-label>
+          <mat-label><strong>{{'options.editor.StopLoss' | translate}}</strong></mat-label>
+          <mat-label>{{ticker.stopLoss}}</mat-label>
+        </div>
+        <div class="spacer"></div>
+        <div>
+          <mat-label>{{'options.management.Comments' | translate}}</mat-label>
+        </div>
+        <div>
+          <mat-table [dataSource]="stockdataSource" matSort matSortActive="createdon" matSortDirection="desc">
+            <ng-container matColumnDef="notestype">
+              <mat-header-cell fxFlex="10%" *matHeaderCellDef mat-sort-header> {{'options.management.NotesType' | translate}} </mat-header-cell>
+              <mat-cell fxFlex="10%" *matCellDef="let row"> {{row.notestype}} </mat-cell>
+            </ng-container>
+
+            <ng-container matColumnDef="notesvalue">
+              <mat-header-cell fxFlex="55%" *matHeaderCellDef mat-sort-header> {{'options.management.Notes' | translate}} </mat-header-cell>
+              <mat-cell fxFlex="55%" *matCellDef="let row"> {{row.notesvalue}} </mat-cell>
+            </ng-container>
+
+            <ng-container matColumnDef="notespostedby">
+              <mat-header-cell fxFlex="10%" *matHeaderCellDef mat-sort-header> {{'options.management.NotesPostedBy' | translate}} </mat-header-cell>
+              <mat-cell fxFlex="10%" *matCellDef="let row"> {{row.notespostedby}} </mat-cell>
+            </ng-container>
+            <ng-container matColumnDef="createdon">
+              <mat-header-cell fxFlex="15%" *matHeaderCellDef mat-sort-header> {{'options.management.NotesCreatedOn' | translate}} </mat-header-cell>
+              <mat-cell fxFlex="15%" *matCellDef="let row">{{checkDate(row.createdon)| date: 'EEEE, MMMM d, y'}} </mat-cell>
+            </ng-container>
+            <mat-header-row *matHeaderRowDef="displayedColumns"></mat-header-row>
+            <mat-row *matRowDef="let row; columns: displayedColumns;">
+            </mat-row>
+          </mat-table>
+          <mat-paginator [pageSizeOptions]="[5, 10, 25, 100]"></mat-paginator>
+        </div>
+
+        <div formGroupName="stockSection">
+          <mat-checkbox id="takestock" class="amateur" color="accent"
+                        formControlName="takestock">Take this stock trade</mat-checkbox>
+        </div>
+      </mat-card-content>
+    </mat-card>
+    <div class="spacer"></div>
+
+    <div>
+      <button mat-raised-button color="primary" (click)="save();" style="margin-right: 1em;">Save</button>
+      <button mat-raised-button color="warn" (click)="cancel()">Cancel</button>
+    </div>
+  </form>
+</mat-dialog-content>

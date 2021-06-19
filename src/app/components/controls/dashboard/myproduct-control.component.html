@@ -1,0 +1,13 @@
+<mat-card class="mat-elevation-z8" fxLayout.lt-lg="column">
+  <div>
+    <mat-progress-bar *ngIf="(loadingIndicator$|async) && (subscriptionLoadingIndicator$|async)" mode="query"></mat-progress-bar>
+    <div fxLayout="row" fxLayout.lt-md="column" fxLayoutGap="1em" *ngIf="(isSubscriptionLoaded$|async) && (isCurrentUserLoaded$|async)">
+      <mat-label  fxFlex="10%"><strong>{{'home.DashboardProductName' | translate}}</strong></mat-label>
+      <mat-label>{{subscriptioName}}</mat-label>
+    </div>
+    <div fxLayout="row" fxLayout.lt-md="column" fxLayoutGap="1em" *ngIf="(isSubscriptionLoaded$|async) && (isCurrentUserLoaded$|async)">
+      <mat-label  fxFlex="10%"><strong>{{'home.DashboardProductRenewal' | translate}}</strong></mat-label>
+      <mat-label>{{checkDate(currentSubscriptions.renewalOn)| date: 'EEEE, MMMM d, y'}}</mat-label>
+    </div>
+  </div>
+</mat-card>

@@ -1,0 +1,32 @@
+
+.mat-form-field {
+  margin-top: 16px;
+}
+
+
+.mat-tab-label {
+  border: 1px solid transparent;
+  border-top-left-radius: .25rem;
+  border-top-right-radius: .25rem;
+}
+
+.mat-tab-label-active {
+  color: #495057;
+  background-color: #fff;
+  border-color: #dee2e6 #dee2e6 #fff;
+  /*border-bottom-color: #f3704c!important;*/
+}
+
+.mat-ink-bar {
+  display: none;
+}
+
+.spacer {
+  height: 20px;
+}
+
+.card-flex-container {
+  display: flex;
+  flex-direction: row;
+  align-items: stretch;
+}

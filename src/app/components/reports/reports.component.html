@@ -1,0 +1,7 @@
+<!--<mat-progress-bar *ngIf="isLoading" mode="query"></mat-progress-bar>-->
+<div style="display: flex; justify-content: center" *ngIf="isLoading">
+  <mat-spinner *ngIf="isLoading" [diameter]="30"></mat-spinner><h2>Please wait preparing the report...</h2>
+</div>
+<section id="report">
+  <div style=" width: 100%;" [ngStyle]="{ 'height': (screenHeight-150)+ 'px' }" #embeddedReport></div>
+</section>

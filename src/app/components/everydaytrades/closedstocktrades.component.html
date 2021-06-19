@@ -1,0 +1,104 @@
+<div>
+  <div>
+    <div class="spacer"></div>
+    <h1>Closed Stock Trades</h1>
+    <mat-progress-bar *ngIf="loadingIndicator$|async" mode="query"></mat-progress-bar>
+    <form #form="ngForm" [formGroup]="opentradeform" novalidate fxLayout="column" [fxLayoutGap]="isEditMode ? '1em' : '0'" autocomplete="off">
+      <div fxLayout="row" fxLayout.lt-md="column" fxLayoutGap="1em">
+        <mat-form-field [floatLabel]="floatLabels" fxFlex class="app-validate">
+          <mat-label>{{'options.editor.FromDate' | translate}}</mat-label>
+          <input matInput formControlName="fromdate" [matDatepicker]="picker">
+          <mat-datepicker-toggle matSuffix [for]="picker"></mat-datepicker-toggle>
+          <mat-datepicker #picker></mat-datepicker>
+          <mat-error *ngIf="fromdate.hasError('required')">
+            {{'options.editor.FromDateRequired' | translate}}
+          </mat-error>
+        </mat-form-field>
+
+        <mat-form-field [floatLabel]="floatLabels" fxFlex class="app-validate">
+          <mat-label>{{'options.editor.ToDate' | translate}}</mat-label>
+          <input matInput formControlName="todate" [matDatepicker]="picker1">
+          <mat-datepicker-toggle matSuffix [for]="picker1"></mat-datepicker-toggle>
+          <mat-datepicker #picker1></mat-datepicker>
+          <mat-error *ngIf="todate.hasError('required')">
+            {{'options.editor.ToDateRequired' | translate}}
+          </mat-error>
+        </mat-form-field>
+        <button mat-raised-button type="button" color="accent" style="margin-right: 1em;" (click)="submitReport()">GO</button>
+      </div>
+    </form>
+
+    <div class="search-box" *ngIf="(isOptionsTradeLoaded$|async) && recordFound">
+      <mat-form-field>
+        <input matInput (keyup)="applyFilter($event.target.value)" placeholder="{{'options.management.Search' | translate}}">
+      </mat-form-field>
+    </div>
+
+    <!--<div *ngIf="(isOptionsTradeLoaded$|async) && recordFound">-->
+    <div style="display: flex; justify-content: flex-end">
+      <mat-icon class="mat-button-icon stock-check-icon">lock</mat-icon>Stock Trade Closed
+    </div>
+    <div style="display: flex; justify-content: flex-end">
+      <button mat-button color="primary" matTooltip="{{'options.management.Refresh' | translate}}" (click)="reloadOptions()">
+        <mat-icon class="mat-button-icon" (click)="reloadOptions()">
+          refresh
+        </mat-icon>Reload
+      </button>
+    </div>
+    <mat-table [dataSource]="dataSource" matSort matSortActive="createdon" matSortDirection="desc">
+
+      <ng-container matColumnDef="symbol">
+        <mat-header-cell fxFlex="10%" *matHeaderCellDef mat-sort-header> {{'options.management.Symbol' | translate}} </mat-header-cell>
+        <mat-cell fxFlex="10%" *matCellDef="let row"> {{row.symbol}} </mat-cell>
+      </ng-container>
+
+      <ng-container matColumnDef="postedby">
+        <mat-header-cell fxFlex="15%" *matHeaderCellDef mat-sort-header> {{'options.management.PostedBy' | translate}} </mat-header-cell>
+        <mat-cell fxFlex="15%" *matCellDef="let row"> {{row.postedby}} </mat-cell>
+      </ng-container>
+      <ng-container matColumnDef="tradetype">
+        <mat-header-cell fxFlex="15%" *matHeaderCellDef mat-sort-header> {{'options.management.TradeType' | translate}} </mat-header-cell>
+        <mat-cell fxFlex="15%" *matCellDef="let row">
+          {{
+((row.spread.length>0 && row.currentStockPrice.length>0) ?'options.management.TradeTypes':
+          (row.spread.length>0)?'options.management.TradeTypes1':'options.management.TradeTypes2')| translate
+          }}
+        </mat-cell>
+      </ng-container>
+
+      <ng-container matColumnDef="createdon">
+        <mat-header-cell fxFlex="20%" *matHeaderCellDef mat-sort-header> {{'options.management.CreatedOn' | translate}} </mat-header-cell>
+        <mat-cell fxFlex="20%" *matCellDef="let row">{{checkDate(row.createdon)| date: 'EEEE, MMMM d, y'}} </mat-cell>
+      </ng-container>
+      <!--<ng-container matColumnDef="isactive">
+       <mat-header-cell fxFlex="10%" *matHeaderCellDef mat-sort-header> {{'options.management.TradeStatus' | translate}} </mat-header-cell>
+       <mat-cell fxFlex="10%" *matCellDef="let row">{{(row.isactive?'options.management.StillOpen':'options.management.Closed')| translate}}</mat-cell>
+    </ng-container>-->
+      <ng-container *ngIf="canManageDailyTrade || canViewOptionTrade || canManageOptionTrade" matColumnDef="actions">
+        <mat-header-cell *matHeaderCellDef fxFlex="15%">
+          {{'options.management.ViewDetails' | translate}}
+          <!--<button mat-button color="primary" matTooltip="{{'options.management.Refresh' | translate}}" (click)="reloadOptions()">
+          <mat-icon class="mat-button-icon">refresh</mat-icon>
+        </button>-->
+        </mat-header-cell>
+        <mat-cell *matCellDef="let ticker" fxFlex="140px" fxFlexOffset="30px">
+          <!--<button mat-icon-button matTooltip="{{'options.management.ViewDetails' | translate}}" (click)="ViewComments(ticker)">
+            <mat-icon>comment</mat-icon>
+          </button>-->
+          <button mat-icon-button matTooltip="{{'options.management.Closed' | translate}}" (click)="ViewComments(ticker)" *ngIf="ticker.currentStockPrice.length>0 && (!ticker.isstockactive && ticker.isstockactive!=null)">
+            <mat-cell><mat-icon class="mat-button-icon stock-check-icon">lock</mat-icon>  </mat-cell>
+          </button>
+        </mat-cell>
+      </ng-container>
+
+      <mat-header-row *matHeaderRowDef="displayedColumns"></mat-header-row>
+      <mat-row *matRowDef="let row; columns: displayedColumns;">
+      </mat-row>
+    </mat-table>
+    <mat-paginator [pageSizeOptions]="[10, 25, 100]"></mat-paginator>
+    <!--</div>-->
+    <div style="display: flex; justify-content: center" *ngIf="!recordFound">
+      <h2>No Data Found!</h2>
+    </div>
+  </div>
+</div>

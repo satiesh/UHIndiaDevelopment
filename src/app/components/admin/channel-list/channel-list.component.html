@@ -1,0 +1,55 @@
+<app-page-header title="Channel" icon="list"></app-page-header>
+<div [@fadeInOut] class="page-content">
+
+  <div class="search-box">
+    <mat-form-field>
+      <input matInput (keyup)="applyFilter($event.target.value)" placeholder="{{'messaging.management.ChannelSearch' | translate}}">
+    </mat-form-field>
+  </div>
+
+  <div class="mat-elevation-z8">
+    <mat-progress-bar *ngIf="loadingIndicator$|async" mode="query"></mat-progress-bar>
+    <mat-table [dataSource]="dataSource" matSort>
+
+      <ng-container matColumnDef="name">
+        <mat-header-cell fxFlex="20%" *matHeaderCellDef mat-sort-header> {{'messaging.management.ChannelName' | translate}} </mat-header-cell>
+        <mat-cell *matCellDef="let row" fxFlex="20%"> {{row.name}} </mat-cell>
+      </ng-container>
+
+      <ng-container matColumnDef="accountsid" >
+        <mat-header-cell fxFlex="20%" *matHeaderCellDef mat-sort-header> {{'messaging.management.ChannelAccountSID' | translate}} </mat-header-cell>
+        <mat-cell *matCellDef="let row" fxFlex="20%"> {{row.accountsid}} </mat-cell>
+      </ng-container>
+      <ng-container matColumnDef="authtoken" >
+        <mat-header-cell fxFlex="30%" *matHeaderCellDef mat-sort-header> {{'messaging.management.ChannelAuthToken' | translate}} </mat-header-cell>
+        <mat-cell *matCellDef="let row" fxFlex="30%"> {{row.authtoken}} </mat-cell>
+      </ng-container>
+      <ng-container matColumnDef="createdon" >
+        <mat-header-cell fxFlex="10%" *matHeaderCellDef mat-sort-header> {{'messaging.management.ChannelCreatedOn' | translate}} </mat-header-cell>
+        <mat-cell *matCellDef="let row" fxFlex="10%"> {{checkDate(row.createdon)| date: 'EEEE, MMMM d, y' }} </mat-cell>
+      </ng-container>
+      <ng-container *ngIf="canManageChannel" matColumnDef="actions" >
+        <mat-header-cell *matHeaderCellDef>
+          <button mat-button color="primary" matTooltip="{{'messaging.management.NewChannel' | translate}}" (click)="editChannel()">
+            <mat-icon class="mat-button-icon">list</mat-icon>{{'messaging.management.NewChannel' | translate}}
+          </button>
+          <button mat-button color="primary" matTooltip="{{'messaging.management.Refresh' | translate}}" (click)="reloadChannel()">
+            <mat-icon class="mat-button-icon">refresh</mat-icon>
+          </button>
+        </mat-header-cell>
+
+        <mat-cell *matCellDef="let channel" fxFlex="140px" fxFlexOffset="30px">
+          <button mat-icon-button matTooltip="{{'coupon.management.Edit' | translate}}" (click)="editChannel(channel)">
+            <mat-icon>edit</mat-icon>
+          </button>
+        </mat-cell>
+      </ng-container>
+
+      <mat-header-row *matHeaderRowDef="displayedColumns"></mat-header-row>
+      <mat-row *matRowDef="let row; columns: displayedColumns;">
+      </mat-row>
+    </mat-table>
+
+    <mat-paginator [pageSizeOptions]="[10, 25, 100]"></mat-paginator>
+  </div>
+</div>

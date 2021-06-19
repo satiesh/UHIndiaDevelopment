@@ -1,0 +1,8 @@
+{
+  "projects": {
+    "default": "urbanhoodadmin",
+    "alpha": "urbanhoodadminalpha",
+    "prod": "urbanhood-learning",
+    "qa": "urbanhood-learning-qa"
+  }
+}

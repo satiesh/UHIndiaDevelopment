@@ -1,0 +1,54 @@
+<app-page-header title="Coupons" icon="local_atm"></app-page-header>
+<div [@fadeInOut] class="page-content">
+
+  <div class="search-box">
+    <mat-form-field>
+      <input matInput (keyup)="applyFilter($event.target.value)" placeholder="{{'coupon.management.Search' | translate}}">
+    </mat-form-field>
+  </div>
+
+  <div class="mat-elevation-z8">
+    <mat-progress-bar *ngIf="loadingIndicator$|async" mode="query"></mat-progress-bar>
+    <mat-table [dataSource]="dataSource" matSort>
+
+      <ng-container matColumnDef="name">
+        <mat-header-cell *matHeaderCellDef mat-sort-header> {{'coupon.management.Name' | translate}} </mat-header-cell>
+        <mat-cell *matCellDef="let row"> {{row.name}} </mat-cell>
+      </ng-container>
+
+      <ng-container matColumnDef="description">
+        <mat-header-cell *matHeaderCellDef mat-sort-header> {{'coupon.management.DiscountedItem' | translate}} </mat-header-cell>
+        <mat-cell *matCellDef="let row"> {{row.description}} </mat-cell>
+      </ng-container>
+      <ng-container matColumnDef="isactive">
+        <mat-header-cell *matHeaderCellDef mat-sort-header> {{'coupon.management.DiscountedItem' | translate}} </mat-header-cell>
+        <mat-cell *matCellDef="let row"> {{row.isactive}} </mat-cell>
+      </ng-container>
+      <ng-container matColumnDef="createdon">
+        <mat-header-cell *matHeaderCellDef mat-sort-header> {{'coupon.management.ExpiresOn' | translate}} </mat-header-cell>
+        <mat-cell *matCellDef="let row"> {{checkDate(row.createdon)| date: 'EEEE, MMMM d, y' }} </mat-cell>
+      </ng-container>
+      <ng-container *ngIf="canManageTemplates" matColumnDef="actions">
+        <mat-header-cell *matHeaderCellDef>
+          <button mat-button color="primary" matTooltip="{{'coupon.management.NewCoupon' | translate}}" (click)="editTemplate()">
+            <mat-icon class="mat-button-icon">local_atm</mat-icon>{{'coupon.management.NewCoupon' | translate}}
+          </button>
+          <button mat-button color="primary" matTooltip="{{'coupon.management.Refresh' | translate}}" (click)="reloadTemplates()">
+            <mat-icon class="mat-button-icon">refresh</mat-icon>
+          </button>
+        </mat-header-cell>
+        <mat-cell *matCellDef="let coupon" fxFlex="140px" fxFlexOffset="30px">
+          <button mat-icon-button matTooltip="{{'coupon.management.Edit' | translate}}" (click)="editTemplate(coupon)">
+            <mat-icon>edit</mat-icon>
+          </button>
+        </mat-cell>
+      </ng-container>
+
+      <mat-header-row *matHeaderRowDef="displayedColumns"></mat-header-row>
+      <mat-row *matRowDef="let row; columns: displayedColumns;">
+      </mat-row>
+    </mat-table>
+
+    <mat-paginator [pageSizeOptions]="[10, 25, 100]"></mat-paginator>
+  </div>
+</div>

@@ -1,0 +1,40 @@
+<form fxLayout="column" autocomplete="off">
+  <div *ngIf="!isNewSetup && isExistingUser">
+    <div class="uh-ack-justify" *ngIf="enablePaymentStep">
+      <p>
+        We have successfully processed payment and the reference is <strong>{{referenceid}}</strong>. An receipt will be emailed to <strong>{{emailaddress}}</strong>.
+      </p>
+      <h2>For any refund or dispute please contact billing@urbanhood.org.</h2>
+    </div>
+    <div class="spacer"></div>
+  </div>
+  <div *ngIf="!isNewSetup && !isExistingUser">
+    <div class="uh-ack-justify" *ngIf="enablePaymentStep">
+      <p>
+        <strong>{{firstname}}</strong>, thank you for your payment. We have successfully processed payment and the reference is <strong>{{referenceid}}</strong>. We have emailed the receipt to <strong>{{emailaddress}}</strong>.
+      </p>
+      <h2>Your subscription has been successfully updated. For any refund or dispute please contact billing@urbanhood.org. Please logout and login again for the new subscription to take effect.</h2>
+    </div>
+    <div class="spacer"></div>
+
+  </div>
+  <div *ngIf="isNewSetup && !isExistingUser">
+    <div class="uh-ack-justify" *ngIf="enablePaymentStep">
+      <p>
+        <strong>{{firstname}}</strong>, thank you for your payment. We have successfully processed payment and the reference is <strong>{{referenceid}}</strong>. We have emailed the receipt to <strong>{{emailaddress}}</strong>.
+      </p>
+      <p>
+        Click "Take me to Dashboard" button to take you to the dashboard screen.
+      </p>
+    </div>
+    <div class="uh-ack-justify" *ngIf="!enablePaymentStep">
+      <p>
+        <strong>{{firstname}}</strong>, thanks for subscribing.
+      </p>
+      <p>
+        Click "Take me to Dashboard" button to take you to the dashboard screen.
+      </p>
+    </div>
+  </div>
+  <div class="spacer"></div>
+</form>

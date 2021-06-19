@@ -1,0 +1,11 @@
+<button mat-icon-button class="close" aria-label="Close" title="Close" style="float: right;" (click)="cancel()">
+  <mat-icon>close</mat-icon>
+</button>
+<h1 mat-dialog-title>{{subscriptionName ? ('subscription.management.Edit' | translate:subscriptionName) : ('subscription.management.NewSubscription' | translate)}}</h1>
+<div mat-dialog-content>
+  <app-subscription-editor [subscription]="data.subscription" isEditMode="true"></app-subscription-editor>
+</div>
+<div mat-dialog-actions>
+  <button mat-raised-button (click)="editSubscription.save();" color="primary">Save</button>
+  <button mat-raised-button (click)="cancel()" color="warn">Cancel</button>
+</div>
