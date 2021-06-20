@@ -177,6 +177,8 @@ export class AuthenticatedComponent implements OnInit, OnDestroy {
 
 
   logout() {
+    console.log(this.authService.currentUser.uid);
+    this.store$.dispatch(new CurrentUsersStoreActions.CurrentDeleteUsersRequestAction({ id: this.authService.currentUser.uid }));
     this.authService.SignOut();
     this.authService.redirectLogoutUser();
   }

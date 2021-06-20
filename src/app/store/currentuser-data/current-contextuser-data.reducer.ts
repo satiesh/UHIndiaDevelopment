@@ -123,6 +123,9 @@ export function currentUsersDataReducer(state = initialState, action: Actions): 
         isCurrentUserLoaded: false,
         error: action.payload.error
       };
+
+    case ActionTypes.DELETE_CURRENT_USER_REQUEST:
+      return adapter.removeOne(action.payload.id, state);
     default: {
       return state;
     }
