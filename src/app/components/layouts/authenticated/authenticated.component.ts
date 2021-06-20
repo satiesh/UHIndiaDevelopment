@@ -132,9 +132,10 @@ export class AuthenticatedComponent implements OnInit, OnDestroy {
               }
             }
           }
-          else {
-            this.router.navigate(['/setprofile']);
-          }
+          //else {
+          //  console.log("comes here");
+          //  this.router.navigate(['/setprofile']);
+          //}
         });
       }
     });

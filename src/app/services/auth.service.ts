@@ -523,6 +523,7 @@ export class AuthService {
     if (this.redirectUrl === 'auth/course-purchase/' ) {
       this.router.navigate(['/auth/course-purchase' , { 'data' : this.courseId}]);
     } else if (this.UserRole === 'Subscriber' && this.redirectUrl !== 'auth/course-purchase')  {
+      console.log(this.UserRole);
       this.router.navigate(['/auth/reports']);
     }
     else {
@@ -531,6 +532,7 @@ export class AuthService {
   }
 
   AuthRedirect(doc: any) {
+    console.log(this.subscribedUser);
     if (this.subscribedUser) {
       this.ngZone.run(() => {
       this.getRedirectUrl();

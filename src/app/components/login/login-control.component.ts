@@ -10,6 +10,10 @@ import { AlertService, AuthService} from '@app/services';
 import { UserLogin } from '@app/models';
 import { Router } from '@angular/router';
 import { LocalStoreManager } from '@app/services';
+import { Observable } from 'rxjs';
+import { User } from '../../models/user';
+import { Store } from '@ngrx/store';
+import { CurrentUsersStoreActions, RootStoreState } from '../../store';
 
 @Component({
     selector: 'app-login-control',
@@ -22,7 +26,9 @@ import { LocalStoreManager } from '@app/services';
     loginStatusSubscription: any;
     hide = true;
     loginForm: FormGroup;
-
+  loadingIndicator$: Observable<boolean>;
+  isCurrentUserLoaded$: Observable<boolean>;
+  selectCurrentUser$: Observable<User>;
     @ViewChild('form', { static: true })
     private form: NgForm;
   
@@ -38,6 +44,7 @@ import { LocalStoreManager } from '@app/services';
     private authService: AuthService,
     private formBuilder: FormBuilder ,
     private sessionValue: LocalStoreManager,
+    private store$: Store<RootStoreState.State>,
     private router: Router) {
     const redirect = this.router.url;
     const red = redirect.split('?')[1];
@@ -97,6 +104,7 @@ import { LocalStoreManager } from '@app/services';
       }
       this.isLoading = true;
       this.authService.SignIn(this.getUserLogin());
+      this.store$.dispatch(new CurrentUsersStoreActions.CurrentUsersRequestAction(this.authService.currentUser.uid));
       this.isLoading = false;
     }
 
