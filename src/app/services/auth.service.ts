@@ -70,7 +70,7 @@ export class AuthService {
     private store$: Store<RootStoreState.State>,
     private localStorage: LocalStoreManager, private http: HttpClient, private datePipe: DatePipe) {
     this.initializeLoginStatus();
- 
+
 
     /* Saving user data in localstorage when 
     logged in and setting up null when logged out */
@@ -80,7 +80,7 @@ export class AuthService {
         //    this.fbUserData = user;
       }
     })
-   
+
   }
 
   private initializeLoginStatus() {
@@ -159,25 +159,113 @@ export class AuthService {
   }
 
   // Sign in with email/password
-  SignIn(user: UserLogin) {
-    return this.afAuth.signInWithEmailAndPassword(user.userName, user.password)
-      .then((result) => {
-        if (!result.user.emailVerified) {
-          this.ngZone.run(() => {
-            this.router.navigate(['/verifyemail']);
-          });
-        }
-        else {
-          this.afAuth.authState.pipe(filter(user => user !== null)).subscribe(data => {
-            this.UpdateUserDataNew(data, user.rememberMe);
-          });
-        }
-      }).catch((error) => {
-        this.alertService.showStickyMessage('Unable to login', error.message, MessageSeverity.error, error);
-      })
+  SignIn(user: UserLogin): Promise<string> {
+    return new Promise<string>(resolve => {
+      setTimeout(() => {
+        this.afAuth.signInWithEmailAndPassword(user.userName, user.password)
+          .then((result) => {
+            if (!result.user.emailVerified) {
+              resolve("1");
+            }
+            else {
+              this.UpdateUserDataNewI()
+                .then((result) => {
+                  if (result) {
+                    resolve("3");
+                  }
+                });
+            }
+          })
+          .catch((error) => {
+            resolve(error);
+          })
+
+      }, 500)
+    });
+
+
+
+
+    //   let returnValue: number;
+    //  //return this.afAuth.signInWithEmailAndPassword(user.userName, user.password)
+    //  this.afAuth.signInWithEmailAndPassword(user.userName, user.password)
+    //    .then((result) => {
+    //      if (!result.user.emailVerified) {
+
+    //        console.log("1");
+    //        this.ngZone.run(() => {
+    //          //this.router.navigate(['/verifyemail']);
+    //          returnValue =1;
+    //        });
+    //      }
+    //      else {
+    //        console.log("3");
+    //        returnValue = 3;
+    //      }
+    //    })
+    //  //  else {
+    //  //    this.afAuth.authState.pipe(filter(user => user !== null)).subscribe(data => {
+    //  //      this.UpdateUserDataNew(data, user.rememberMe);
+    //  //    });
+    //  //  }
+    //  //}).catch((error) => {
+    //  //  this.alertService.showStickyMessage('Unable to login', error.message, MessageSeverity.error, error);
+    //  //})
+    //  return returnValue;
   }
 
-  async UpdateUserDataNew(data: firebase.User, rememberMe: boolean) {
+  UpdateUserDataNewI(): Promise<boolean> {
+    return new Promise<boolean>(resolve => {
+      setTimeout(() => {
+        this.afAuth.authState.pipe(filter(user => user !== null)).subscribe(data => {
+          // let rememberMe: boolean = user.rememberMe
+          this.subscribedUser = false;
+          var strRoles: string[] = [];
+          var docRef: AngularFirestoreDocument = this.afs.collection("users").doc(data.uid)
+          docRef.get().toPromise().then((docSnapshot) => {
+            if (docSnapshot.exists) {
+              var docData = docSnapshot.data();
+              this.UserRole = docData["userroles"].roleName;
+              if (docData["usersubscription"].subscriptions && docData["usersubscription"].subscriptions.length > 0) {
+                let currectsubscriptions: subscriptions;
+                currectsubscriptions = docData["usersubscription"].subscriptions.find(a => a.isActive == true);
+                var subDocRef: AngularFirestoreDocument = this.afs.collection("subscription").doc(currectsubscriptions.subscriptionId);
+
+                subDocRef.get().toPromise().then((docSubSnapshot) => {
+                  if (docSubSnapshot.exists) {
+                    var docSubData = docSubSnapshot.data();
+                    this.groupBelongsTo = docSubData.GroupName;
+                    if (docData["userroles"] && docData["userroles"].roleName) {
+                      strRoles = docData["userroles"].roleName.split(",");
+                    }
+                    else {
+                      strRoles = "Subscriber".split(",");
+                    }
+                    this.userData = new User(data.uid, data.email, data.photoURL, data.emailVerified, false, strRoles);
+                    this.setuserpermission(data, false, this.groupBelongsTo)
+                      .then((result) => {
+                        resolve(result);
+                      })
+                  }
+                });
+
+                // console.log(currectsubscriptions);
+                this.subscribedUser = true;
+              }
+            }
+            else {
+              strRoles = "Subscriber".split(",");
+              this.userData = new User(data.uid, data.email, data.photoURL, data.emailVerified, false, strRoles);
+              this.setuserpermission(data, false, this.groupBelongsTo);
+              resolve(true);
+            }
+          });
+        });
+      }, 100)
+    });
+  }
+
+  UpdateUserDataNew(data: firebase.User, rememberMe: boolean) {
     this.subscribedUser = false;
     var strRoles: string[] = [];
     var docRef: AngularFirestoreDocument = this.afs.collection("users").doc(data.uid)
@@ -185,7 +273,7 @@ export class AuthService {
     docRef.get().toPromise().then((docSnapshot) => {
       if (docSnapshot.exists) {
         var docData = docSnapshot.data();
-        this.UserRole =  docData["userroles"].roleName;
+        this.UserRole = docData["userroles"].roleName;
         if (docData["usersubscription"].subscriptions && docData["usersubscription"].subscriptions.length > 0) {
           let currectsubscriptions: subscriptions;
           currectsubscriptions = docData["usersubscription"].subscriptions.find(a => a.isActive == true);
@@ -195,8 +283,6 @@ export class AuthService {
             if (docSubSnapshot.exists) {
               var docSubData = docSubSnapshot.data();
               this.groupBelongsTo = docSubData.GroupName;
-              //console.log(this.groupBelongsTo);
-
               if (docData["userroles"] && docData["userroles"].roleName) {
                 strRoles = docData["userroles"].roleName.split(",");
               }
@@ -445,30 +531,33 @@ export class AuthService {
       true, strRoles);
   }
 
-  setuserpermission(data: firebase.User, rememberMe: boolean, groupBelongsTo?: string) {
+  setuserpermission(data: firebase.User, rememberMe: boolean, groupBelongsTo?: string): Promise<boolean> {
     var strPermission: string[] = [];
-    for (let role of this.userData.roles.toString().split(",")) {
-      const roleList = this.afs.collection<any>('/roles', ref => { return ref.where('RoleName', "==", role) }).valueChanges();
-      roleList.subscribe(roleDoc => {
-        if (roleDoc) {
-          roleDoc.forEach(permmissionDoc => {
-            if (permmissionDoc.Permission) {
-              let permission = permmissionDoc.Permission.toString().split(",");
-              for (let entry of permission) {
-                if (strPermission.indexOf(entry.toLowerCase()) > -1) {
-                  //In the array!
-                } else {
-                  //strPermission.push(this.encrdecrService.encrypt(entry.toLowerCase()));
-                  strPermission.push(entry.toLowerCase());
+    return new Promise<boolean>(resolve => {
+      setTimeout(() => {
+        for (let role of this.userData.roles.toString().split(",")) {
+          const roleList = this.afs.collection<any>('/roles', ref => { return ref.where('RoleName', "==", role) }).valueChanges();
+          roleList.subscribe(roleDoc => {
+            if (roleDoc) {
+              roleDoc.forEach(permmissionDoc => {
+                if (permmissionDoc.Permission) {
+                  let permission = permmissionDoc.Permission.toString().split(",");
+                  for (let entry of permission) {
+                    if (strPermission.indexOf(entry.toLowerCase()) > -1) {
+                      //In the array!
+                    } else {
+                      strPermission.push(entry.toLowerCase());
+                    }
+                  }
+                  this.saveUserDetails(this.userData, strPermission, null, data.refreshToken, null, rememberMe, null, this.groupBelongsTo);
+                  resolve(true);
                 }
-              }
-              this.saveUserDetails(this.userData, strPermission, null, data.refreshToken, null, rememberMe, null, this.groupBelongsTo);
+              });
             }
           });
-          this.AuthRedirect(null);
         }
-      });
-    }
+      }, 100)
+    })
   }
 
   transformSecondsToDate(secondsValu: any): Date {
@@ -478,20 +567,6 @@ export class AuthService {
       return date;
     }
   }
-
-  //async GetRoles(uid: string): string {
-  //  const userRoleList = this.afs.collection<any>('/userroles', ref => { return ref.where('uid', "==", uid) }).valueChanges();
-  //  const rolearray: string[] = []
-  //  var str1: string = '';
-  //  userRoleList.forEach(doc => {
-  //    doc.forEach(role => {
-  //      console.log(role.rolename.toLowerCase());
-  //      rolearray.push(role.rolename.toLowerCase());
-  //      str1.concat(role.rolename.toLowerCase() + ",");
-  //    })
-  //  });
-  //  return str1
-  //}
 
   saveUserDetails(user: User, permissions: string[], accessToken: string, refreshToken: string, expiresIn: Date, rememberMe: boolean, userProfile?: userprofile, groupBelongsTo?: string) {
     if (rememberMe) {
@@ -512,7 +587,7 @@ export class AuthService {
 
     this.localStorage.savePermanentData(rememberMe, DBkeys.REMEMBER_ME);
   }
-  
+
   getRedirectUrl() {
     const redirect = this.router.url;
     const red = redirect.split('?')[1];
@@ -520,9 +595,9 @@ export class AuthService {
     const withidUrl = url.slice(0, url.length - 1);
     this.courseId = withidUrl.substring(withidUrl.lastIndexOf('/') + 1, withidUrl.length);
     this.redirectUrl = withidUrl.substring(0, withidUrl.lastIndexOf('/') + 1);
-    if (this.redirectUrl === 'auth/course-purchase/' ) {
-      this.router.navigate(['/auth/course-purchase' , { 'data' : this.courseId}]);
-    } else if (this.UserRole === 'Subscriber' && this.redirectUrl !== 'auth/course-purchase')  {
+    if (this.redirectUrl === 'auth/course-purchase/') {
+      this.router.navigate(['/auth/course-purchase', { 'data': this.courseId }]);
+    } else if (this.UserRole === 'Subscriber' && this.redirectUrl !== 'auth/course-purchase') {
       console.log(this.UserRole);
       this.router.navigate(['/auth/reports']);
     }
@@ -535,7 +610,7 @@ export class AuthService {
     console.log(this.subscribedUser);
     if (this.subscribedUser) {
       this.ngZone.run(() => {
-      this.getRedirectUrl();
+        this.getRedirectUrl();
       });
     }
     else {
@@ -566,7 +641,6 @@ export class AuthService {
     //});
   }
 
-
   // Sign up with email/password
   SignUp(user: UserLogin) {
     return this.afAuth.createUserWithEmailAndPassword(user.userName, user.password)
@@ -582,8 +656,8 @@ export class AuthService {
   }
 
   /* Setting up user data when sign in with username/password, 
- sign up with username/password and sign in with social auth  
- provider in Firestore database using AngularFirestore + AngularFirestoreDocument service */
+  sign up with username/password and sign in with social auth  
+  provider in Firestore database using AngularFirestore + AngularFirestoreDocument service */
 
   setCustomClaims() {
     this.afAuth.authState.pipe(filter(user => user !== null)).subscribe(user => {
@@ -752,7 +826,7 @@ export class AuthService {
     //    newPermissionValues.push(this.encrdecrService.decrypt(storedPermissionValues[i].toString(CryptoJS.enc.Utf8)));
     //  }
     //}
-    var permissionData:string[] = Utilities.JsonTryParse(this.localStorage.getDataObject<string>(DBkeys.USER_PERMISSIONS));
+    var permissionData: string[] = Utilities.JsonTryParse(this.localStorage.getDataObject<string>(DBkeys.USER_PERMISSIONS));
     //console.log(permissionData);
     //permissionData.forEach(item => {
     //  console.log(item);

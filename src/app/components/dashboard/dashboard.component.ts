@@ -109,7 +109,7 @@ export class DashboardComponent implements OnInit {
 
   pushData(myData: User[], displayName: string) {
     this.selectOptionsTrade$.subscribe((subData => {
-      if (subData.length > 0) {
+      if (subData && subData.length > 0) {
         for (var i = 0; i < myData.length; i++) {
           let displayName = myData[i].displayName;
           let databyuser = subData.filter(a => a.postedby == displayName);

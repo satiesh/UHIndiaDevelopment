@@ -102,7 +102,6 @@ export class AuthenticatedComponent implements OnInit, OnDestroy {
     this.isCurrentUserLoaded$ = this.store$.select(CurrentUsersStoreSelectors.selectIsCurrentUsersLoaded);
     this.selectCurrentUser$ = this.store$.select(CurrentUsersStoreSelectors.selectUserById(this.authService.currentUser.uid));
     this.isCurrentUserLoaded$.subscribe((result: boolean) => {
-
       if (!result) {
         this.store$.dispatch(new CurrentUsersStoreActions.CurrentUsersRequestAction(this.authService.currentUser.uid));
       }
@@ -178,7 +177,7 @@ export class AuthenticatedComponent implements OnInit, OnDestroy {
 
 
   logout() {
-    console.log(this.authService.currentUser.uid);
+    //console.log(this.authService.currentUser.uid);
     this.store$.dispatch(new CurrentUsersStoreActions.CurrentDeleteUsersRequestAction({ id: this.authService.currentUser.uid }));
     this.authService.SignOut();
     this.authService.redirectLogoutUser();

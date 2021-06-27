@@ -3,13 +3,13 @@
     "",
     "\\app",
     "\\app\\components",
-    "\\app\\components\\layouts",
-    "\\app\\components\\layouts\\authenticated",
     "\\app\\components\\login",
+    "\\app\\components\\register",
+    "\\app\\components\\reports",
     "\\app\\services",
     "\\app\\store",
-    "\\app\\store\\currentuser-data"
+    "\\app\\store\\currentuser-data",
+    "\\environments"
   ],
-  "SelectedNode": "\\app\\components\\login\\login-control.component.ts",
   "PreviewInSolutionExplorer": false
 }

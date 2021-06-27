@@ -6,7 +6,7 @@
 import { Component, OnInit, OnDestroy, Input, Output, ViewChild, EventEmitter, AfterViewInit } from '@angular/core';
 import { FormBuilder, FormGroup, NgForm, Validators } from '@angular/forms';
 
-import { AlertService, AuthService} from '@app/services';
+import { AlertService, AuthService, MessageSeverity } from '@app/services';
 import { UserLogin } from '@app/models';
 import { Router } from '@angular/router';
 import { LocalStoreManager } from '@app/services';
@@ -16,33 +16,33 @@ import { Store } from '@ngrx/store';
 import { CurrentUsersStoreActions, RootStoreState } from '../../store';
 
 @Component({
-    selector: 'app-login-control',
-    templateUrl: './login-control.component.html',
-    styleUrls: ['./login-control.component.scss']
-  })
-  export class LoginControlComponent implements OnInit, OnDestroy {
+  selector: 'app-login-control',
+  templateUrl: './login-control.component.html',
+  styleUrls: ['./login-control.component.scss']
+})
+export class LoginControlComponent implements OnInit, OnDestroy {
 
-    isLoading = false;
-    loginStatusSubscription: any;
-    hide = true;
-    loginForm: FormGroup;
+  isLoading = false;
+  loginStatusSubscription: any;
+  hide = true;
+  loginForm: FormGroup;
   loadingIndicator$: Observable<boolean>;
   isCurrentUserLoaded$: Observable<boolean>;
   selectCurrentUser$: Observable<User>;
-    @ViewChild('form', { static: true })
-    private form: NgForm;
-  
-    @Input()
-    isModal = false;
-    UserRole: string;
-    @Output()
-    enterKeyPress = new EventEmitter();
+  @ViewChild('form', { static: true })
+  private form: NgForm;
+
+  @Input()
+  isModal = false;
+  UserRole: string;
+  @Output()
+  enterKeyPress = new EventEmitter();
   redirectUrl: string;
   courseId: string;
   constructor(
     private alertService: AlertService,
     private authService: AuthService,
-    private formBuilder: FormBuilder ,
+    private formBuilder: FormBuilder,
     private sessionValue: LocalStoreManager,
     private store$: Store<RootStoreState.State>,
     private router: Router) {
@@ -55,80 +55,118 @@ import { CurrentUsersStoreActions, RootStoreState } from '../../store';
     this.buildForm();
   }
 
-    ngOnInit(): void {
-        this.loginForm.setValue({
-            email: '',
-            password: '',
-            rememberMe: this.authService.rememberMe
-          });
-        if (this.getShouldRedirect()) {
-            this.authService.redirectLoginUser();
-          } else {
-            this.loginStatusSubscription = this.authService.getLoginStatusEvent()
-              .subscribe(isLoggedIn => {
-                if (isLoggedIn) {
-                  this.UserRole = JSON.parse(sessionStorage.getItem('current_user')).roles[0];
-                  if (this.redirectUrl === 'auth/course-purchase/') {
-                    this.router.navigate(['auth/course-purchase'  , { data: this.courseId  }]);
-                  }else if (this.UserRole === 'Subscriber' && this.redirectUrl !== 'auth/course-purchase/') {
-                    this.router.navigate(['auth/reports']);
-                  }
-                   else{
-                    this.router.navigate(['auth/dashboard']);
-                  }
-                }
-                if (this.getShouldRedirect()) {
-                  this.authService.redirectLoginUser();
-                }
-              });
+  ngOnInit(): void {
+    this.loginForm.setValue({
+      email: '',
+      password: '',
+      rememberMe: this.authService.rememberMe
+    });
+    if (this.getShouldRedirect()) {
+      this.authService.redirectLoginUser();
+    } else {
+      this.authRedirect();
+      //this.loginStatusSubscription = this.authService.getLoginStatusEvent()
+      //  .subscribe(isLoggedIn => {
+      //    if (isLoggedIn) {
+      //      this.authRedirect();
+      //    }
+      //  });
+    }
+  }
+
+  async authRedirect() {
+    this.loginStatusSubscription = this.authService.getLoginStatusEvent()
+      .subscribe(isLoggedIn => {
+        if (isLoggedIn) {
+          console.log(sessionStorage.getItem('current_user'));
+          this.UserRole = JSON.parse(sessionStorage.getItem('current_user')).roles[0];
+          if (this.redirectUrl === 'auth/course-purchase/') {
+            this.router.navigate(['auth/course-purchase', { data: this.courseId }]);
+          } else if (this.UserRole === 'Subscriber' && this.redirectUrl !== 'auth/course-purchase/') {
+            this.router.navigate(['auth/reports']);
           }
-                 }
-
-    buildForm() {
-      this.loginForm = this.formBuilder.group({
-        email: ['',[Validators.required,Validators.email]],
-        password: ['', [Validators.required, Validators.pattern(/(?=.*\d)(?=.*[a-z])(?=.*[A-Z])(?=.*[\W]).{8,}/)]],
-        rememberMe: ''
+          else {
+            this.router.navigate(['auth/dashboard']);
+          }
+        }
       });
+  }
+
+  buildForm() {
+    this.loginForm = this.formBuilder.group({
+      email: ['', [Validators.required, Validators.email]],
+      password: ['', [Validators.required, Validators.pattern(/(?=.*\d)(?=.*[a-z])(?=.*[A-Z])(?=.*[\W]).{8,}/)]],
+      rememberMe: ''
+    });
+  }
+
+  async login() {
+    if (!this.form.submitted) {
+      this.form.onSubmit(null);
+      return;
     }
 
-    login() {
-      if (!this.form.submitted) {
-        this.form.onSubmit(null);
-        return;
-      }
-  
-      if (!this.loginForm.valid) {
-        this.alertService.showValidationError();
-        return;
-      }
-      this.isLoading = true;
-      this.authService.SignIn(this.getUserLogin());
-      this.store$.dispatch(new CurrentUsersStoreActions.CurrentUsersRequestAction(this.authService.currentUser.uid));
+    if (!this.loginForm.valid) {
+      this.alertService.showValidationError();
+      return;
+    }
+    let returnValue: string;
+    this.isLoading = true;
+    this.authService.SignIn(this.getUserLogin())
+      .then((result) => {
+        if (result) {
+          returnValue = result;
+          if (returnValue == "1") {
+            this.router.navigate(['/verifyemail']);
+          }
+          else if (returnValue == "3") {
+            //this.authRedirect();
+            this.router.navigate(['/redirect']);
+          }
+          else {
+            this.alertService.showStickyMessage('Unable to login', returnValue["message"], MessageSeverity.error);
+          }
+          this.isLoading = false;
+          console.log(returnValue);
+        }
+      })
+      .catch ((error) => {
+      this.alertService.showStickyMessage('Unable to login', error.message, MessageSeverity.error, error);
       this.isLoading = false;
-    }
+    });
 
-    getUserLogin(): UserLogin {
-      const formModel = this.loginForm.value;
-      return new UserLogin(formModel.email, formModel.password, formModel.rememberMe);
-    }
-  
+    //this.store$.dispatch(new CurrentUsersStoreActions.CurrentUsersRequestAction(this.authService.currentUser.uid));
+  }
 
-    getShouldRedirect() {
-      return !this.isModal && this.authService.isLoggedIn && !this.authService.isSessionExpired;
-    }
-    get email() { return this.loginForm.get('email'); }
+  async setUserData() {
+    //this.authService.UpdateUserDataNewI()
+    //  .then((result) => {
+    //    if (result) {
+    //      this.router.navigate(['/redirect']);
+    //    }
+    //  });
+  }
+  getUserLogin(): UserLogin {
+    const formModel = this.loginForm.value;
+    return new UserLogin(formModel.email, formModel.password, formModel.rememberMe);
+  }
 
-    get password() { return this.loginForm.get('password'); }
+
+  getShouldRedirect() {
+    return !this.isModal && this.authService.isLoggedIn && !this.authService.isSessionExpired;
+  }
+  get email() { return this.loginForm.get('email'); }
+
+  get password() { return this.loginForm.get('password'); }
 
   enterKeyDown() {
-      this.enterKeyPress.emit();
-    }
+    this.enterKeyPress.emit();
+  }
 
   ngOnDestroy(): void {
-      if (this.loginStatusSubscription) {
-        this.loginStatusSubscription.unsubscribe();
-      }
+    if (this.loginStatusSubscription) {
+      this.loginStatusSubscription.unsubscribe();
+    }
   }
 
-  }
+}
