@@ -257,7 +257,7 @@ export class AuthService {
             }
             else {
               strRoles = "Subscriber".split(",");
-              this.userData = new User(data.uid, data.email, data.photoURL, data.emailVerified, true, strRoles);
+              this.userData = new User(data.uid, data.email, data.photoURL, data.emailVerified, false, strRoles);
               this.setuserpermission(data, false, this.groupBelongsTo)
                 .then((result) => {
                   resolve(false);
