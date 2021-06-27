@@ -12,7 +12,7 @@ import { User } from '@app/models/user';
   templateUrl: './redirect.component.html',
   styleUrls: ['./redirect.component.scss']
 })
-export class RedirectComponent implements OnInit, AfterViewInit {
+export class RedirectComponent implements OnInit {
   isUserLoggedIn: boolean;
   UserRole: string;
   userProfile: userprofile;
@@ -28,11 +28,6 @@ export class RedirectComponent implements OnInit, AfterViewInit {
     public ngZone: NgZone, // NgZone service to remove outside scope warning
     private store$: Store<RootStoreState.State>
   ) { }
-
-
-  ngAfterViewInit(): void {
-  }
-
 
   ngOnInit() {
     this.isUserLoggedIn = this.authService.isLoggedIn;
@@ -57,22 +52,6 @@ export class RedirectComponent implements OnInit, AfterViewInit {
           this.router.navigate(['auth/dashboard']);
         }
       }
-      //if (doc) {
-      //  if (doc["usersubscription"]) {
-      //    if (doc[0]["usersubscription"].subscriptions && doc[0]["usersubscription"].subscriptions.length > 0) {
-      //      this.router.navigate(['/auth/dashboard']);
-      //    }
-      //    else {
-      //      this.router.navigate(['/setprofile']);
-      //    }
-      //  }
-      //  else {
-      //    this.router.navigate(['/setprofile']);
-      //  }
-      //}
-      //else {
-      //  this.router.navigate(['/setprofile']);
-      //}
     })
   }
 }
