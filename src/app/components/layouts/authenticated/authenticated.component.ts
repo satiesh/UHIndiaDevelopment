@@ -97,7 +97,6 @@ export class AuthenticatedComponent implements OnInit, OnDestroy {
   }
 
   ngOnInit() {
-
     this.loadingIndicator$ = this.store$.select(CurrentUsersStoreSelectors.selectIsCurrentUsersLoading);
     this.isCurrentUserLoaded$ = this.store$.select(CurrentUsersStoreSelectors.selectIsCurrentUsersLoaded);
     this.selectCurrentUser$ = this.store$.select(CurrentUsersStoreSelectors.selectUserById(this.authService.currentUser.uid));
@@ -131,27 +130,13 @@ export class AuthenticatedComponent implements OnInit, OnDestroy {
               }
             }
           }
-          //else {
-          //  console.log("comes here");
-          //  this.router.navigate(['/setprofile']);
-          //}
         });
       }
     });
-
-
     //this.messagingService.requestPermission()
     //this.messagingService.receiveMessage()
     //this.message = this.messagingService.currentMessage
-
     this.isUserLoggedIn = this.authService.isLoggedIn;
-
-    //setTimeout(() => {
-    //  if (this.isUserLoggedIn) {
-    //    this.alertService.resetStickyMessage();
-    //    this.alertService.showMessage('Login', `Welcome back ${this.userName}!`, MessageSeverity.default);
-    //  }
-    //}, 2000);
   }
 
   get userName(): string {
@@ -159,7 +144,6 @@ export class AuthenticatedComponent implements OnInit, OnDestroy {
   }
 
   newDisclaimer() {
-    //this.ngZone.run(() => {
     const dialogRef = this.dialog.open(DisclaimerDialogComponent,
       {
         panelClass: 'mat-dialog-lg',
@@ -169,15 +153,12 @@ export class AuthenticatedComponent implements OnInit, OnDestroy {
     dialogRef.afterClosed().subscribe(u => {
       if (u) {
         console.log("After close" + u);
-        //this.updateUsers(u);
       }
     });
-    //});
   }
 
 
   logout() {
-    //console.log(this.authService.currentUser.uid);
     this.store$.dispatch(new CurrentUsersStoreActions.CurrentDeleteUsersRequestAction({ id: this.authService.currentUser.uid }));
     this.authService.SignOut();
     this.authService.redirectLogoutUser();
