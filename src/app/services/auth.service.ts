@@ -173,6 +173,9 @@ export class AuthService {
                   if (result) {
                     resolve("3");
                   }
+                  else {
+                    resolve("2");
+                  }
                 });
             }
           })
@@ -248,16 +251,17 @@ export class AuthService {
                       })
                   }
                 });
-
-                // console.log(currectsubscriptions);
                 this.subscribedUser = true;
               }
+              else {resolve(false)}
             }
             else {
               strRoles = "Subscriber".split(",");
-              this.userData = new User(data.uid, data.email, data.photoURL, data.emailVerified, false, strRoles);
-              this.setuserpermission(data, false, this.groupBelongsTo);
-              resolve(true);
+              this.userData = new User(data.uid, data.email, data.photoURL, data.emailVerified, true, strRoles);
+              this.setuserpermission(data, false, this.groupBelongsTo)
+                .then((result) => {
+                  resolve(false);
+                })
             }
           });
         });

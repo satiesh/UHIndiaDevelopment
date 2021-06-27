@@ -4,12 +4,14 @@
     "\\src",
     "\\src\\app",
     "\\src\\app\\components",
-    "\\src\\app\\components\\controls",
-    "\\src\\app\\components\\verify",
-    "\\src\\app\\store\\dailytrade-data",
-    "\\src\\assets",
-    "\\src\\environments"
+    "\\src\\app\\components\\layouts",
+    "\\src\\app\\components\\layouts\\shared",
+    "\\src\\app\\components\\layouts\\shared\\header",
+    "\\src\\app\\components\\login",
+    "\\src\\app\\components\\redirect",
+    "\\src\\app\\components\\setprofile",
+    "\\src\\app\\store\\currentuser-data"
   ],
-  "SelectedNode": "\\src\\app\\components\\verify\\verifyemail.component.html",
+  "SelectedNode": "\\src\\app\\components\\setprofile\\setprofile.component.html",
   "PreviewInSolutionExplorer": false
 }

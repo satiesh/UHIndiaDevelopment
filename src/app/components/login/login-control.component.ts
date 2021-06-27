@@ -79,6 +79,8 @@ export class LoginControlComponent implements OnInit, OnDestroy {
       .subscribe(isLoggedIn => {
         if (isLoggedIn) {
           console.log(sessionStorage.getItem('current_user'));
+
+
           this.UserRole = JSON.parse(sessionStorage.getItem('current_user')).roles[0];
           if (this.redirectUrl === 'auth/course-purchase/') {
             this.router.navigate(['auth/course-purchase', { data: this.courseId }]);
@@ -117,17 +119,23 @@ export class LoginControlComponent implements OnInit, OnDestroy {
         if (result) {
           returnValue = result;
           if (returnValue == "1") {
+            console.log(returnValue);
             this.router.navigate(['/verifyemail']);
+          }
+          else if (returnValue == "2") {
+            //this.authRedirect();
+            console.log(returnValue);
+            this.router.navigate(['/setprofile']);
           }
           else if (returnValue == "3") {
             //this.authRedirect();
+            console.log(returnValue);
             this.router.navigate(['/redirect']);
           }
           else {
             this.alertService.showStickyMessage('Unable to login', returnValue["message"], MessageSeverity.error);
           }
           this.isLoading = false;
-          console.log(returnValue);
         }
       })
       .catch ((error) => {

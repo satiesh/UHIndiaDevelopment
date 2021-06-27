@@ -25,7 +25,7 @@ export const selectSubscriptions: (state: object) => ServiceSubscription[] = ada
 export const selectSubscriptionWithoutAlreadyPaid = (id: string) =>
   createSelector(selectSubscriptions, (allSubscriptions: ServiceSubscription[]) => {
     if (allSubscriptions) {
-      return allSubscriptions.filter(p => p.id !== id);
+      return allSubscriptions.filter(p => p.id !== id && p.IsActive==true);
     } else {
       return null;
     }
