@@ -84,8 +84,9 @@ export class LoginControlComponent implements OnInit, OnDestroy {
           this.UserRole = JSON.parse(sessionStorage.getItem('current_user')).roles[0];
           if (this.redirectUrl === 'auth/course-purchase/') {
             this.router.navigate(['auth/course-purchase', { data: this.courseId }]);
-          } else if (this.UserRole === 'Subscriber' && this.redirectUrl !== 'auth/course-purchase/') {
-            this.router.navigate(['auth/reports']);
+          }
+          else if (this.UserRole === 'Subscriber' && this.redirectUrl !== 'auth/course-purchase/') {
+            this.router.navigate(['redirect']);
           }
           else {
             this.router.navigate(['auth/dashboard']);

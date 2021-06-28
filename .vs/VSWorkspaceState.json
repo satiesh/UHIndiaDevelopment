@@ -4,14 +4,13 @@
     "\\src",
     "\\src\\app",
     "\\src\\app\\components",
+    "\\src\\app\\components\\disclaimer-dialog",
     "\\src\\app\\components\\layouts",
-    "\\src\\app\\components\\layouts\\shared",
-    "\\src\\app\\components\\layouts\\shared\\header",
-    "\\src\\app\\components\\login",
-    "\\src\\app\\components\\redirect",
+    "\\src\\app\\components\\layouts\\authenticated",
     "\\src\\app\\components\\setprofile",
-    "\\src\\app\\store\\currentuser-data"
+    "\\src\\app\\services",
+    "\\src\\app\\store"
   ],
-  "SelectedNode": "\\src\\app\\components\\setprofile\\setprofile.component.html",
+  "SelectedNode": "\\src\\app\\components\\layouts\\authenticated\\authenticated.module.ts",
   "PreviewInSolutionExplorer": false
 }
