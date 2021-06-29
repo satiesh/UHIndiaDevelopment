@@ -4,13 +4,13 @@
     "\\src",
     "\\src\\app",
     "\\src\\app\\components",
-    "\\src\\app\\components\\disclaimer-dialog",
     "\\src\\app\\components\\layouts",
-    "\\src\\app\\components\\layouts\\authenticated",
-    "\\src\\app\\components\\setprofile",
+    "\\src\\app\\components\\login",
+    "\\src\\app\\components\\redirect",
+    "\\src\\app\\pipes",
     "\\src\\app\\services",
-    "\\src\\app\\store"
+    "\\src\\app\\shared"
   ],
-  "SelectedNode": "\\src\\app\\components\\layouts\\authenticated\\authenticated.module.ts",
+  "SelectedNode": "\\src\\app\\components\\login\\login-control.component.ts",
   "PreviewInSolutionExplorer": false
 }

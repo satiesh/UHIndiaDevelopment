@@ -31,7 +31,9 @@ export class RegisterCourseDialogComponent implements AfterViewInit {
   ngAfterViewInit() {
     //this.editCourse.courseSaved$.subscribe(user => this.dialogRef.close(user));
   }
-
+  payCourse(): void {
+    this.editCourse.pay();
+  }
   cancel(): void {
     this.dialogRef.close(null);
   }

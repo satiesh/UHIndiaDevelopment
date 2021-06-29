@@ -12,6 +12,8 @@ export const environment = {
   azureApi: 'https://uhazurerestapi.azurewebsites.net/',
   //sendinBlueKey: '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',
   sendinBlueKey: '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',
+  publicKey: "BLh_Ik3u9URcTFvrc4UfvKW_HlmvkiTc-sePL6fndmmm6RlMRwO5huOlaeTpuAjOuLKqCqL-osplAvedFObVB-Y",
+  privateKey: "123456$#@$^@1ERF",
   welcometemplateId: 14,
   sendinBlueListId: 13,
   encryptionKey: '123456$#@$^@1ERF',

@@ -27,9 +27,9 @@ export class CourseBuyComponent implements OnInit {
   currentCourseId: any;
   loadingIndicator$: Observable<boolean>;
   isCourseLoaded$: Observable<boolean>;
-  selectCourses$: Observable<Courses[]>;
+  selectCourses$: Observable<Courses>;
 
-  sourceCourses: Courses[];
+  sourceCourses: Courses;
   sourceCourse: Courses;
 
   constructor(
@@ -47,7 +47,7 @@ export class CourseBuyComponent implements OnInit {
   ngOnInit(): void {
     this.loadingIndicator$ = this.store$.select(CoursesStoreSelectors.selectCoursesLoading);
     this.isCourseLoaded$ = this.store$.select(CoursesStoreSelectors.selectCoursesLoaded);
-    this.selectCourses$ = this.store$.select(CoursesStoreSelectors.selectCourses);
+    this.selectCourses$ = this.store$.select(CoursesStoreSelectors.selectCourseById(this.currentCourseId ));
     this.loadData();
   }
   
@@ -70,10 +70,11 @@ export class CourseBuyComponent implements OnInit {
   reloadCourse() {
     this.store$.dispatch(new CoursesStoreActions.CourseRequestAction());
   }
-  private onDataLoadSuccessful(courses: Courses[]) {
-    this.sourceCourses = courses.filter((element) => {
-      return element.id === this.currentCourseId;
-    });
+  private onDataLoadSuccessful(courses: Courses) {
+    //this.sourceCourses = courses.filter((element) => {
+    //  return element.id === this.currentCourseId;
+    //});
+    this.sourceCourses = courses;
     this.alertService.stopLoadingMessage();
   }
 

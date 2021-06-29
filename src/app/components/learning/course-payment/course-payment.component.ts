@@ -165,7 +165,8 @@ export class CoursePaymentComponent implements OnInit {
       headers: new HttpHeaders(
         {
           'Content-Type': 'application/x-www-form-urlencoded',
-          'Authorization': 'Bearer sk_test_51HN7MiHZ4XNG0JRpnv9s4WBRWz5EblyHAQbjANtTHhoLt8hdqtDvsDb9yq6F91lE8Cpi6Os0C4coAUL8hdsGFa4Q00fCUIx62k'
+          //'Authorization': 'Bearer sk_test_51HN7MiHZ4XNG0JRpnv9s4WBRWz5EblyHAQbjANtTHhoLt8hdqtDvsDb9yq6F91lE8Cpi6Os0C4coAUL8hdsGFa4Q00fCUIx62k'
+          'Authorization': 'Bearer ' + env.stripeSecretApi
         })
 
     };

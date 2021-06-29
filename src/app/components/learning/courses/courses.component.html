@@ -9,8 +9,8 @@
     </button>
   </div>
   <div>
-    <mat-progress-bar  mode="query"></mat-progress-bar>
-    <div fxLayout="row wrap" fxLayoutAlign="space-evenly">
+    <mat-progress-bar *ngIf="loadingIndicator$|async"  mode="query"></mat-progress-bar>
+    <div fxLayout="row wrap" fxLayoutAlign="space-evenly" *ngIf="isCourseLoaded$|async">
       <div fxFlex="50" fxFlex.sm="33.3" fxFlex.xs="50" *ngFor="let tile of sourceCourses" style="padding: 2px;margin-bottom: 1em">
         <mat-card class="card">
           <mat-card-title>{{tile.Name}}</mat-card-title>

@@ -64,6 +64,7 @@ export class LoginControlComponent implements OnInit, OnDestroy {
     if (this.getShouldRedirect()) {
       this.authService.redirectLoginUser();
     } else {
+      console.log(this.redirectUrl);
       this.authRedirect();
       //this.loginStatusSubscription = this.authService.getLoginStatusEvent()
       //  .subscribe(isLoggedIn => {
@@ -131,7 +132,13 @@ export class LoginControlComponent implements OnInit, OnDestroy {
           else if (returnValue == "3") {
             //this.authRedirect();
             console.log(returnValue);
-            this.router.navigate(['/redirect']);
+            if (this.redirectUrl == 'auth/course-purchase/')
+            {
+              this.router.navigate(['auth/course-purchase', { data: this.courseId }]);
+            }
+            else {
+              this.router.navigate(['/redirect']);
+            }
           }
           else {
             this.alertService.showStickyMessage('Unable to login', returnValue["message"], MessageSeverity.error);
@@ -139,10 +146,10 @@ export class LoginControlComponent implements OnInit, OnDestroy {
           this.isLoading = false;
         }
       })
-      .catch ((error) => {
-      this.alertService.showStickyMessage('Unable to login', error.message, MessageSeverity.error, error);
-      this.isLoading = false;
-    });
+      .catch((error) => {
+        this.alertService.showStickyMessage('Unable to login', error.message, MessageSeverity.error, error);
+        this.isLoading = false;
+      });
 
     //this.store$.dispatch(new CurrentUsersStoreActions.CurrentUsersRequestAction(this.authService.currentUser.uid));
   }
