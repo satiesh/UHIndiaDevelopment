@@ -28,7 +28,7 @@ import { Courses } from '../../../models';
 
 export class CoursePaymentComponent implements OnInit {
   @Input() course: Courses = new Courses();
-  
+
   @ViewChild(StripeCardComponent) card: StripeCardComponent;
   amountval: string;
   amountnumber: number;
@@ -100,36 +100,37 @@ export class CoursePaymentComponent implements OnInit {
     });
 
 
-        this.stripeTest = this.fb.group({
-          name: ['', [Validators.required]],
-          amount: ['', [Validators.required, Validators.pattern(/\d+/)]],
-        });
-      }
+    this.stripeTest = this.fb.group({
+      name: ['', [Validators.required]],
+      amount: ['', [Validators.required, Validators.pattern(/\d+/)]],
+    });
+  }
 
 
-      getnewuserPayment() {
-        var date = new Date();
-        return new userpayment(this.subscriptionId,"course", this.paymentReferenceId, this.amountnumber,'',0, new Date(this.datePipe.transform(date, "MM/dd/yyyy")), this.authService.currentUser.uid)
+  getnewuserPayment() {
+    var date = new Date();
+    return new userpayment(this.subscriptionId, "course", this.paymentReferenceId, this.amountnumber, '', 0, new Date(this.datePipe.transform(date, "MM/dd/yyyy")), this.authService.currentUser.uid)
 
-      }
+  }
 
-      createToken(): void {
-        const name = this.stripeTest.get('name').value;
-        this.stripeService
-          .createToken(this.card.element, { name })
-          .subscribe((result) => {
-            if (result.token) {
-              // Use the token
-              console.log(result.token.id);
-            } else if (result.error) {
-              // Error creating the token
-              console.log(result.error.message);
-            }
-          });
-      }
+  createToken(): void {
+    const name = this.stripeTest.get('name').value;
+    this.stripeService
+      .createToken(this.card.element, { name })
+      .subscribe((result) => {
+        if (result.token) {
+          // Use the token
+          console.log(result.token.id);
+        } else if (result.error) {
+          // Error creating the token
+          console.log(result.error.message);
+        }
+      });
+  }
 
-      pay(): void {
-        if(this.stripeTest.valid) {
+  pay(): void {
+ 
+    if (this.stripeTest.valid) {
       this.createPaymentIntent(this.stripeTest.get('amount').value)
         .pipe(
           switchMap((pi) =>

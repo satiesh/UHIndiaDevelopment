@@ -21,6 +21,8 @@
 <div class="spacer"></div>
 
 <div mat-dialog-actions>
-  <button mat-raised-button (click)="payCourse()" color="primary">Pay</button>
+  <button mat-raised-button (click)="payCourse()" [disabled]="isPaymentProcessing" color="primary">
+    <mat-spinner *ngIf="isPaymentProcessing" [diameter]="20"></mat-spinner>Pay&nbsp;{{data.course.Price|currency}}
+  </button>
   <button mat-raised-button (click)="cancel()" color="warn">Cancel</button>
 </div>

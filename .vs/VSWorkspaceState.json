@@ -4,13 +4,13 @@
     "\\src",
     "\\src\\app",
     "\\src\\app\\components",
-    "\\src\\app\\components\\layouts",
-    "\\src\\app\\components\\login",
-    "\\src\\app\\components\\redirect",
-    "\\src\\app\\pipes",
-    "\\src\\app\\services",
-    "\\src\\app\\shared"
+    "\\src\\app\\components\\learning",
+    "\\src\\app\\components\\learning\\course-buy",
+    "\\src\\app\\components\\learning\\course-payment",
+    "\\src\\app\\components\\learning\\course-register-dialog",
+    "\\src\\app\\components\\setprofile",
+    "\\src\\app\\services"
   ],
-  "SelectedNode": "\\src\\app\\components\\login\\login-control.component.ts",
+  "SelectedNode": "\\src\\app\\components\\setprofile\\setprofile.component.ts",
   "PreviewInSolutionExplorer": false
 }

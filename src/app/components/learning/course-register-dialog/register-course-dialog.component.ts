@@ -8,6 +8,7 @@ import { MatDialogRef, MAT_DIALOG_DATA } from '@angular/material/dialog';
 import { Courses } from '@app/models';
 import { CoursePaymentComponent } from '../course-payment/course-payment.component';
 import { AuthService } from '../../../services';
+import { CurrencyPipe } from '@angular/common';
 
 @Component({
   selector: 'app-register-course-dialog',
@@ -21,10 +22,12 @@ export class RegisterCourseDialogComponent implements AfterViewInit {
   editCourse: CoursePaymentComponent;
   @Input() course: Courses = new Courses();
   get courseName(): any { return this.data.course ? { name: this.data.course.Name } : null; }
-
+  isPaymentProcessing: boolean = false;
   constructor(
     public dialogRef: MatDialogRef<RegisterCourseDialogComponent>,
-    @Inject(MAT_DIALOG_DATA) public data: { course: Courses }) {
+    private authService: AuthService,
+    private currencyPipe: CurrencyPipe,
+   @Inject(MAT_DIALOG_DATA) public data: { course: Courses }) {
       console.log('From Register' , data);
   }
 
@@ -32,7 +35,12 @@ export class RegisterCourseDialogComponent implements AfterViewInit {
     //this.editCourse.courseSaved$.subscribe(user => this.dialogRef.close(user));
   }
   payCourse(): void {
-    this.editCourse.pay();
+    this.editCourse.stripeTest.setValue({ name: 'Satiesh', amount: Number(this.currencyPipe.transform(this.data.course.Price).toString().replace(/[^0-9-\.]+/g, ""))});
+
+    if (this.editCourse.stripeTest.valid) {
+      this.isPaymentProcessing = true;
+      this.editCourse.pay();
+    }
   }
   cancel(): void {
     this.dialogRef.close(null);
