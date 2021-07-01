@@ -17,6 +17,7 @@ export const environment = {
   welcometemplateId: 14,
   sendinBlueListId: 13,
   encryptionKey: '123456$#@$^@1ERF',
+  staticsiteurl:'https://www.urbanhood.org/',
   twillio: {
     accountSid: 'AC5a77bd74cd6cd1215ea783ced6a8b97f',
     authToken: '34ee149eba7208d0964f844c3461ea04'

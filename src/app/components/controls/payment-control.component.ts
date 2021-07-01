@@ -229,7 +229,7 @@ export class PaymentControlComponent implements OnInit {
             //console.log(result.error);
             //console.log(result.error.message);
             this.alertService.showMessage('', result.error.message, MessageSeverity.error)
-            this.isPaymentProcessing = false;
+            //this.isPaymentProcessing = false;
           } else {
             // The payment has been processed!
             if (result.paymentIntent.status === 'succeeded') {
