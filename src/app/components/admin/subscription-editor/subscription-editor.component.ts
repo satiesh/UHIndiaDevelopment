@@ -50,6 +50,9 @@ export class SubscriptionEditorComponent implements OnChanges, OnDestroy {
   get IsActive() {
     return this.subscriptionForm.get('IsActive');
   }
+  get IsRecurring() {
+    return this.subscriptionForm.get('IsRecurring');
+  }
 
   get GroupName() {
     return this.subscriptionForm.get('GroupName');
@@ -98,6 +101,7 @@ export class SubscriptionEditorComponent implements OnChanges, OnDestroy {
       Name: ['', Validators.required],
       Description: '',
       IsActive: [true, [Validators.required]],
+      IsRecurring: [false],
       GroupName: ['', Validators.required],
       Price: ['', Validators.required]
     });
@@ -120,6 +124,7 @@ export class SubscriptionEditorComponent implements OnChanges, OnDestroy {
       Description: this.subscription.Description || '',
       GroupName: this.subscription.GroupName || '',
       IsActive: this.subscription.IsActive || '',
+      IsRecurring: this.subscription.IsRecurring || '',
       Price: this.currencyPipe.transform(this.subscription.Price, '$') || []
     });
   }
@@ -167,6 +172,7 @@ export class SubscriptionEditorComponent implements OnChanges, OnDestroy {
       subscriptionedit.GroupName = formModel.GroupName,
       subscriptionedit.Price = Number(formModel.Price.replace(/[^0-9\.]+/g, "")),
       subscriptionedit.IsActive = formModel.IsActive,
+      subscriptionedit.IsRecurring = formModel.IsRecurring,
       subscriptionedit.CreatedOn = this.isNewSubscription ? new Date(now_utc) : this.subscription.CreatedOn,
       subscriptionedit.CreatedBy = this.isNewSubscription ? this.authService.currentUser.uid : this.subscription.CreatedBy
     return subscriptionedit;

@@ -28,7 +28,10 @@
       </mat-error>
     </mat-form-field>
   </div>
-
+  <div fxLayout="row" fxLayout.lt-md="column" fxLayoutGap="1em">
+    <mat-label>{{'subscription.editor.Recurring' | translate}}</mat-label>
+    <mat-slide-toggle formControlName="IsRecurring" color="accent">{{IsRecurring ? 'TRUE' : 'FALSE'}}</mat-slide-toggle>
+  </div>
   <div fxLayout="row" fxLayout.lt-md="column" fxLayoutGap="1em">
     <mat-form-field [floatLabel]="floatLabels" fxFlex class="app-validate">
       <mat-label>{{'subscription.editor.GroupName' | translate}}</mat-label>

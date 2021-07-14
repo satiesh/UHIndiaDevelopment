@@ -150,7 +150,8 @@ export class SetProfileComponent implements OnInit {
         this.enablePaymentStep = true;
         let fullName = this.userProfile.firstName + ' ' + this.userProfile.lastName;
         this.paymentControl.firstname = this.userProfile.firstName;
-        this.paymentControl.stripeTest.setValue({ name: fullName, amount: this.currencyPipe.transform(this.subscriptionControl.subscriptionamount) });
+        this.paymentControl.isRecurring = this.subscriptionControl.isRecurring;
+        this.paymentControl.stripeTest.setValue({ name: fullName, amount: this.currencyPipe.transform(this.subscriptionControl.subscriptionamount), agreeInstallment: this.subscriptionControl.isRecurring ? true : false });
         this.paymentControl.amountval = this.subscriptionControl.subscriptionamount;
         this.paymentControl.amountvalcoupon = this.subscriptionControl.subscriptionamount;
         this.paymentControl.subscriptionname = this.subscriptionControl.subscriptionname;
@@ -198,6 +199,7 @@ export class SetProfileComponent implements OnInit {
               this.paymentControl.amountnumber = amount;
               this.paymentControl.subscriptionId = this.userSubscription.subscriptions[0].subscriptionId;
               this.userPayment = this.paymentControl.getnewuserPayment();
+              console.log(this.userPayment);
               let memberId = this.getMemberId(this.userProfile.firstName.substring(0, 1), this.userProfile.lastName.substring(0, 1));
               // new user
               let user: newuser = new newuser(this.authService.currentUser.uid, this.currentuseremail, null, true, this.userProfile.firstName + " " + this.userProfile.lastName, memberId, false, this.authService.currentUser.uid, new Date(this.datePipe.transform(this.date, "MM/dd/yyyy")));
@@ -325,7 +327,7 @@ export class SetProfileComponent implements OnInit {
 
     // calling the sendinblue service to create the contact
     let sendinblueattribute: sendinblueattributes = new sendinblueattributes(this.userProfile.firstName,
-      this.userProfile.lastName,this.userProfile.mobileNumber,
+      this.userProfile.lastName, this.userProfile.mobileNumber,
       this.userProfile.city, this.userProfile.state, this.userProfile.country, this.userProfile.address, this.userProfile.postalZip,
       this.userProfile.address + ' ' + this.userProfile.city + ' ' + this.userProfile.state + ' ' + this.userProfile.postalZip + ' ' + this.userProfile.country);
     let lstId: Array<number> = new Array<number>();

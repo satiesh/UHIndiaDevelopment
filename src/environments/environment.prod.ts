@@ -19,8 +19,8 @@ export const environment = {
   encryptionKey: '123456$#@$^@1ERF',
   staticsiteurl:'https://www.urbanhood.org/',
   twillio: {
-    accountSid: 'AC5a77bd74cd6cd1215ea783ced6a8b97f',
-    authToken: '34ee149eba7208d0964f844c3461ea04'
+    accountSid: 'ACe94db2dbc71ac56121091a9debca1644',
+    authToken: '616fbc22be47fef32442ee0e91925eb6'
   },
   firebase: {
     apiKey: "AIzaSyB1Ewm6VTwkBxclvPe157_FOqGkLHWSijo",

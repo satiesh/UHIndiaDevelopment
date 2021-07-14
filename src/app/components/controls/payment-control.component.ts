@@ -34,6 +34,8 @@ export class PaymentControlComponent implements OnInit {
   @Input() selectedSubscription;
   amountval: string;
   amountvalcoupon: string;
+  isRecurring: boolean;
+  isRecurringUnChecked: boolean;
   amountnumber: number;
   firstname: string;
   subscriptionname: string;
@@ -63,6 +65,10 @@ export class PaymentControlComponent implements OnInit {
   get couponcode() {
     return this.couponDetails.get('couponcode');
   }
+  get agreeInstallment() {
+    return this.stripeTest.get('agreeInstallment');
+  }
+
 
   constructor(
     private http: HttpClient,
@@ -77,9 +83,11 @@ export class PaymentControlComponent implements OnInit {
   ngOnInit(): void {
     this.stripeTest = this.fb.group({
       name: ['', [Validators.required]],
-      amount: ['', [Validators.required, Validators.pattern(/\d+/)]]
+      amount: ['', [Validators.required, Validators.pattern(/\d+/)]],
+      agreeInstallment:''
     })
     this.buildForm();
+    console.log(this.selectedSubscription);
   }
 
   private buildForm() {
@@ -91,7 +99,9 @@ export class PaymentControlComponent implements OnInit {
   clearCoupon() {
 
   }
-
+  onInstallmentCheckBoxCheck() {
+    this.isRecurringUnChecked = this.agreeInstallment.value;
+  }
   applyCoupon() {
     this.couponProcessed = false;
     this.appliedCodes = [];
@@ -178,6 +188,7 @@ export class PaymentControlComponent implements OnInit {
   }
 
   getnewuserPayment() {
+    
     let couponcode: string = ''
     let couponamt: number = 0;
     couponcode = this.appliedCodes.length > 0 ? this.appliedCodes[0].couponcode : '';
@@ -190,7 +201,7 @@ export class PaymentControlComponent implements OnInit {
       couponcode,
       couponamt,
       new Date(this.datePipe.transform(date, "MM/dd/yyyy")),
-      this.authService.currentUser.uid)
+      this.authService.currentUser.uid, this.agreeInstallment.value)
   }
 
   createToken(): void {

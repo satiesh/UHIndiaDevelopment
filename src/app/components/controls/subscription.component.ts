@@ -44,6 +44,7 @@ export class SubscriptionComponent implements OnInit {
   subscriptionId: string;
   subscriptionamount: string;
   subscriptionname: string;
+  isRecurring: boolean;
   dataSource: MatTableDataSource<ServiceSubscription>;
   isSubscriptionSelected: boolean = false;
   userSubscription: usersubscription;
@@ -113,7 +114,7 @@ export class SubscriptionComponent implements OnInit {
     this.subscriptionId = element.id;
     this.subscriptionamount = element.Price;
     this.subscriptionname = element.Name;
-
+    this.isRecurring = element.IsRecurring;
     console.log(element);
     console.log(this.subscriptionamount);
 
